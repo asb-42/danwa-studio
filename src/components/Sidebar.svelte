@@ -1,7 +1,6 @@
 <script>
   import { i18n } from '../lib/i18n/loader.js';
-  import { page } from '../stores.js';
-  export { user };
+  import { page, user } from '../stores.js';
 
   const sections = [
     {

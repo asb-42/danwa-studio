@@ -19,6 +19,9 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
+    "@danwa/api-client": "file:../danwa-core/packages/api-client",
+    "@danwa/ui-core": "file:../danwa-core/packages/ui-core",
+    "@danwa/i18n": "file:../danwa-core/packages/i18n",
     "@tailwindcss/typography": "^0.5.19",
     "@xyflow/svelte": "^1.5.2",
     "cytoscape": "^3.34.0",

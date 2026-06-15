@@ -1,7 +1,6 @@
 <script>
   import { i18n } from '../lib/i18n/loader.js';
-
-  export { user };
+  import { user } from '../stores.js';
 </script>
 
 <div class="space-y-6">
