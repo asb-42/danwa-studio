@@ -1,6 +1,6 @@
 <script>
   import { i18n } from '../../lib/i18n/loader.js';
-  import { getModule, getModuleProfile } from '../../lib/modules/api.js';
+  import { getModule, getModuleProfile, updateModuleProfile } from '../../lib/modules/api.js';
 
   let { moduleInfo = null, visible = false, onClose = () => {} } = $props();
 
@@ -9,6 +9,14 @@
   let detail = $state(null);
   let profile = $state(null);
   let activeTab = $state('overview'); // 'overview' | 'manifest' | 'profile'
+
+  // Edit-mode state for the Profile tab
+  let editing = $state(false);
+  let draftJson = $state('');
+  let draftError = $state(null);
+  let saving = $state(false);
+  let saveError = $state(null);
+  let lastSavedAt = $state(null);
 
   $effect(() => {
     if (visible && moduleInfo) {
@@ -47,6 +55,84 @@
   function prettyJson(obj) {
     if (obj == null) return '';
     return JSON.stringify(obj, null, 2);
+  }
+
+  // ── Edit mode ──────────────────────────────────────────────────────
+
+  function startEdit() {
+    draftJson = prettyJson(profile);
+    draftError = null;
+    saveError = null;
+    editing = true;
+  }
+
+  function cancelEdit() {
+    editing = false;
+    draftJson = '';
+    draftError = null;
+    saveError = null;
+  }
+
+  let isDirty = $derived(
+    editing && prettyJson(profile) !== draftJson,
+  );
+
+  function diffLines(a, b) {
+    // Very small line-by-line diff: - removed, + added, ' ' same.
+    const al = (a || '').split('\n');
+    const bl = (b || '').split('\n');
+    const max = Math.max(al.length, bl.length);
+    const out = [];
+    for (let i = 0; i < max; i++) {
+      const lo = al[i] ?? '';
+      const ln = bl[i] ?? '';
+      if (lo === ln) {
+        out.push({ kind: 'same', text: ln });
+      } else {
+        if (lo) out.push({ kind: 'del', text: lo });
+        if (ln) out.push({ kind: 'add', text: ln });
+      }
+    }
+    return out;
+  }
+
+  let diffResult = $derived(
+    editing ? diffLines(prettyJson(profile), draftJson) : [],
+  );
+
+  async function saveEdit() {
+    if (!moduleInfo?.module_id) return;
+    saveError = null;
+    let parsed;
+    try {
+      parsed = JSON.parse(draftJson);
+    } catch (e) {
+      draftError = `Invalid JSON: ${e.message}`;
+      return;
+    }
+    if (
+      typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)
+    ) {
+      draftError = 'Profile must be a JSON object at the top level';
+      return;
+    }
+    saving = true;
+    try {
+      const resp = await updateModuleProfile(moduleInfo.module_id, parsed);
+      profile = parsed;
+      lastSavedAt = new Date();
+      editing = false;
+      // The response includes a server-side preview string; keep it
+      // for status display.
+      if (resp?.profile && typeof resp.profile === 'string') {
+        // intentionally not overwriting `profile` (we already set it
+        // to the parsed object above)
+      }
+    } catch (e) {
+      saveError = e.message;
+    } finally {
+      saving = false;
+    }
   }
 </script>
 
@@ -147,10 +233,68 @@
         {:else if activeTab === 'manifest'}
           <pre class="json-block">{prettyJson(detail)}</pre>
         {:else if activeTab === 'profile'}
-          {#if profile}
+          {#if !profile}
+            <p class="text-gray-500">No profile available for this module type.</p>
+          {:else if !editing}
+            <div class="flex items-center justify-between mb-2">
+              <div class="text-xs text-gray-500 dark:text-gray-400">
+                {#if lastSavedAt}
+                  <span class="text-green-600 dark:text-green-400">✓ saved {lastSavedAt.toLocaleTimeString()}</span>
+                {/if}
+              </div>
+              <div class="flex gap-2">
+                <button class="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded" onclick={startEdit}>
+                  ✎ Edit schema
+                </button>
+              </div>
+            </div>
             <pre class="json-block">{prettyJson(profile)}</pre>
           {:else}
-            <p class="text-gray-500">No profile available for this module type.</p>
+            <!-- Edit mode -->
+            <div class="flex items-center justify-between mb-2 gap-2 flex-wrap">
+              <div class="flex items-center gap-2">
+                {#if isDirty}
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300">● unsaved</span>
+                {:else}
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">✓ in sync</span>
+                {/if}
+                <span class="text-xs text-gray-500 dark:text-gray-400">
+                  {draftJson.split('\n').length} lines
+                </span>
+              </div>
+              <div class="flex gap-2">
+                <button class="text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded" onclick={cancelEdit} disabled={saving}>
+                  Cancel
+                </button>
+                <button class="text-xs px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50" onclick={saveEdit} disabled={saving || !isDirty}>
+                  {saving ? '…' : 'Save'}
+                </button>
+              </div>
+            </div>
+            {#if draftError}
+              <div class="form-error mb-2">{draftError}</div>
+            {/if}
+            {#if saveError}
+              <div class="form-error mb-2">⚠ Save failed: {saveError}</div>
+            {/if}
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Editor (JSON)</div>
+                <textarea
+                  class="w-full h-96 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 font-mono text-xs"
+                  spellcheck="false"
+                  bind:value={draftJson}
+                ></textarea>
+              </div>
+              <div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Diff (current → draft)</div>
+                <pre class="json-block h-96 overflow-y-auto whitespace-pre">
+{#each diffResult as line, i (i)}<span class={line.kind === 'add' ? 'text-green-600 dark:text-green-400' : line.kind === 'del' ? 'text-red-600 dark:text-red-400 line-through' : 'text-gray-500 dark:text-gray-400'}>
+{line.kind === 'add' ? '+' : line.kind === 'del' ? '-' : ' '} {line.text}
+</span>
+{/each}</pre>
+              </div>
+            </div>
           {/if}
         {/if}
       </div>

@@ -149,3 +149,18 @@ export function validateModule(manifest) {
 export function exportModule(moduleId) {
   return request(`/api/v1/modules/${moduleId}/export`, { method: 'POST' });
 }
+
+// ─── Profile write (Schema-Editor) ─────────────────────────────────
+
+/**
+ * Update the parsed profile data for a module.
+ * @param {string} moduleId
+ * @param {Object} data  The full profile data dict to persist.
+ * @returns {Promise<{ status: string, module_id: string, profile: any }>}
+ */
+export function updateModuleProfile(moduleId, data) {
+  return request(`/api/v1/modules/${encodeURIComponent(moduleId)}/profile`, {
+    method: 'PUT',
+    body: JSON.stringify({ data }),
+  });
+}
