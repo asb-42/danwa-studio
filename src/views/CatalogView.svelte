@@ -8,6 +8,7 @@
     fetchAllCatalogSources,
     getCatalog,
     runCatalogImport,
+    publishNewModules,
   } from '../lib/catalog/api.js';
   import ConfirmDialog from '../components/ConfirmDialog.svelte';
 
@@ -34,6 +35,32 @@
   let pendingApply = $state(false);
   let importError = $state(null);
   let importSources = $state([]); // checked names (empty = all)
+
+  // Phase 4: publish-new — batched POST /publish for would_create entries
+  let publishResults = $state(null);
+  let publishing = $state(false);
+  let publishError = $state(null);
+
+  async function handlePublishNew() {
+    if (!lastImport) return;
+    const ids = (lastImport.entries || [])
+      .filter((e) => e.action === 'create')
+      .map((e) => e.module_id);
+    if (ids.length === 0) {
+      publishError = 'No newly-created modules to publish (apply first)';
+      return;
+    }
+    publishing = true;
+    publishError = null;
+    publishResults = null;
+    try {
+      publishResults = await publishNewModules(ids);
+    } catch (e) {
+      publishError = e.message;
+    } finally {
+      publishing = false;
+    }
+  }
 
   onMount(loadSources);
 
@@ -386,11 +413,39 @@
           >
             Apply ({lastDiff.by_action?.create || 0} new, {lastDiff.by_action?.update || 0} updates)
           </button>
+          {#if lastImport && (lastImport.by_action?.create || 0) > 0}
+            <button
+              class="text-xs px-3 py-1.5 bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50"
+              onclick={handlePublishNew}
+              disabled={publishing}
+            >
+              {publishing ? 'Publishing…' : `Publish new (${lastImport.by_action?.create || 0})`}
+            </button>
+          {/if}
         {/if}
       </div>
 
       {#if importError}
         <div class="form-error">⚠ {importError}</div>
+      {/if}
+      {#if publishError}
+        <div class="form-error">⚠ {publishError}</div>
+      {/if}
+      {#if publishResults}
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-3 text-xs">
+          <div class="font-semibold mb-2 text-gray-900 dark:text-white">
+            Publish results ({publishResults.length})
+          </div>
+          <ul class="space-y-1 max-h-48 overflow-y-auto">
+            {#each publishResults as r, i (i)}
+              <li class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-full {r.status === 'published' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' : r.status === 'failed' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'}">{r.status}</span>
+                <code class="font-mono">{r.module_id}</code>
+                {#if r.error}<span class="text-red-500 truncate">— {r.error}</span>{/if}
+              </li>
+            {/each}
+          </ul>
+        </div>
       {/if}
 
       {#if lastDiff}
