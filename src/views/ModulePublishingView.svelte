@@ -8,6 +8,7 @@
     exportModulePack,
     fetchRepoIndex,
     checkRepoUpdates,
+    publishModule,
   } from '../lib/publishing/api.js';
   import ModuleDetailModal from '../components/modules/ModuleDetailModal.svelte';
 
@@ -32,6 +33,49 @@
   // Last export info
   let lastExport = $state(null);
   let exporting = $state(false);
+
+  // Publish state (real Git workflow via backend)
+  let publishing = $state(false);
+  let lastPublish = $state(null);
+  let publishError = $state(null);
+  let publishMessage = $state('');
+
+  async function handlePublish(m) {
+    publishing = true;
+    publishError = null;
+    lastPublish = null;
+    // Pull the live manifest from the on-disk module via the existing
+    // /api/v1/modules/{id}/profile endpoint (already wrapped in
+    // lib/blueprint/api.js as getModuleProfile).
+    let manifest = null;
+    try {
+      const profile = await (await import('../lib/blueprint/api.js')).getModuleProfile(m.module_id);
+      manifest = profile;
+    } catch (e) {
+      // fall through to lastPublish below
+    }
+    if (!manifest) {
+      publishError = `Could not load manifest for ${m.module_id} from backend`;
+      publishing = false;
+      return;
+    }
+    try {
+      const report = await publishModule(m.module_id, {
+        manifest,
+        commit_message: publishMessage.trim() || undefined,
+      });
+      lastPublish = report;
+      if (report.status === 'failed') {
+        publishError = report.error || 'publish failed (see steps)';
+      } else {
+        await loadAll();
+      }
+    } catch (e) {
+      publishError = e.message;
+    } finally {
+      publishing = false;
+    }
+  }
 
   onMount(loadAll);
 
@@ -113,18 +157,6 @@
     }
   }
 
-  // Helper: insert pre-canned publish handoff command
-  function handoffCommand(m) {
-    return `# On the server, then run:
-cd /path/to/danwa-modules
-git checkout -b publish/${m.module_id}-${m.version || 'x'}
-git pull  # ensure base is current
-# (copy the zip or edited files in)
-git add ${m.module_id}/
-git commit -m "publish(${m.module_id}): v${m.version || 'x'}"
-git push origin publish/${m.module_id}-${m.version || 'x'}
-# Then open a PR on github.com/asb-42/danwa-modules`;
-  }
 </script>
 
 <div class="space-y-6">
@@ -141,11 +173,10 @@ git push origin publish/${m.module_id}-${m.version || 'x'}
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4">
     <h2 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Publishing pipeline</h2>
     <ol class="text-xs text-gray-600 dark:text-gray-400 space-y-1 list-decimal pl-5">
-      <li>Edit the module under <code class="font-mono">danwa-modules/<type>/<id>/</code> locally.</li>
       <li>Validate the manifest here (paste the JSON below).</li>
-      <li>Export the module as a zip pack (button in the table).</li>
-      <li>Run the hand-off commands printed at the bottom to <code class="font-mono">git commit && git push</code> in <code class="font-mono">danwa-modules</code>.</li>
-      <li>Open a PR; once merged, <strong>Update available</strong> shows up in the ModulesView.</li>
+      <li>Click <em>Publish</em> on a row in the table — the backend commits (and optionally pushes) the live manifest to the <code class="font-mono">danwa-modules</code> repo on a <code class="font-mono">publish/<id></code> branch.</li>
+      <li>Optionally export the module as a zip pack for offline use / uploading.</li>
+      <li>Open a PR on github.com/asb-42/danwa-modules; once merged, <strong>Update available</strong> shows up in the ModulesView.</li>
     </ol>
   </div>
 
@@ -230,6 +261,9 @@ git push origin publish/${m.module_id}-${m.version || 'x'}
                 <button class="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded" onclick={() => handleExport(m)} disabled={exporting}>
                   {exporting ? '…' : 'Export .zip'}
                 </button>
+                <button class="text-xs px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded" onclick={() => handlePublish(m)} disabled={publishing}>
+                  {publishing ? '…' : 'Publish'}
+                </button>
               </td>
             </tr>
           {/each}
@@ -245,24 +279,62 @@ git push origin publish/${m.module_id}-${m.version || 'x'}
     </div>
   {/if}
 
-  <!-- Hand-off section -->
+  <!-- Real Git publishing (Sprint 7) -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 space-y-3">
-    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">3. Hand off to danwa-modules (Git)</h2>
+    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">3. Publish to danwa-modules (Git)</h2>
     <p class="text-xs text-gray-500 dark:text-gray-400">
-      The backend has no Git endpoint (yet). The commands below are the manual handoff —
-      they can be copy-pasted into a shell on the server that has write access to the
-      <code class="font-mono">danwa-modules</code> repo.
+      Click <em>Publish</em> on a row in the table above to commit (and optionally push)
+      the live module manifest to the danwa-modules repo.
     </p>
-    {#if localModules.length > 0}
-      <div class="space-y-2">
-        {#each localModules.slice(0, 3) as m (m.module_id)}
-          <details class="border border-gray-200 dark:border-gray-700 rounded">
-            <summary class="cursor-pointer text-xs px-2 py-1 bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700">
-              Hand-off for <code class="font-mono">{m.module_id}</code>
-            </summary>
-            <pre class="json-block">{handoffCommand(m)}</pre>
-          </details>
-        {/each}
+    <details class="border border-gray-200 dark:border-gray-700 rounded">
+      <summary class="cursor-pointer text-xs px-2 py-1 bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700">
+        Custom commit message (optional)
+      </summary>
+      <div class="p-3">
+        <input
+          type="text"
+          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-xs font-mono"
+          bind:value={publishMessage}
+          placeholder="leave empty for auto-generated 'publish(<id>): v<x.y.z>'"
+        />
+      </div>
+    </details>
+    {#if publishError}
+      <div class="form-error">⚠ {publishError}</div>
+    {/if}
+    {#if lastPublish}
+      <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-sm font-semibold text-gray-900 dark:text-white">
+            Result: {lastPublish.status}
+          </span>
+          {#if lastPublish.status === 'published'}
+            <span class="text-xs px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">✓ pushed</span>
+          {:else if lastPublish.status === 'local_only'}
+            <span class="text-xs px-2 py-0.5 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300">◌ committed, not pushed</span>
+          {:else if lastPublish.status === 'noop'}
+            <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">○ no changes</span>
+          {:else if lastPublish.status === 'failed'}
+            <span class="text-xs px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300">✗ failed</span>
+          {/if}
+          <span class="text-xs text-gray-500 font-mono">
+            branch={lastPublish.branch}
+            {#if lastPublish.commit_sha} · sha={lastPublish.commit_sha.slice(0, 7)}{/if}
+            {#if lastPublish.pushed} · pushed to {lastPublish.push_remote}{/if}
+          </span>
+        </div>
+        <ol class="text-xs space-y-1 list-decimal pl-5 max-h-48 overflow-y-auto">
+          {#each lastPublish.steps as s, i (i)}
+            <li class="{s.ok ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}">
+              <code class="font-mono">{s.name}</code>: {s.detail}
+              <span class="text-gray-400">({s.elapsed_ms}ms)</span>
+            </li>
+          {/each}
+        </ol>
+        <details class="mt-2">
+          <summary class="text-xs text-gray-500 dark:text-gray-400 cursor-pointer">Raw report (JSON)</summary>
+          <pre class="json-block">{JSON.stringify(lastPublish, null, 2)}</pre>
+        </details>
       </div>
     {/if}
   </div>
@@ -275,6 +347,14 @@ git push origin publish/${m.module_id}-${m.version || 'x'}
 />
 
 <style>
+  .form-error {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: rgba(243, 139, 168, 0.1);
+    border: 1px solid var(--color-error, #f38ba8);
+    color: var(--color-error, #f38ba8);
+    font-size: 0.85rem;
+  }
   .btn-primary {
     padding: 8px 16px; border: none; border-radius: 6px;
     background: var(--color-primary, #89b4fa); color: var(--color-bg, #1e1e2e);

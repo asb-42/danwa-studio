@@ -82,3 +82,24 @@ export function fetchRepoIndex({ forceRefresh = false } = {}) {
 export function checkRepoUpdates() {
   return request('/api/v1/modules/check-repo-updates');
 }
+
+// ─── Real Git publishing (Sprint 7) ────────────────────────────
+
+/**
+ * Publish a module to the danwa-modules Git repo via the backend.
+ *
+ * Requires the backend to be started with DANWA_MODULES_PUBLISH_ENABLED=true
+ * and DANWA_MODULES_PUBLISH_DIR pointing at a writable git working tree.
+ * If not enabled, the endpoint returns 403 and this throws an Error
+ * whose message is the backend's detail field.
+ *
+ * @param {string} moduleId
+ * @param {Object} body  { manifest, profile_content?, profile_filename?, commit_message? }
+ * @returns {Promise<PublishReport>}
+ */
+export function publishModule(moduleId, body) {
+  return request(`/api/v1/modules/${encodeURIComponent(moduleId)}/publish`, {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+}
