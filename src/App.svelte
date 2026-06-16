@@ -13,6 +13,7 @@
   import ToneProfilesView from './views/ToneProfilesView.svelte';
   import LLMProfilesView from './views/LLMProfilesView.svelte';
   import ModulesView from './views/ModulesView.svelte';
+  import ModulePublishingView from './views/ModulePublishingView.svelte';
   import InputComposerView from './views/InputComposerView.svelte';
   import OutputComposerView from './views/OutputComposerView.svelte';
   import WorkflowExecView from './views/WorkflowExecView.svelte';
@@ -81,6 +82,8 @@
               <LLMProfilesView />
             {#case '/modules'}
               <ModulesView />
+            {#case '/modules/publish'}
+              <ModulePublishingView />
             {#case '/input-composer'}
               <InputComposerView />
             {#case '/output-composer'}

@@ -37,6 +37,7 @@
       items: [
         { route: '/translations', label: 'nav.translations', icon: '🌐' },
         { route: '/modules', label: 'nav.modules', icon: '📦' },
+        { route: '/modules/publish', label: 'Module Publishing', icon: '🚀' },
       ],
     },
     {
