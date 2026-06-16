@@ -93,6 +93,17 @@ const enFallback = {
   'nav.section.evolve': 'EVOLVE',
   'nav.section.administration': 'ADMINISTRATION',
   'nav.section.account': 'ACCOUNT',
+  // Sprint 7: LLM Catalog
+  'nav.catalog': 'LLM Catalog',
+  'catalog.title': 'LLM Catalog',
+  'catalog.sources': 'Sources',
+  'catalog.preview': 'Preview',
+  'catalog.diff': 'Import diff',
+  'catalog.stale': 'Stale',
+  'catalog.fetch': 'Fetch',
+  'catalog.fetchAll': 'Fetch all',
+  'catalog.apply': 'Apply',
+  'catalog.refresh': 'Refresh',
 };
 
 // Base URL for language modules - can be configured via Vite env
