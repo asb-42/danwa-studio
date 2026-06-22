@@ -92,18 +92,29 @@ start_studio() {
         return 0
     fi
     log_step "Starting studio (port $STUDIO_PORT)..."
+    # Background the start command. We deliberately avoid `(cmd &)`
+    # subshells because $! would resolve to empty outside the subshell.
+    local pid=""
     if [[ "$DANWA_USE_MOCK" == "1" ]]; then
         write_mock_script "$MOCK_STUDIO_SCRIPT"
-        nohup "$MOCK_STUDIO_SCRIPT" > "$STUDIO_LOG" 2>&1 &
+        "$MOCK_STUDIO_SCRIPT" > "$STUDIO_LOG" 2>&1 &
+        pid=$!
     else
         if [[ ! -f "$PROJECT_DIR/package.json" ]]; then
             log_error "package.json missing — cannot start Vite"
             return 1
         fi
-        (cd "$PROJECT_DIR" && nohup npm run dev -- --port "$STUDIO_PORT" --host 127.0.0.1 \
-            > "$STUDIO_LOG" 2>&1 &)
+        pushd "$PROJECT_DIR" >/dev/null
+        npm run dev -- --port "$STUDIO_PORT" --host 127.0.0.1 \
+            > "$STUDIO_LOG" 2>&1 &
+        pid=$!
+        popd >/dev/null
     fi
-    local pid=$!
+    if [[ -z "$pid" ]]; then
+        log_error "Failed to capture backgrounded Vite PID"
+        return 1
+    fi
+    disown "$pid" 2>/dev/null || true
     echo "$pid" > "$STUDIO_PID_FILE"
     log_ok "Studio started (PID $pid, log: $STUDIO_LOG)"
 }
