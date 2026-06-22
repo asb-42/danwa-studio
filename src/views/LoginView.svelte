@@ -1,7 +1,8 @@
 <script>
   import { i18n } from '../lib/i18n/loader.js';
 
-  export let user = $bindable(null);
+  // Svelte 5: $bindable() lives inside $props()
+  let { user = $bindable(null) } = $props();
 
   let email = $state('');
   let password = $state('');

@@ -45,10 +45,10 @@
     return () => window.removeEventListener('hashchange', handleHashChange);
   });
 
-  // Check if route requires auth
+  // Check if route requires auth (Svelte 5: $derived, not legacy $:)
   const publicRoutes = ['/login'];
-  $: isPublicRoute = publicRoutes.includes($page);
-  $: needsAuth = !$isPublicRoute;
+  const isPublicRoute = $derived(publicRoutes.includes($page));
+  const needsAuth = $derived(!isPublicRoute);
 
   // Mock auth store - will be replaced with real auth
   let user = $state(null);
@@ -64,61 +64,60 @@
       <div class="flex-1 flex flex-col overflow-hidden">
         <Header {user} />
         <main class="flex-1 overflow-auto p-6">
-          {#switch $page}
-            {#case '/'}
-              <DashboardView />
-            {#case '/blueprints'}
-              <BlueprintCanvasView />
-            {#case '/workflow-templates'}
-              <WorkflowTemplatesView />
-            {#case '/agents'}
-              <LLMAgentsView />
-            {#case '/prompts'}
-              <PromptsView />
-            {#case '/roles'}
-              <RolesView />
-            {#case '/tones'}
-              <ToneProfilesView />
-            {#case '/llm'}
-              <LLMProfilesView />
-            {#case '/modules'}
-              <ModulesView />
-            {#case '/catalog'}
-              <CatalogView />
-            {#case '/modules/publish'}
-              <ModulePublishingView />
-            {#case '/input-composer'}
-              <InputComposerView />
-            {#case '/output-composer'}
-              <OutputComposerView />
-            {#case '/exec'}
-              <WorkflowExecView />
-            {#case '/diff'}
-              <DiffView />
-            {#case '/replay'}
-              <ReplayView />
-            {#case '/proposals'}
-              <ProposalsView />
-            {#case '/translations'}
-              <TranslationsView />
-            {#case '/tenants'}
-              <TenantsView />
-            {#case '/users'}
-              <UsersView />
-            {#case '/health'}
-              <ServerHealthView />
-            {#case '/system'}
-              <SystemManagementView />
-            {#case '/profile'}
-              <ProfileView {user} />
-            {#case '/my-keys'}
-              <BYOKManager />
-            {:default}
-              <div class="text-center py-12">
-                <h2 class="text-2xl font-bold text-gray-900">Seite nicht gefunden</h2>
-                <p class="text-gray-500 mt-2">Route "{ $page }" existiert nicht.</p>
-              </div>
-          {/switch}
+          {#if $page === '/'}
+            <DashboardView />
+          {:else if $page === '/blueprints'}
+            <BlueprintCanvasView />
+          {:else if $page === '/workflow-templates'}
+            <WorkflowTemplatesView />
+          {:else if $page === '/agents'}
+            <LLMAgentsView />
+          {:else if $page === '/prompts'}
+            <PromptsView />
+          {:else if $page === '/roles'}
+            <RolesView />
+          {:else if $page === '/tones'}
+            <ToneProfilesView />
+          {:else if $page === '/llm'}
+            <LLMProfilesView />
+          {:else if $page === '/modules'}
+            <ModulesView />
+          {:else if $page === '/catalog'}
+            <CatalogView />
+          {:else if $page === '/modules/publish'}
+            <ModulePublishingView />
+          {:else if $page === '/input-composer'}
+            <InputComposerView />
+          {:else if $page === '/output-composer'}
+            <OutputComposerView />
+          {:else if $page === '/exec'}
+            <WorkflowExecView />
+          {:else if $page === '/diff'}
+            <DiffView />
+          {:else if $page === '/replay'}
+            <ReplayView />
+          {:else if $page === '/proposals'}
+            <ProposalsView />
+          {:else if $page === '/translations'}
+            <TranslationsView />
+          {:else if $page === '/tenants'}
+            <TenantsView />
+          {:else if $page === '/users'}
+            <UsersView />
+          {:else if $page === '/health'}
+            <ServerHealthView />
+          {:else if $page === '/system'}
+            <SystemManagementView />
+          {:else if $page === '/profile'}
+            <ProfileView {user} />
+          {:else if $page === '/my-keys'}
+            <BYOKManager />
+          {:else}
+            <div class="text-center py-12">
+              <h2 class="text-2xl font-bold text-gray-900">Seite nicht gefunden</h2>
+              <p class="text-gray-500 mt-2">Route "{ $page }" existiert nicht.</p>
+            </div>
+          {/if}
         </main>
       </div>
     </div>

@@ -174,7 +174,7 @@
     <h2 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Publishing pipeline</h2>
     <ol class="text-xs text-gray-600 dark:text-gray-400 space-y-1 list-decimal pl-5">
       <li>Validate the manifest here (paste the JSON below).</li>
-      <li>Click <em>Publish</em> on a row in the table — the backend commits (and optionally pushes) the live manifest to the <code class="font-mono">danwa-modules</code> repo on a <code class="font-mono">publish/<id></code> branch.</li>
+      <li>Click <em>Publish</em> on a row in the table — the backend commits (and optionally pushes) the live manifest to the <code class="font-mono">danwa-modules</code> repo on a <code class="font-mono">{'publish/<id>'}</code> branch.</li>
       <li>Optionally export the module as a zip pack for offline use / uploading.</li>
       <li>Open a PR on github.com/asb-42/danwa-modules; once merged, <strong>Update available</strong> shows up in the ModulesView.</li>
     </ol>
@@ -186,7 +186,7 @@
     <p class="text-xs text-gray-500 dark:text-gray-400">
       Paste a <code class="font-mono">manifest.json</code> here. The backend runs the validator without touching disk.
     </p>
-    <textarea class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 font-mono text-xs" rows="8" bind:value={manifestJson} placeholder='{ "id": "my-module", "name": { "en": "My Module" }, "type": "agent-core", "version": "0.1.0", ... }'></textarea>
+    <textarea class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 font-mono text-xs" rows="8" bind:value={manifestJson} placeholder={'{ "id": "my-module", "name": { "en": "My Module" }, "type": "agent-core", "version": "0.1.0", ... }'}></textarea>
     <div class="flex items-center gap-2">
       <button class="btn-primary" onclick={handleValidate} disabled={validating}>
         {validating ? '…' : 'Validate'}
