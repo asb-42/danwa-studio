@@ -8,7 +8,7 @@
    * Node output log: scrollable list of completed node outputs.
    */
   import { onDestroy } from 'svelte';
-  import { i18n } from '../lib/i18n/loader.js';
+  import { i18n } from '../../lib/i18n/loader.js';
   import {
     startWorkflow,
     pauseWorkflow,

@@ -1,7 +1,9 @@
 <script>
   import { i18n } from '../lib/i18n/loader.js';
+  import { login as loginRequest } from '../lib/api/auth.js';
 
-  export let user = $bindable(null);
+  // Svelte 5: $bindable() lives inside $props()
+  let { user = $bindable(null) } = $props();
 
   let email = $state('');
   let password = $state('');
@@ -12,17 +14,20 @@
     error = '';
     loading = true;
     try {
-      const response = await fetch('/api/v1/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.detail || 'Login failed');
-      user = data.user;
+      // login() does a pre-flight /health check + sets the auth
+      // store on success (see src/lib/api/auth.js).
+      const loggedInUser = await loginRequest(email, password);
+      user = loggedInUser;
       window.location.hash = '/';
     } catch (e) {
-      error = e.message;
+      // Map the localized 'Backend connection lost' diagnostic to a
+      // user-actionable hint. Anything else (e.g. 'Invalid
+      // credentials' from the backend) passes through unchanged.
+      if (e && /Backend connection lost/i.test(e.message)) {
+        error = i18n.t('auth.login.backendDown');
+      } else {
+        error = (e && e.message) || i18n.t('auth.login.failed');
+      }
     } finally {
       loading = false;
     }

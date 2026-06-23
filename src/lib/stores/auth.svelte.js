@@ -1,93 +1,141 @@
 /**
- * Auth stores for JWT-based authentication.
+ * stores/auth.svelte.js — Svelte 5 rune-based auth state.
  *
- * Persisted to localStorage so the user stays logged in across page reloads.
+ * Holds the current user, the access/refresh token, and the
+ * selected tenant. Persists to localStorage so a page refresh
+ * keeps the user signed in.
+ *
+ * Public surface:
+ *   - currentUser        : $state-backed read-only view (object|null)
+ *   - currentTenant      : $state-backed read-only view (object|null)
+ *   - accessToken()      : function returning the raw token string
+ *   - setAuth(tk, rtk, user, tenant?)  : write all fields + persist
+ *   - clearAuth()        : reset all fields + remove from localStorage
+ *
+ * Date: 2026-06-23
  */
 
-import { writable, derived, get } from 'svelte/store';
+const STORAGE_KEY = 'danwa-studio-auth-v1';
 
-/** JWT access token (null when logged out) */
-export const accessToken = writable(null);
+// Module-level state (Svelte 5 runes work at module scope via $state)
+// We use the `let` + $state.raw() / $state() pattern so the runes
+// are visible to the Svelte compiler.
 
-/** JWT refresh token (null when logged out) */
-export const refreshToken = writable(null);
+let _user = $state(null);
+let _tenant = $state(null);
+let _accessToken = $state(null);
+let _refreshToken = $state(null);
 
-/** Current user object (null when logged out) */
-export const currentUser = writable(null);
-
-/** Currently active tenant (null when logged out or no tenant selected) */
-export const currentTenant = writable(null);
-
-/** Whether the user is authenticated */
-export const isAuthenticated = derived(
-  [accessToken, currentUser],
-  ([$token, $user]) => !!$token && !!$user
-);
-
-// ---------------------------------------------------------------------------
-// Persistence — restore from localStorage on module load
-// ---------------------------------------------------------------------------
-
-if (typeof localStorage !== 'undefined') {
-  const storedAccess = localStorage.getItem('danwa.accessToken');
-  const storedRefresh = localStorage.getItem('danwa.refreshToken');
-  const storedUser = localStorage.getItem('danwa.currentUser');
-  const storedTenant = localStorage.getItem('danwa.currentTenant');
-
-  if (storedAccess) accessToken.set(storedAccess);
-  if (storedRefresh) refreshToken.set(storedRefresh);
-  if (storedUser) {
-    try {
-      currentUser.set(JSON.parse(storedUser));
-    } catch { /* ignore */ }
+function persist() {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    if (_accessToken && _user) {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          access_token: _accessToken,
+          refresh_token: _refreshToken,
+          user: _user,
+          tenant: _tenant,
+        }),
+      );
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  } catch {
+    // localStorage may be disabled (private mode); ignore.
   }
-  if (storedTenant) {
-    try {
-      currentTenant.set(JSON.parse(storedTenant));
-    } catch { /* ignore */ }
-  }
-
-  // Persist on change
-  accessToken.subscribe((v) => {
-    if (v) localStorage.setItem('danwa.accessToken', v);
-    else localStorage.removeItem('danwa.accessToken');
-  });
-  refreshToken.subscribe((v) => {
-    if (v) localStorage.setItem('danwa.refreshToken', v);
-    else localStorage.removeItem('danwa.refreshToken');
-  });
-  currentUser.subscribe((v) => {
-    if (v) localStorage.setItem('danwa.currentUser', JSON.stringify(v));
-    else localStorage.removeItem('danwa.currentUser');
-  });
-  currentTenant.subscribe((v) => {
-    if (v) localStorage.setItem('danwa.currentTenant', JSON.stringify(v));
-    else localStorage.removeItem('danwa.currentTenant');
-  });
 }
 
-// ---------------------------------------------------------------------------
-// Auth actions
-// ---------------------------------------------------------------------------
-
-/**
- * Store tokens and user after successful login/refresh.
- */
-export function setAuth(accessTokenVal, refreshTokenVal, userVal) {
-  accessToken.set(accessTokenVal);
-  refreshToken.set(refreshTokenVal);
-  currentUser.set(userVal);
-  if (userVal?.tenant_id && !get(currentTenant)) {
-    currentTenant.set({ id: userVal.tenant_id, name: userVal.tenant_id });
+/** Restore from localStorage. Safe to call multiple times. */
+function restore() {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (data && data.access_token && data.user) {
+      _accessToken = data.access_token;
+      _refreshToken = data.refresh_token || null;
+      _user = data.user;
+      _tenant = data.tenant || null;
+    }
+  } catch {
+    // Corrupt JSON — clear it.
+    try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
   }
 }
 
 /**
- * Clear all auth state (logout).
+ * Read-only getters. Svelte components use these in $derived
+ * expressions (e.g. `const isAuth = $derived($currentUser !== null)`).
+ */
+export function getCurrentUser() {
+  return _user;
+}
+export function getCurrentTenant() {
+  return _tenant;
+}
+export function getAccessToken() {
+  return _accessToken;
+}
+export function getRefreshToken() {
+  return _refreshToken;
+}
+
+/**
+ * Convenience for components that want the rune directly. In
+ * Svelte 5, runes are only reactive inside .svelte files; outside,
+ * we expose plain functions and have the component wrap in $derived
+ * if it needs reactivity in the template.
+ */
+export const currentUser = {
+  get value() {
+    return _user;
+  },
+};
+export const currentTenant = {
+  get value() {
+    return _tenant;
+  },
+};
+
+/**
+ * Write all auth fields. Persists to localStorage.
+ * @param {string} accessToken
+ * @param {string|null} refreshToken
+ * @param {object} user
+ * @param {object|null} [tenant]
+ */
+export function setAuth(accessToken, refreshToken, user, tenant = null) {
+  _accessToken = accessToken;
+  _refreshToken = refreshToken || null;
+  _user = user;
+  _tenant = tenant;
+  persist();
+}
+
+/**
+ * Clear all auth fields and remove from localStorage.
  */
 export function clearAuth() {
-  accessToken.set(null);
-  refreshToken.set(null);
-  currentUser.set(null);
-  currentTenant.set(null);
+  _accessToken = null;
+  _refreshToken = null;
+  _user = null;
+  _tenant = null;
+  persist();
 }
+
+// Auto-restore on module load (idempotent)
+restore();
+
+export default {
+  getCurrentUser,
+  getCurrentTenant,
+  getAccessToken,
+  getRefreshToken,
+  setAuth,
+  clearAuth,
+  currentUser,
+  currentTenant,
+};

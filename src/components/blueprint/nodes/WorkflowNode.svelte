@@ -7,7 +7,7 @@
    * sequential I/O ports, and execution status visualization.
    */
   import { Handle, Position } from '@xyflow/svelte';
-  import { i18n } from '$1lib/i18n/loader.js';
+  import { i18n } from '../../../lib/i18n/loader.js';
 
   /** @type {{ data: { role: string, label: string, isDraft: boolean, blueprintId?: string, icon?: string, executionStatus?: string } }} */
   let { data } = $props();

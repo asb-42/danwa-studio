@@ -1,5 +1,5 @@
 <script>
-  import { i18n } from '../lib/i18n/loader.js';
+  import { i18n } from '../../lib/i18n/loader.js';
 
   /** @type {{ capabilities?: Object }} */
   let { capabilities = {} } = $props();

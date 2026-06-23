@@ -5,7 +5,7 @@
    * Shows system and custom templates with search, category filter,
    * and delete functionality for custom templates.
    */
-  import { i18n } from '../lib/i18n/loader.js';
+  import { i18n } from '../../lib/i18n/loader.js';
   import {
     listWorkflowTemplates,
     deleteWorkflowTemplate,
@@ -70,7 +70,7 @@
 </script>
 
 {#if visible}
-  <div class="gallery-overlay" role="dialog" aria-label={t('template.gallery.title')}>
+  <div class="gallery-overlay" role="dialog" tabindex="-1" aria-label={t('template.gallery.title')}>
     <div class="gallery-modal">
       <!-- Header -->
       <div class="gallery-header">

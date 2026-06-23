@@ -5,7 +5,7 @@
    * Fields: topic/case description, language, max rounds, consensus threshold.
    * On confirm, calls the onstart callback with the collected parameters.
    */
-  import { i18n } from '../lib/i18n/loader.js';
+  import { i18n } from '../../lib/i18n/loader.js';
   import { getCaseDocuments } from '../../lib/api/case.js';
   import { currentTenant } from '../../lib/stores/auth.svelte.js';
   import { activeCase } from '../../lib/stores.js';

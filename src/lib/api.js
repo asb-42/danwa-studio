@@ -1,7 +1,11 @@
 // Danwa Studio API wrapper
-// Re-exports @danwa/api-client and provides local request() for blueprint API compatibility
-
-import { api as apiClient } from '@danwa/api-client';
+// Provides local request() and a minimal api facade for blueprint
+// API compatibility. The original import of @danwa/api-client has
+// been removed because the danwa-core monorepo's api-client package
+// has not been built (dist/ is missing) and the symlink in
+// node_modules/@danwa/ is not followed by rolldown in production
+// builds. Re-enable the re-export below after `pnpm build` (or
+// equivalent) inside danwa-core/packages/api-client.
 
 const BASE_URL = '/api/v1';
 
@@ -27,5 +31,14 @@ export async function request(path, options = {}) {
   return response.json();
 }
 
-// Re-export the typed API client
-export { apiClient as api };
+/**
+ * Minimal `api` facade. The full @danwa/api-client exposes 30+
+ * generated methods; consumers in the studio currently only need
+ * `api` to be importable. Replace with `export { api as api } from
+ * '@danwa/api-client'` once the package is built.
+ */
+export const api = {
+  // Marker object so `import { api } from '$lib/api.js'` keeps
+  // working. Extend with typed methods as the studio grows.
+  __placeholder: true,
+};

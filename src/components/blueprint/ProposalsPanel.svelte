@@ -2,7 +2,7 @@
      Shown after clicking the Reflect button in the canvas toolbar.
      Svelte 5 runes. -->
 <script>
-  import { i18n } from '../lib/i18n/loader.js';
+  import { i18n } from '../../lib/i18n/loader.js';
 
   let { workflowId = '', visible = false, onclose = () => {} } = $props();
 

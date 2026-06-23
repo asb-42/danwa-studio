@@ -23,6 +23,8 @@ const enFallback = {
   'common.profile': 'Profile',
   'common.logout': 'Logout',
   'common.login': 'Login',
+  'auth.login.failed': 'Login failed. Please check your credentials.',
+  'auth.login.backendDown': 'Backend connection lost. Please start danwa-core first.',
   'nav.dashboard': 'Dashboard',
   'nav.blueprints': 'Blueprints',
   'nav.workflow_templates': 'Workflow Templates',
@@ -93,6 +95,17 @@ const enFallback = {
   'nav.section.evolve': 'EVOLVE',
   'nav.section.administration': 'ADMINISTRATION',
   'nav.section.account': 'ACCOUNT',
+  // Sprint 7: LLM Catalog
+  'nav.catalog': 'LLM Catalog',
+  'catalog.title': 'LLM Catalog',
+  'catalog.sources': 'Sources',
+  'catalog.preview': 'Preview',
+  'catalog.diff': 'Import diff',
+  'catalog.stale': 'Stale',
+  'catalog.fetch': 'Fetch',
+  'catalog.fetchAll': 'Fetch all',
+  'catalog.apply': 'Apply',
+  'catalog.refresh': 'Refresh',
 };
 
 // Base URL for language modules - can be configured via Vite env

@@ -24,6 +24,11 @@ Thumbs.db
 *.log
 npm-debug.log*
 
+# Runtime artefacts (created by manage.sh / setup.sh)
+.lib/
+logs/
+pids/
+
 # Test
 coverage/
 

@@ -221,3 +221,53 @@ export async function getPhaseSnapshotDetail(sessionId, nodeId) {
     throw err;
   }
 }
+
+// ─── Sessions (for Diff / Replay pickers) ───────────────────────────
+
+/**
+ * List workflow sessions, optionally filtered by status/workflow.
+ * @param {{ status?: string, workflow_id?: string, project_id?: string, limit?: number, offset?: number }} [opts]
+ * @returns {Promise<Array>}
+ */
+export function listWorkflowSessions({ status = null, workflow_id = null, project_id = null, limit = 50, offset = 0 } = {}) {
+  const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+  if (status) params.set('status', status);
+  if (workflow_id) params.set('workflow_id', workflow_id);
+  if (project_id) params.set('project_id', project_id);
+  return request(`/api/v1/workflow-exec/sessions?${params.toString()}`);
+}
+
+// ─── Audit log (used by Diff + Replay) ──────────────────────────────
+
+/**
+ * Get the audit log for a workflow session.
+ * @param {string} sessionId
+ * @param {{ node_id?: string, event_type?: string, limit?: number, offset?: number }} [opts]
+ * @returns {Promise<Array>}
+ */
+export function getAuditLog(sessionId, { node_id = null, event_type = null, limit = 1000, offset = 0 } = {}) {
+  const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+  if (node_id) params.set('node_id', node_id);
+  if (event_type) params.set('event_type', event_type);
+  return request(`/api/v1/workflow-exec/${sessionId}/audit-log?${params.toString()}`);
+}
+
+// ─── Session lifecycle extras ───────────────────────────────────────
+
+/**
+ * Delete a workflow session.
+ * @param {string} sessionId
+ * @returns {Promise<Object>}
+ */
+export function deleteWorkflowSession(sessionId) {
+  return request(`/api/v1/workflow-exec/${sessionId}`, { method: 'DELETE' });
+}
+
+/**
+ * Restore a deleted workflow session.
+ * @param {string} sessionId
+ * @returns {Promise<Object>}
+ */
+export function restoreWorkflowSession(sessionId) {
+  return request(`/api/v1/workflow-exec/${sessionId}/restore`, { method: 'POST' });
+}

@@ -5,7 +5,7 @@
    * Allows the user to specify name, description, and which fields
    * should be extracted as placeholders.
    */
-  import { i18n } from '../lib/i18n/loader.js';
+  import { i18n } from '../../lib/i18n/loader.js';
   import { saveWorkflowAsTemplate } from '../../lib/blueprint/api.js';
 
   /** @type {{ workflowId?: string|null, workflowData?: Object|null, visible?: boolean, onSuccess?: Function, onClose?: Function }} */
@@ -70,7 +70,7 @@
 </script>
 
 {#if visible}
-  <div class="dialog-overlay" role="dialog" aria-label={t('template.saveAs.title')}>
+  <div class="dialog-overlay" role="dialog" tabindex="-1" aria-label={t('template.saveAs.title')}>
     <div class="dialog-container">
       <!-- Header -->
       <div class="dialog-header">
