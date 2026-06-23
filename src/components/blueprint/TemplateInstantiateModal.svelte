@@ -5,7 +5,7 @@
    * Renders form fields based on the template's placeholder definitions.
    * Supports: string, blueprint_ref (dropdown), integer, float.
    */
-  import { i18n } from '../lib/i18n/loader.js';
+  import { i18n } from '../../lib/i18n/loader.js';
   import {
     instantiateWorkflowTemplate,
     listAgentBlueprints,

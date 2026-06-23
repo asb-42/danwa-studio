@@ -4,7 +4,7 @@
    *
    * Maps 1:1 to the BlueprintLLMProfile Pydantic model.
    */
-  import { i18n } from '$1lib/i18n/loader.js';
+  import { i18n } from '../../../lib/i18n/loader.js';
   import { canvasStore } from '../../../lib/blueprint/store.svelte.js';
   import {
     createBlueprintLLMProfile,

@@ -5,7 +5,7 @@
    * Shows system and custom templates with search, category filter,
    * and delete functionality for custom templates.
    */
-  import { i18n } from '../lib/i18n/loader.js';
+  import { i18n } from '../../lib/i18n/loader.js';
   import {
     listWorkflowTemplates,
     deleteWorkflowTemplate,

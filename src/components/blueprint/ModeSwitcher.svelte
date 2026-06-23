@@ -5,7 +5,7 @@
    * Blueprint Mode (default): Phase 3 functionality, only asset nodes.
    * Workflow Mode: Shows workflow nodes, allows control flow edges.
    */
-  import { i18n } from '../lib/i18n/loader.js';
+  import { i18n } from '../../lib/i18n/loader.js';
   import { canvasStore } from '../../lib/blueprint/store.svelte.js';
 
   let t = $derived((key, params) => $i18n.t(key, params));

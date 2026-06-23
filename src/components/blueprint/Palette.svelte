@@ -7,7 +7,7 @@
    * Uses HTML5 Drag API for DnD to canvas.
    */
   import { onMount } from 'svelte';
-  import { i18n } from '../lib/i18n/loader.js';
+  import { i18n } from '../../lib/i18n/loader.js';
   import { canvasStore } from '../../lib/blueprint/store.svelte.js';
   import { getNodesByCategory } from '../../lib/blueprint/registry.js';
   import { registerAllNodeTypes } from '../../lib/blueprint/registerAll.js';

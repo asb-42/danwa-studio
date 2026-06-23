@@ -1,6 +1,6 @@
 <script>
   import { onDestroy } from 'svelte';
-  import { i18n } from '../lib/i18n/loader.js';
+  import { i18n } from '../../lib/i18n/loader.js';
   import { pauseWorkflow, resumeWorkflow, cancelWorkflow } from '../../lib/workflowExec.js';
   import { createWorkflowSSE } from '../../lib/workflowSSE.js';
   import { normalizeTranscriptContent } from '../../lib/transcriptNormalizer.js';

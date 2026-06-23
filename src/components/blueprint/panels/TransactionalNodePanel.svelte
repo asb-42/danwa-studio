@@ -8,7 +8,7 @@
    * - Pragmatist (wf-pragmatist): reality_score threshold display + blocking_concerns warning
    * - Angel's Advocate (wf-angels-advocate): PreservedElement info
    */
-  import { i18n } from '$1lib/i18n/loader.js';
+  import { i18n } from '../../../lib/i18n/loader.js';
 
   /** @type {{ nodeType: string }} */
   let { nodeType } = $props();

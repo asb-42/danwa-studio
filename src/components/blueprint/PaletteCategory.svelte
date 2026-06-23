@@ -6,7 +6,7 @@
    * Inactive items (active: false) are rendered with reduced opacity
    * and cannot be dragged.
    */
-  import { i18n } from '../lib/i18n/loader.js';
+  import { i18n } from '../../lib/i18n/loader.js';
   import { handlePaletteDragStart } from '../../lib/blueprint/dnd.js';
 
   /** @type {{ title: string, nodes: Array }} */
