@@ -38,10 +38,12 @@ describe('api/auth.js — login()', () => {
   });
 
   it('calls POST /api/v1/auth/login on a reachable backend', async () => {
-    // First /health call returns 200, then POST returns 200 + user.
+    // First isBackendReachable() hits /api/v1/system/status (proxied
+    // route — /health is answered by Vite's static fallback with
+    // 200 even when the backend is down), then POST returns the user.
     globalThis.fetch = vi
       .fn()
-      .mockResolvedValueOnce({ ok: true, status: 200 }) // /health
+      .mockResolvedValueOnce({ ok: true, status: 200 }) // system/status
       .mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -54,8 +56,8 @@ describe('api/auth.js — login()', () => {
     const user = await login('admin@example.com', 'admin123');
     expect(user).toEqual({ id: 'u-1', email: 'admin@example.com' });
     expect(globalThis.fetch).toHaveBeenCalledTimes(2);
-    // First call: GET /health
-    expect(globalThis.fetch.mock.calls[0][0]).toMatch(/\/health$/);
+    // First call: GET /api/v1/system/status
+    expect(globalThis.fetch.mock.calls[0][0]).toMatch(/\/api\/v1\/system\/status$/);
     // Second call: POST /api/v1/auth/login with the body
     const [url, init] = globalThis.fetch.mock.calls[1];
     expect(url).toMatch(/\/api\/v1\/auth\/login$/);

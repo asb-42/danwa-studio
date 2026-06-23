@@ -38,8 +38,22 @@ export const REACHABILITY = Object.freeze({
 });
 
 /**
- * Probe the backend's /health endpoint with a short timeout.
- * Same shape as danwa-frontend's isBackendReachable.
+ * Probe the backend with a short timeout.
+ *
+ * IMPORTANT: we hit `/api/v1/system/status` (a proxied route) and
+ * NOT `/health` directly, because the Vite dev server on :5174
+ * answers /health with the static HTML shell (200 OK) even when
+ * the backend is down — which would give a false positive. The
+ * system/status endpoint is proxied to the backend; if the backend
+ * is unreachable, Vite returns 502/500 and we correctly diagnose
+ * the failure.
+ *
+ * When the backend is reachable we accept any 2xx, and also 401/403
+ * (these mean the backend answered but the endpoint requires auth,
+ * which is still a positive reachability signal).
+ *
+ * Same shape as danwa-frontend's isBackendReachable so the two
+ * apps surface the same diagnostic.
  */
 export async function isBackendReachable(opts = {}) {
   const timeoutMs = opts.timeoutMs ?? 2500;
@@ -50,11 +64,16 @@ export async function isBackendReachable(opts = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const response = await fetch('/health', {
+    const response = await fetch('/api/v1/system/status', {
       method: 'GET',
       signal: controller.signal,
     });
     if (response.ok) return { ok: true };
+    // 401/403 means the backend is up but the endpoint needs auth —
+    // still a positive reachability signal.
+    if (response.status === 401 || response.status === 403) {
+      return { ok: true, authRequired: true };
+    }
     return { ok: false, reason: REACHABILITY.UNHEALTHY, status: response.status };
   } catch (err) {
     if (err && err.name === 'AbortError') {
