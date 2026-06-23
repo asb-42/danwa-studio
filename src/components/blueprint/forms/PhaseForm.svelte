@@ -92,9 +92,9 @@
     <textarea id="phase-desc" class="form-textarea" bind:value={description} placeholder="Phase purpose..." rows="2" oninput={handleSave}></textarea>
   </div>
 
-  <div class="form-group">
-    <label class="form-label">Assigned Roles</label>
-    <div class="role-grid">
+  <fieldset class="form-group">
+    <legend class="form-label">Assigned Roles</legend>
+    <div class="role-grid" role="group" aria-label="Assigned Roles">
       {#each AVAILABLE_ROLES as roleId}
         <button
           class="role-chip"
@@ -105,7 +105,7 @@
         </button>
       {/each}
     </div>
-  </div>
+  </fieldset>
 
   <div class="form-group">
     <label class="form-label" for="phase-rounds">Max Rounds</label>

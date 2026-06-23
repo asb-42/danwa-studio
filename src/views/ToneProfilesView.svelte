@@ -239,8 +239,8 @@
 />
 
 {#if showModal}
-  <div class="modal-overlay" role="dialog" aria-modal="true" onkeydown={(e) => { if (e.key === 'Escape') { showModal = false; editingProfile = null; } }}>
-    <div class="modal-container" role="document" onclick={(e) => e.stopPropagation()}>
+  <div class="modal-overlay" role="dialog" tabindex="-1" aria-modal="true" onkeydown={(e) => { if (e.key === 'Escape') { showModal = false; editingProfile = null; } }}>
+    <div class="modal-container">
       <div class="modal-header">
         <h2 class="modal-title">{isNew ? 'Create Tone Profile' : 'Edit Tone Profile'}</h2>
         <button class="close-btn" onclick={() => { showModal = false; editingProfile = null; }}>✕</button>

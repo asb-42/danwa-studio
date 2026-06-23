@@ -70,7 +70,7 @@
 </script>
 
 {#if visible}
-  <div class="gallery-overlay" role="dialog" aria-label={t('template.gallery.title')}>
+  <div class="gallery-overlay" role="dialog" tabindex="-1" aria-label={t('template.gallery.title')}>
     <div class="gallery-modal">
       <!-- Header -->
       <div class="gallery-header">

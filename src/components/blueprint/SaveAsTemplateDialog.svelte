@@ -70,7 +70,7 @@
 </script>
 
 {#if visible}
-  <div class="dialog-overlay" role="dialog" aria-label={t('template.saveAs.title')}>
+  <div class="dialog-overlay" role="dialog" tabindex="-1" aria-label={t('template.saveAs.title')}>
     <div class="dialog-container">
       <!-- Header -->
       <div class="dialog-header">

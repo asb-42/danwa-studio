@@ -173,7 +173,7 @@
     if (entityId) {
       // Existing entity drop — load entity data and create non-draft node
       try {
-        let entityData = $state(null);
+        let entityData = null;
         switch (nodeType) {
           case 'llm-profile':
             entityData = await getBlueprintLLMProfile(entityId);
@@ -281,7 +281,7 @@
     const updatedPosition = { ...targetNode.position };
 
     // Re-evaluate phase parentage on drag end
-    let newParentId = $state(null);
+    let newParentId = null;
     if (targetNode.type !== 'wf-phase') {
       const phaseNodes = canvasStore.nodes.filter(n => n.type === 'wf-phase' && n.id !== targetNode.id);
       // Use absolute position on the canvas (relative position + parent offset)
@@ -536,11 +536,6 @@
     background: #dbeafe;
     border-color: #3b82f6;
   }
-  .toolbar-btn-execute.active {
-    background: #3b82f6;
-    color: white;
-    border-color: #3b82f6;
-  }
   :global(.dark) .toolbar-btn-execute {
     background: #1e3a5f;
     border-color: #3b82f6;
@@ -549,10 +544,6 @@
   :global(.dark) .toolbar-btn-execute:hover {
     background: #1e40af;
     border-color: #60a5fa;
-  }
-  :global(.dark) .toolbar-btn-execute.active {
-    background: #3b82f6;
-    color: white;
   }
   .toolbar-btn-reflect {
     background: #fefce8;

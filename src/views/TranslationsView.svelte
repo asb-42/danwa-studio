@@ -430,8 +430,8 @@
 />
 
 {#if addOpen}
-  <div class="modal-overlay" role="dialog" aria-modal="true" onkeydown={(e) => { if (e.key === 'Escape') addOpen = false; }}>
-    <div class="modal-container" role="document" onclick={(e) => e.stopPropagation()}>
+  <div class="modal-overlay" role="dialog" tabindex="-1" aria-modal="true" onkeydown={(e) => { if (e.key === 'Escape') addOpen = false; }}>
+    <div class="modal-container">
       <div class="modal-header">
         <h2 class="modal-title">Add Custom Locale</h2>
         <button class="close-btn" onclick={() => (addOpen = false)}>✕</button>

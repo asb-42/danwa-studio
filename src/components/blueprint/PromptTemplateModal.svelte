@@ -114,8 +114,8 @@
 </script>
 
 {#if visible}
-  <div class="modal-overlay" role="dialog" aria-modal="true" onkeydown={(e) => { if (e.key === 'Escape') onClose(); }}>
-    <div class="modal-container" role="document" onclick={(e) => e.stopPropagation()}>
+  <div class="modal-overlay" role="dialog" tabindex="-1" aria-modal="true" onkeydown={(e) => { if (e.key === 'Escape') onClose(); }}>
+    <div class="modal-container" role="document">
       <div class="modal-header">
         <h2 class="modal-title">
           {#if formReadOnly}View{:else}{isNew ? $i18n.t('prompts.create') : $i18n.t('prompts.edit')}{/if}
@@ -284,7 +284,7 @@
     font-weight: 500;
     color: var(--color-text, #cdd6f4);
   }
-  .field-input, .field-select, textarea.field-input {
+  .field-input, textarea.field-input {
     padding: 8px 12px;
     border: 1px solid var(--color-border, #313244);
     border-radius: 6px;
@@ -293,7 +293,7 @@
     font-size: 0.875rem;
     font-family: inherit;
   }
-  .field-input:focus, .field-select:focus, textarea.field-input:focus {
+  .field-input:focus, textarea.field-input:focus {
     outline: none;
     border-color: var(--color-primary, #89b4fa);
   }

@@ -688,7 +688,7 @@
 <!-- Save dialog for new layouts -->
 {#if showSaveDialog}
   <div class="dialog-overlay" role="button" tabindex="0" onclick={() => { showSaveDialog = false; }} onkeydown={(e) => { if (e.key === 'Escape') showSaveDialog = false; }}>
-    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="bp-save-layout-title" tabindex="0" onclick={(e) => e.stopPropagation()} onkeydown={(e) => { if (e.key === 'Enter') handleSaveNewLayout(); }}>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="bp-save-layout-title" tabindex="0" onkeydown={(e) => { if (e.key === 'Enter') handleSaveNewLayout(); }}>
       <h3 id="bp-save-layout-title" class="dialog-title">{t('blueprint.canvas.saveLayout')}</h3>
       {#if saveError}
         <p class="dialog-error">{saveError}</p>
@@ -718,7 +718,7 @@
 <!-- "Save as Workflow" dialog -->
 {#if showWorkflowDialog}
   <div class="dialog-overlay" role="button" tabindex="0" onclick={() => { showWorkflowDialog = false; }} onkeydown={(e) => { if (e.key === 'Escape') showWorkflowDialog = false; }}>
-    <div class="dialog dialog-wide" role="dialog" aria-modal="true" aria-labelledby="bp-save-workflow-title" tabindex="0" onclick={(e) => e.stopPropagation()} onkeydown={(e) => { if (e.key === 'Enter' && !isConverting) handleSaveAsWorkflow(); }}>
+    <div class="dialog dialog-wide" role="dialog" aria-modal="true" aria-labelledby="bp-save-workflow-title" tabindex="0" onkeydown={(e) => { if (e.key === 'Enter' && !isConverting) handleSaveAsWorkflow(); }}>
       <h3 id="bp-save-workflow-title" class="dialog-title">💾 {t('blueprint.workflow.saveAsWorkflow')}</h3>
       <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
         {t('blueprint.workflow.saveAsWorkflowHint')}

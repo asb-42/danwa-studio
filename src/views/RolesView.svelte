@@ -222,8 +222,8 @@
 />
 
 {#if showModal}
-  <div class="modal-overlay" role="dialog" aria-modal="true" onkeydown={(e) => { if (e.key === 'Escape') { showModal = false; editingRole = null; } }}>
-    <div class="modal-container" role="document" onclick={(e) => e.stopPropagation()}>
+  <div class="modal-overlay" role="dialog" tabindex="-1" aria-modal="true" onkeydown={(e) => { if (e.key === 'Escape') { showModal = false; editingRole = null; } }}>
+    <div class="modal-container">
       <div class="modal-header">
         <h2 class="modal-title">{isNew ? 'Create Role Definition' : 'Edit Role Definition'}</h2>
         <button class="close-btn" onclick={() => { showModal = false; editingRole = null; }}>✕</button>

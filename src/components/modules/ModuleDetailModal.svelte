@@ -137,8 +137,8 @@
 </script>
 
 {#if visible}
-  <div class="modal-overlay" role="dialog" aria-modal="true" onkeydown={(e) => { if (e.key === 'Escape') onClose(); }}>
-    <div class="modal-container wide" role="document" onclick={(e) => e.stopPropagation()}>
+  <div class="modal-overlay" role="dialog" tabindex="-1" aria-modal="true" onkeydown={(e) => { if (e.key === 'Escape') onClose(); }}>
+    <div class="modal-container wide">
       <div class="modal-header">
         <div class="flex-1">
           <h2 class="modal-title">
@@ -459,9 +459,6 @@
   .flex-1 { flex: 1; }
   .text-xs { font-size: 0.75rem; }
   .text-gray-500 { color: #6b7280; }
-  .dark .text-gray-500 { color: #6c7086; }
-  .text-gray-400 { color: #9ca3af; }
-  .dark .text-gray-400 { color: #6c7086; }
   .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
   .mt-1 { margin-top: 4px; }
   .mt-4 { margin-top: 16px; }

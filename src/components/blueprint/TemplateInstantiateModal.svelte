@@ -135,8 +135,8 @@
 </script>
 
 {#if visible && templateId}
-  <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="template-instantiate-title" onkeydown={(e) => { if (e.key === 'Escape') onClose(); }}>
-    <div class="modal-container" role="document" onclick={(e) => e.stopPropagation()}>
+  <div class="modal-overlay" role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="template-instantiate-title" onkeydown={(e) => { if (e.key === 'Escape') onClose(); }}>
+    <div class="modal-container">
       <!-- Header -->
       <div class="modal-header">
         <div>
