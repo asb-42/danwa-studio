@@ -29,6 +29,7 @@
   import ProfileView from './views/ProfileView.svelte';
   import BYOKManager from './views/BYOKManager.svelte';
   import { i18n } from './lib/i18n/loader.js';
+  import { getCurrentUser as _getCurrentUser } from './lib/stores/auth.svelte.js';
 
   // Initialize i18n
   i18n.init();
@@ -50,8 +51,11 @@
   const isPublicRoute = $derived(publicRoutes.includes($page));
   const needsAuth = $derived(!isPublicRoute);
 
-  // Mock auth store - will be replaced with real auth
-  let user = $state(null);
+  // Real auth (replaces the mock auth in commit history).
+  // See src/lib/stores/auth.svelte.js + src/lib/api/auth.js.
+  // The store auto-restores from localStorage on module load.
+  const currentUser = $derived(_getCurrentUser());
+  let user = $derived(currentUser); // legacy alias for the LoginView bind
   let isAuthenticated = $derived(user !== null);
 </script>
 

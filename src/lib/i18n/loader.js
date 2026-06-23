@@ -23,6 +23,8 @@ const enFallback = {
   'common.profile': 'Profile',
   'common.logout': 'Logout',
   'common.login': 'Login',
+  'auth.login.failed': 'Login failed. Please check your credentials.',
+  'auth.login.backendDown': 'Backend connection lost. Please start danwa-core first.',
   'nav.dashboard': 'Dashboard',
   'nav.blueprints': 'Blueprints',
   'nav.workflow_templates': 'Workflow Templates',
