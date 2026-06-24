@@ -4,7 +4,7 @@
   import { error as errorStore } from '../lib/stores.js';
   import { getHealth, getMonitorActivity, getServerLogs } from '../lib/admin/api.js';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let health = $state(null);
   let activity = $state([]);
@@ -76,7 +76,7 @@
 <div class="space-y-6">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{$i18n.t('nav.health')}</h1>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{i18n.t('nav.health')}</h1>
       <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
         Live server status — auto-refreshes every 5 seconds.
       </p>
@@ -126,7 +126,7 @@
       <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Recent LLM Activity ({activity.length})</h2>
     </div>
     {#if activity.length === 0}
-      <p class="p-8 text-center text-gray-500 text-sm">{$i18n.t('common.noData')}</p>
+      <p class="p-8 text-center text-gray-500 text-sm">{i18n.t('common.noData')}</p>
     {:else}
       <div class="max-h-96 overflow-y-auto">
         <table class="w-full text-sm">

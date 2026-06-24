@@ -19,7 +19,7 @@
 
   const TRANSACTIONAL_NODE_TYPES = ['wf-critic', 'wf-builder', 'wf-pragmatist', 'wf-angels-advocate'];
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let selectedNode = $derived(canvasStore.selectedNode);
   let nodeType = $derived(selectedNode?.type);

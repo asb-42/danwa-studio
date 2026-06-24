@@ -4,7 +4,7 @@
 
 <div class="space-y-6">
   <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-gray-900">{$i18n.t('nav.input_composer')}</h1>
+    <h1 class="text-2xl font-bold text-gray-900">{i18n.t('nav.input_composer')}</h1>
   </div>
 
   <div class="bg-white rounded-lg border border-gray-200 p-8 text-center">

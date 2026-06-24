@@ -10,7 +10,7 @@
   } from '../lib/blueprint/api.js';
   import ConfirmDialog from '../components/ConfirmDialog.svelte';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let profiles = $state([]);
   let loading = $state(false);
@@ -145,36 +145,36 @@
 
 <div class="space-y-6">
   <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{$i18n.t('nav.tones')}</h1>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{i18n.t('nav.tones')}</h1>
     <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick={handleCreate}>
-      {$i18n.t('common.create')}
+      {i18n.t('common.create')}
     </button>
   </div>
 
   {#if loading}
     <div class="flex items-center justify-center h-32">
-      <p class="text-gray-500">{$i18n.t('common.loading')}</p>
+      <p class="text-gray-500">{i18n.t('common.loading')}</p>
     </div>
   {:else}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
       {#if profiles.length === 0}
         <div class="p-8 text-center">
-          <p class="text-gray-500 dark:text-gray-400 mb-4">{$i18n.t('common.noData')}</p>
+          <p class="text-gray-500 dark:text-gray-400 mb-4">{i18n.t('common.noData')}</p>
           <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" onclick={handleCreate}>
-            {$i18n.t('common.create')}
+            {i18n.t('common.create')}
           </button>
         </div>
       {:else}
         <table class="w-full text-sm text-left">
           <thead class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th class="px-4 py-3">{$i18n.t('config.name')}</th>
+              <th class="px-4 py-3">{i18n.t('config.name')}</th>
               <th class="px-4 py-3">Style</th>
               <th class="px-4 py-3">Formality</th>
               <th class="px-4 py-3">Verbosity</th>
               <th class="px-4 py-3">Emotion</th>
               <th class="px-4 py-3">Rhetoric</th>
-              <th class="px-4 py-3 text-right">{$i18n.t('config.actions')}</th>
+              <th class="px-4 py-3 text-right">{i18n.t('config.actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -210,11 +210,11 @@
                 <td class="px-4 py-3 text-gray-600 dark:text-gray-400">{p.rhetorical_mode}</td>
                 <td class="px-4 py-3 text-right space-x-1">
                   <button class="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800/40 transition-colors" onclick={() => handleEdit(p)}>
-                    {$i18n.t('common.edit')}
+                    {i18n.t('common.edit')}
                   </button>
                   {#if !p.is_system}
                     <button class="text-xs px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded hover:bg-red-200 dark:hover:bg-red-800/40 transition-colors" onclick={() => handleDelete(p.id)}>
-                      {$i18n.t('common.delete')}
+                      {i18n.t('common.delete')}
                     </button>
                   {/if}
                 </td>
@@ -231,8 +231,8 @@
   open={pendingDeleteId !== null}
   title="Delete Tone Profile"
   message="Are you sure you want to delete this tone profile?"
-  confirmLabel={$i18n.t('common.delete')}
-  cancelLabel={$i18n.t('common.cancel')}
+  confirmLabel={i18n.t('common.delete')}
+  cancelLabel={i18n.t('common.cancel')}
   variant="danger"
   onConfirm={confirmDelete}
   onCancel={() => (pendingDeleteId = null)}
@@ -251,7 +251,7 @@
 
         <div class="form-row">
           <div class="form-field flex-1">
-            <label class="field-label" for="tp-name">{$i18n.t('config.name')}</label>
+            <label class="field-label" for="tp-name">{i18n.t('config.name')}</label>
             <input id="tp-name" type="text" class="field-input" bind:value={form.name} placeholder="Academic-Strict" />
           </div>
           <div class="form-field flex-1">
@@ -303,7 +303,7 @@
         </div>
 
         <div class="form-field">
-          <label class="field-label" for="tp-desc">{$i18n.t('config.description')}</label>
+          <label class="field-label" for="tp-desc">{i18n.t('config.description')}</label>
           <textarea id="tp-desc" class="field-input" rows="2" bind:value={form.description}></textarea>
         </div>
 
@@ -316,9 +316,9 @@
       </div>
 
       <div class="modal-footer">
-        <button class="btn-secondary" onclick={() => { showModal = false; editingProfile = null; }} disabled={saving}>{$i18n.t('common.cancel')}</button>
+        <button class="btn-secondary" onclick={() => { showModal = false; editingProfile = null; }} disabled={saving}>{i18n.t('common.cancel')}</button>
         <button class="btn-primary" onclick={handleSave} disabled={saving}>
-          {saving ? '…' : $i18n.t('common.save')}
+          {saving ? '…' : i18n.t('common.save')}
         </button>
       </div>
     </div>

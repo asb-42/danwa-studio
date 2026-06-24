@@ -12,7 +12,7 @@
   /** @type {{ title: string, nodes: Array }} */
   let { title, nodes = [] } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 </script>
 
 <div class="palette-category" data-testid="palette-category-{title}">

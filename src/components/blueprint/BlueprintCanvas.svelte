@@ -31,7 +31,7 @@
 
   let { onsave = () => {}, onsaveas = () => {}, onnewworkflow = () => {}, onsaveastemplate = () => {}, onrun = () => {} } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   /** @type {HTMLElement|null} */
   let flowContainer = $state(null);

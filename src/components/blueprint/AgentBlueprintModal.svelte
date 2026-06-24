@@ -11,7 +11,7 @@
 
   let { blueprint = null, visible = false, onSuccess = () => {}, onClose = () => {} } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let isNew = $derived(!blueprint);
   let saving = $state(false);
@@ -130,7 +130,7 @@
   <div class="modal-overlay" role="dialog" tabindex="-1" aria-modal="true" onkeydown={(e) => { if (e.key === 'Escape') onClose(); }}>
     <div class="modal-container">
       <div class="modal-header">
-        <h2 class="modal-title">{isNew ? $i18n.t('agents.create') : $i18n.t('agents.edit')}</h2>
+        <h2 class="modal-title">{isNew ? i18n.t('agents.create') : i18n.t('agents.edit')}</h2>
         <button class="close-btn" onclick={onClose} aria-label="Close">✕</button>
       </div>
 
@@ -141,7 +141,7 @@
 
         <div class="form-row">
           <div class="form-field flex-1">
-            <label class="field-label" for="ab-name">{$i18n.t('config.name')}</label>
+            <label class="field-label" for="ab-name">{i18n.t('config.name')}</label>
             <input id="ab-name" type="text" class="field-input" bind:value={form.name} placeholder="strategist-main" />
           </div>
           <div class="form-field flex-1">
@@ -151,7 +151,7 @@
         </div>
 
         <div class="form-field">
-          <label class="field-label" for="ab-description">{$i18n.t('config.description')}</label>
+          <label class="field-label" for="ab-description">{i18n.t('config.description')}</label>
           <textarea id="ab-description" class="field-input" rows="2" bind:value={form.description}></textarea>
         </div>
 
@@ -204,9 +204,9 @@
       </div>
 
       <div class="modal-footer">
-        <button class="btn-secondary" onclick={onClose} disabled={saving}>{$i18n.t('common.cancel')}</button>
+        <button class="btn-secondary" onclick={onClose} disabled={saving}>{i18n.t('common.cancel')}</button>
         <button class="btn-primary" onclick={handleSave} disabled={saving}>
-          {saving ? '…' : $i18n.t('common.save')}
+          {saving ? '…' : i18n.t('common.save')}
         </button>
       </div>
     </div>

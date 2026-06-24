@@ -5,7 +5,7 @@
   import { reloadProfiles, getServerLogs } from '../lib/admin/api.js';
   import ConfirmDialog from '../components/ConfirmDialog.svelte';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let lastReload = $state(null);
   let reloading = $state(false);
@@ -57,7 +57,7 @@
 
 <div class="space-y-6">
   <div>
-    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{$i18n.t('nav.system')}</h1>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{i18n.t('nav.system')}</h1>
     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
       System-wide maintenance actions and configuration overview.
     </p>
@@ -98,7 +98,7 @@
       Read-only view of what the running server reports about itself. Use this to verify env-var changes after a restart.
     </p>
     {#if !configSnapshot}
-      <p class="text-gray-500 text-sm">{$i18n.t('common.loading')}</p>
+      <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
     {:else}
       <pre class="json-block">{JSON.stringify(configSnapshot, null, 2)}</pre>
     {/if}
@@ -120,7 +120,7 @@
   title="Reload LLM profiles"
   message="This refreshes the in-memory LLM profile cache. In-flight requests will continue with the old cache until they complete."
   confirmLabel="Reload"
-  cancelLabel={$i18n.t('common.cancel')}
+  cancelLabel={i18n.t('common.cancel')}
   variant="primary"
   onConfirm={handleReload}
   onCancel={() => (pendingReload = false)}

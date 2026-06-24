@@ -12,7 +12,7 @@
   } from '../lib/admin/api.js';
   import ConfirmDialog from '../components/ConfirmDialog.svelte';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let tenants = $state([]);
   let currentTenant = $state(null);
@@ -123,14 +123,14 @@
 
 <div class="space-y-6">
   <div>
-    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{$i18n.t('nav.tenants')}</h1>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{i18n.t('nav.tenants')}</h1>
     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
       Tenant administration — settings, members, role management.
     </p>
   </div>
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{$i18n.t('common.loading')}</p>
+    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
   {:else}
     <!-- Current tenant card -->
     {#if currentTenant}
@@ -198,7 +198,7 @@
       {/if}
 
       {#if currentUsers.length === 0}
-        <p class="p-8 text-center text-gray-500 text-sm">{$i18n.t('common.noData')}</p>
+        <p class="p-8 text-center text-gray-500 text-sm">{i18n.t('common.noData')}</p>
       {:else}
         <table class="w-full text-sm text-left">
           <thead class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">
@@ -262,8 +262,8 @@
   open={pendingDelete !== null}
   title="Remove member"
   message={pendingDelete ? `Remove ${pendingDelete.email} from this tenant?` : ''}
-  confirmLabel={$i18n.t('common.delete')}
-  cancelLabel={$i18n.t('common.cancel')}
+  confirmLabel={i18n.t('common.delete')}
+  cancelLabel={i18n.t('common.cancel')}
   variant="danger"
   onConfirm={confirmDelete}
   onCancel={() => (pendingDelete = null)}

@@ -33,7 +33,7 @@ describe('request() — success', () => {
       json: async () => ({ data: 1 }),
     });
 
-    const result = await request('/blueprints');
+    const result = await request('/api/v1/blueprints');
     expect(result).toEqual({ data: 1 });
 
     const [url, init] = fetchMock.mock.calls[0];

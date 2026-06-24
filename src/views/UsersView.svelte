@@ -5,7 +5,7 @@
   import { listUsers, inviteUser, changePassword } from '../lib/admin/api.js';
   import ConfirmDialog from '../components/ConfirmDialog.svelte';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let users = $state([]);
   let loading = $state(false);
@@ -113,7 +113,7 @@
 <div class="space-y-6">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{$i18n.t('nav.users')}</h1>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{i18n.t('nav.users')}</h1>
       <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">User administration (admin only).</p>
     </div>
     <div class="flex gap-2">
@@ -196,9 +196,9 @@
   </div>
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{$i18n.t('common.loading')}</p>
+    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
   {:else if filteredUsers.length === 0}
-    <p class="text-gray-500 text-sm">{$i18n.t('common.noData')}</p>
+    <p class="text-gray-500 text-sm">{i18n.t('common.noData')}</p>
   {:else}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
       <table class="w-full text-sm text-left">

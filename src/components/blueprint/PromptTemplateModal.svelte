@@ -7,7 +7,7 @@
 
   let { template = null, visible = false, readOnly = false, onSuccess = () => {}, onClose = () => {} } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let isNew = $derived(!template);
   let saving = $state(false);
@@ -118,7 +118,7 @@
     <div class="modal-container" role="document">
       <div class="modal-header">
         <h2 class="modal-title">
-          {#if formReadOnly}View{:else}{isNew ? $i18n.t('prompts.create') : $i18n.t('prompts.edit')}{/if}
+          {#if formReadOnly}View{:else}{isNew ? i18n.t('prompts.create') : i18n.t('prompts.edit')}{/if}
           {#if formReadOnly}<span class="readonly-badge">🔒 read-only</span>{/if}
         </h2>
         <button class="close-btn" onclick={onClose} aria-label="Close">✕</button>
@@ -132,7 +132,7 @@
 
         <div class="form-row">
           <div class="form-field flex-1">
-            <label class="field-label" for="pt-name">{$i18n.t('config.name')}</label>
+            <label class="field-label" for="pt-name">{i18n.t('config.name')}</label>
             <input id="pt-name" type="text" class="field-input" bind:value={form.name} placeholder="strategist-system-de" />
           </div>
           <div class="form-field flex-1">
@@ -143,7 +143,7 @@
 
         <div class="form-row">
           <div class="form-field flex-1">
-            <label class="field-label" for="pt-role">{$i18n.t('config.role')}</label>
+            <label class="field-label" for="pt-role">{i18n.t('config.role')}</label>
             <input id="pt-role" type="text" class="field-input" bind:value={form.role} placeholder="strategist" list="role-type-suggestions" />
             <datalist id="role-type-suggestions">
               <option value="strategist"></option>
@@ -155,7 +155,7 @@
             </datalist>
           </div>
           <div class="form-field flex-1">
-            <label class="field-label" for="pt-variant">{$i18n.t('config.variant')}</label>
+            <label class="field-label" for="pt-variant">{i18n.t('config.variant')}</label>
             <input id="pt-variant" type="text" class="field-input" bind:value={form.variant} placeholder="default" />
           </div>
           <div class="form-field flex-1">
@@ -165,12 +165,12 @@
         </div>
 
         <div class="form-field">
-          <label class="field-label" for="pt-content">{$i18n.t('config.prompt')} *</label>
+          <label class="field-label" for="pt-content">{i18n.t('config.prompt')} *</label>
           <textarea id="pt-content" class="field-input content-area" rows="10" bind:value={form.content} placeholder="You are a strategist. Reason step by step..."></textarea>
         </div>
 
         <div class="form-field">
-          <label class="field-label" for="pt-description">{$i18n.t('config.description')}</label>
+          <label class="field-label" for="pt-description">{i18n.t('config.description')}</label>
           <textarea id="pt-description" class="field-input" rows="2" bind:value={form.description}></textarea>
         </div>
 
@@ -187,10 +187,10 @@
       </div>
 
       <div class="modal-footer">
-        <button class="btn-secondary" onclick={onClose}>{$i18n.t('common.cancel')}</button>
+        <button class="btn-secondary" onclick={onClose}>{i18n.t('common.cancel')}</button>
         {#if !formReadOnly}
           <button class="btn-primary" onclick={handleSave} disabled={saving}>
-            {saving ? '…' : $i18n.t('common.save')}
+            {saving ? '…' : i18n.t('common.save')}
           </button>
         {/if}
       </div>

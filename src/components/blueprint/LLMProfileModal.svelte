@@ -7,7 +7,7 @@
 
   let { profile = null, visible = false, onSuccess = () => {}, onClose = () => {} } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let isNew = $derived(!profile);
   let saving = $state(false);
@@ -83,19 +83,19 @@
   <div class="modal-overlay" role="dialog" tabindex="-1" aria-modal="true" onkeydown={(e) => { if (e.key === 'Escape') onClose(); }}>
     <div class="modal-container">
       <div class="modal-header">
-        <h2 class="modal-title">{isNew ? $i18n.t('llm_profiles.create') : $i18n.t('llm_profiles.edit')}</h2>
+        <h2 class="modal-title">{isNew ? i18n.t('llm_profiles.create') : i18n.t('llm_profiles.edit')}</h2>
         <button class="close-btn" onclick={onClose} aria-label="Close">✕</button>
       </div>
 
       <div class="modal-body">
         <div class="form-field">
-          <label class="field-label" for="lp-name">{$i18n.t('config.name')}</label>
+          <label class="field-label" for="lp-name">{i18n.t('config.name')}</label>
           <input id="lp-name" type="text" class="field-input" bind:value={form.name} />
         </div>
 
         <div class="form-row">
           <div class="form-field flex-1">
-            <label class="field-label" for="lp-provider">{$i18n.t('config.provider')}</label>
+            <label class="field-label" for="lp-provider">{i18n.t('config.provider')}</label>
             <select id="lp-provider" class="field-select" bind:value={form.provider}>
               {#each providers as p}
                 <option value={p}>{p}</option>
@@ -103,13 +103,13 @@
             </select>
           </div>
           <div class="form-field flex-1">
-            <label class="field-label" for="lp-model">{$i18n.t('config.model')}</label>
+            <label class="field-label" for="lp-model">{i18n.t('config.model')}</label>
             <input id="lp-model" type="text" class="field-input" bind:value={form.model} placeholder="anthropic/claude-3.5-sonnet" />
           </div>
         </div>
 
         <div class="form-field">
-          <label class="field-label" for="lp-profile-type">{$i18n.t('config.profileType')}</label>
+          <label class="field-label" for="lp-profile-type">{i18n.t('config.profileType')}</label>
           <select id="lp-profile-type" class="field-select" bind:value={form.profile_type}>
             {#each profileTypes as pt}
               <option value={pt}>{pt}</option>
@@ -118,46 +118,46 @@
         </div>
 
         <div class="form-field">
-          <label class="field-label" for="lp-api-base">{$i18n.t('config.apiBase')}</label>
+          <label class="field-label" for="lp-api-base">{i18n.t('config.apiBase')}</label>
           <input id="lp-api-base" type="text" class="field-input" bind:value={form.api_base} placeholder="https://api.openrouter.ai" />
         </div>
 
         <div class="form-field">
-          <label class="field-label" for="lp-api-key">{$i18n.t('config.apiKeyEnv')}</label>
+          <label class="field-label" for="lp-api-key">{i18n.t('config.apiKeyEnv')}</label>
           <input id="lp-api-key" type="text" class="field-input" bind:value={form.api_key_env} placeholder="OPENROUTER_API_KEY" />
         </div>
 
         {#if form.provider === 'cloudflare'}
           <div class="form-field">
-            <label class="field-label" for="lp-account-id">{$i18n.t('config.accountIdEnv')}</label>
+            <label class="field-label" for="lp-account-id">{i18n.t('config.accountIdEnv')}</label>
             <input id="lp-account-id" type="text" class="field-input" bind:value={form.account_id_env} placeholder="CLOUDFLARE_ACCOUNT_ID" />
           </div>
         {/if}
 
         <div class="form-row">
           <div class="form-field flex-1">
-            <label class="field-label" for="lp-temperature">{$i18n.t('config.temperature')}</label>
+            <label class="field-label" for="lp-temperature">{i18n.t('config.temperature')}</label>
             <input id="lp-temperature" type="number" class="field-input" bind:value={form.temperature} min="0" max="2" step="0.1" />
           </div>
           <div class="form-field flex-1">
-            <label class="field-label" for="lp-max-tokens">{$i18n.t('config.maxTokens')}</label>
+            <label class="field-label" for="lp-max-tokens">{i18n.t('config.maxTokens')}</label>
             <input id="lp-max-tokens" type="number" class="field-input" bind:value={form.max_tokens} min="1" step="1" />
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-field flex-1">
-            <label class="field-label" for="lp-context">{$i18n.t('config.contextWindow')}</label>
+            <label class="field-label" for="lp-context">{i18n.t('config.contextWindow')}</label>
             <input id="lp-context" type="number" class="field-input" bind:value={form.context_window} min="0" step="1" placeholder="128000" />
           </div>
           <div class="form-field flex-1">
-            <label class="field-label" for="lp-timeout">{$i18n.t('config.timeout')}</label>
+            <label class="field-label" for="lp-timeout">{i18n.t('config.timeout')}</label>
             <input id="lp-timeout" type="number" class="field-input" bind:value={form.timeout} min="1" step="1" />
           </div>
         </div>
 
         <div class="form-field">
-          <label class="field-label" for="lp-protocol">{$i18n.t('config.protocol')}</label>
+          <label class="field-label" for="lp-protocol">{i18n.t('config.protocol')}</label>
           <select id="lp-protocol" class="field-select" bind:value={form.protocol}>
             {#each protocols as p}
               <option value={p}>{p}</option>
@@ -167,7 +167,7 @@
 
         {#if form.protocol === 'a2a'}
           <div class="form-field">
-            <label class="field-label" for="lp-a2a">{$i18n.t('config.a2aEndpoint')}</label>
+            <label class="field-label" for="lp-a2a">{i18n.t('config.a2aEndpoint')}</label>
             <input id="lp-a2a" type="text" class="field-input" bind:value={form.a2a_endpoint} placeholder="http://agent.example.com" />
           </div>
         {/if}
@@ -178,9 +178,9 @@
       </div>
 
       <div class="modal-footer">
-        <button class="btn-secondary" onclick={onClose}>{$i18n.t('common.cancel')}</button>
+        <button class="btn-secondary" onclick={onClose}>{i18n.t('common.cancel')}</button>
         <button class="btn-primary" onclick={handleSave} disabled={saving}>
-          {saving ? '...' : (isNew ? $i18n.t('common.create') : $i18n.t('common.save'))}
+          {saving ? '...' : (isNew ? i18n.t('common.create') : i18n.t('common.save'))}
         </button>
       </div>
     </div>

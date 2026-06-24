@@ -1,6 +1,5 @@
 <script>
   import { onMount } from 'svelte';
-  import { page } from './stores.js';
   import Header from './components/Header.svelte';
   import Sidebar from './components/Sidebar.svelte';
   import LoginView from './views/LoginView.svelte';
@@ -31,95 +30,93 @@
   import { i18n } from './lib/i18n/loader.js';
   import { getCurrentUser as _getCurrentUser } from './lib/stores/auth.svelte.js';
 
-  // Initialize i18n
   i18n.init();
 
-  // Hash-based routing
+  let currentPage = $state(window.location.hash.slice(1) || '/');
+
   function handleHashChange() {
-    const hash = window.location.hash.slice(1) || '/';
-    page.set(hash);
+    currentPage = window.location.hash.slice(1) || '/';
   }
 
   onMount(() => {
     window.addEventListener('hashchange', handleHashChange);
-    handleHashChange();
     return () => window.removeEventListener('hashchange', handleHashChange);
   });
 
-  // Check if route requires auth (Svelte 5: $derived, not legacy $:)
   const publicRoutes = ['/login'];
-  const isPublicRoute = $derived(publicRoutes.includes($page));
-  const needsAuth = $derived(!isPublicRoute);
+  const needsAuth = $derived(!publicRoutes.includes(currentPage));
 
-  // Real auth (replaces the mock auth in commit history).
-  // See src/lib/stores/auth.svelte.js + src/lib/api/auth.js.
-  // The store auto-restores from localStorage on module load.
   const currentUser = $derived(_getCurrentUser());
-  let user = $derived(currentUser); // legacy alias for the LoginView bind
+  let user = $derived(currentUser);
   let isAuthenticated = $derived(user !== null);
+
+  function handleLogout() {
+    user = null;
+    window.location.hash = '/login';
+  }
 </script>
 
-<div class="min-h-screen bg-gray-50">
+<div class="min-h-screen bg-gray-50 dark:bg-gray-950">
   {#if needsAuth && !isAuthenticated}
     <LoginView bind:user />
   {:else}
     <div class="flex h-screen overflow-hidden">
-      <Sidebar {user} />
+      <Sidebar user={user} {currentPage} />
       <div class="flex-1 flex flex-col overflow-hidden">
-        <Header {user} />
+        <Header {user} onlogout={handleLogout} />
         <main class="flex-1 overflow-auto p-6">
-          {#if $page === '/'}
+          {#if currentPage === '/'}
             <DashboardView />
-          {:else if $page === '/blueprints'}
+          {:else if currentPage === '/blueprints'}
             <BlueprintCanvasView />
-          {:else if $page === '/workflow-templates'}
+          {:else if currentPage === '/workflow-templates'}
             <WorkflowTemplatesView />
-          {:else if $page === '/agents'}
+          {:else if currentPage === '/agents'}
             <LLMAgentsView />
-          {:else if $page === '/prompts'}
+          {:else if currentPage === '/prompts'}
             <PromptsView />
-          {:else if $page === '/roles'}
+          {:else if currentPage === '/roles'}
             <RolesView />
-          {:else if $page === '/tones'}
+          {:else if currentPage === '/tones'}
             <ToneProfilesView />
-          {:else if $page === '/llm'}
+          {:else if currentPage === '/llm'}
             <LLMProfilesView />
-          {:else if $page === '/modules'}
+          {:else if currentPage === '/modules'}
             <ModulesView />
-          {:else if $page === '/catalog'}
+          {:else if currentPage === '/catalog'}
             <CatalogView />
-          {:else if $page === '/modules/publish'}
+          {:else if currentPage === '/modules/publish'}
             <ModulePublishingView />
-          {:else if $page === '/input-composer'}
+          {:else if currentPage === '/input-composer'}
             <InputComposerView />
-          {:else if $page === '/output-composer'}
+          {:else if currentPage === '/output-composer'}
             <OutputComposerView />
-          {:else if $page === '/exec'}
+          {:else if currentPage === '/exec'}
             <WorkflowExecView />
-          {:else if $page === '/diff'}
+          {:else if currentPage === '/diff'}
             <DiffView />
-          {:else if $page === '/replay'}
+          {:else if currentPage === '/replay'}
             <ReplayView />
-          {:else if $page === '/proposals'}
+          {:else if currentPage === '/proposals'}
             <ProposalsView />
-          {:else if $page === '/translations'}
+          {:else if currentPage === '/translations'}
             <TranslationsView />
-          {:else if $page === '/tenants'}
+          {:else if currentPage === '/tenants'}
             <TenantsView />
-          {:else if $page === '/users'}
+          {:else if currentPage === '/users'}
             <UsersView />
-          {:else if $page === '/health'}
+          {:else if currentPage === '/health'}
             <ServerHealthView />
-          {:else if $page === '/system'}
+          {:else if currentPage === '/system'}
             <SystemManagementView />
-          {:else if $page === '/profile'}
+          {:else if currentPage === '/profile'}
             <ProfileView {user} />
-          {:else if $page === '/my-keys'}
+          {:else if currentPage === '/my-keys'}
             <BYOKManager />
           {:else}
             <div class="text-center py-12">
               <h2 class="text-2xl font-bold text-gray-900">Seite nicht gefunden</h2>
-              <p class="text-gray-500 mt-2">Route "{ $page }" existiert nicht.</p>
+              <p class="text-gray-500 mt-2">Route "{ currentPage }" existiert nicht.</p>
             </div>
           {/if}
         </main>

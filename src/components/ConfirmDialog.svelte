@@ -32,7 +32,7 @@
     onCancel = () => {},
   } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let confirmText = $derived(confirmLabel || t('common.confirm'));
   let cancelText = $derived(cancelLabel || t('common.cancel'));

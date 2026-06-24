@@ -56,8 +56,8 @@ describe('api/auth.js — login()', () => {
     const user = await login('admin@example.com', 'admin123');
     expect(user).toEqual({ id: 'u-1', email: 'admin@example.com' });
     expect(globalThis.fetch).toHaveBeenCalledTimes(2);
-    // First call: GET /api/v1/system/status
-    expect(globalThis.fetch.mock.calls[0][0]).toMatch(/\/api\/v1\/system\/status$/);
+    // First call: GET /health
+    expect(globalThis.fetch.mock.calls[0][0]).toMatch(/\/health$/);
     // Second call: POST /api/v1/auth/login with the body
     const [url, init] = globalThis.fetch.mock.calls[1];
     expect(url).toMatch(/\/api\/v1\/auth\/login$/);

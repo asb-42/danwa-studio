@@ -5,7 +5,7 @@
   import { listPromptTemplates } from '../lib/blueprint/api.js';
   import PromptTemplateModal from '../components/blueprint/PromptTemplateModal.svelte';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let templates = $state([]);
   let loading = $state(false);
@@ -56,7 +56,7 @@
 <div class="space-y-6">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{$i18n.t('prompts.title')}</h1>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{i18n.t('prompts.title')}</h1>
       {#if readOnly}
         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
           🔒 Read-only — prompts live in <code class="font-mono">danwa-modules</code>; edit there to change.
@@ -68,40 +68,40 @@
   <!-- Filter bar -->
   <div class="flex gap-3 items-end">
     <div class="flex flex-col gap-1">
-      <label class="text-xs text-gray-600 dark:text-gray-400" for="filter-role">{$i18n.t('prompts.role')}</label>
+      <label class="text-xs text-gray-600 dark:text-gray-400" for="filter-role">{i18n.t('prompts.role')}</label>
       <input id="filter-role" type="text" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm" bind:value={filterRole} placeholder="any" />
     </div>
     <div class="flex flex-col gap-1">
-      <label class="text-xs text-gray-600 dark:text-gray-400" for="filter-variant">{$i18n.t('prompts.variant')}</label>
+      <label class="text-xs text-gray-600 dark:text-gray-400" for="filter-variant">{i18n.t('prompts.variant')}</label>
       <input id="filter-variant" type="text" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm" bind:value={filterVariant} placeholder="default" />
     </div>
     <button class="px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md text-sm hover:bg-gray-300 dark:hover:bg-gray-600" onclick={loadTemplates}>
-      {$i18n.t('common.filter')}
+      {i18n.t('common.filter')}
     </button>
   </div>
 
   {#if loading}
     <div class="flex items-center justify-center h-32">
-      <p class="text-gray-500">{$i18n.t('common.loading')}</p>
+      <p class="text-gray-500">{i18n.t('common.loading')}</p>
     </div>
   {:else}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
       {#if templates.length === 0}
         <div class="p-8 text-center">
-          <p class="text-gray-500 dark:text-gray-400 mb-2">{$i18n.t('common.noData')}</p>
+          <p class="text-gray-500 dark:text-gray-400 mb-2">{i18n.t('common.noData')}</p>
           <p class="text-xs text-gray-400">No prompt-template modules enabled. Enable one in <code>danwa-modules</code> (type: <code>prompt-variant</code>).</p>
         </div>
       {:else}
         <table class="w-full text-sm text-left">
           <thead class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th class="px-4 py-3">{$i18n.t('config.name')}</th>
-              <th class="px-4 py-3">{$i18n.t('prompts.role')}</th>
-              <th class="px-4 py-3">{$i18n.t('prompts.variant')}</th>
+              <th class="px-4 py-3">{i18n.t('config.name')}</th>
+              <th class="px-4 py-3">{i18n.t('prompts.role')}</th>
+              <th class="px-4 py-3">{i18n.t('prompts.variant')}</th>
               <th class="px-4 py-3">Lang</th>
-              <th class="px-4 py-3">{$i18n.t('prompts.content')}</th>
+              <th class="px-4 py-3">{i18n.t('prompts.content')}</th>
               <th class="px-4 py-3">Tags</th>
-              <th class="px-4 py-3 text-right">{$i18n.t('config.actions')}</th>
+              <th class="px-4 py-3 text-right">{i18n.t('config.actions')}</th>
             </tr>
           </thead>
           <tbody>

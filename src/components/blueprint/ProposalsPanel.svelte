@@ -6,7 +6,7 @@
 
   let { workflowId = '', visible = false, onclose = () => {} } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let proposals = $state([]);
   let loading = $state(false);

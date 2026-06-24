@@ -4,7 +4,7 @@
   import { error as errorStore } from '../lib/stores.js';
   import { listWorkflowSessions, getAuditLog } from '../lib/workflowExec.js';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let sessions = $state([]);
   let sessionA = $state('');
@@ -85,7 +85,7 @@
 
 <div class="space-y-6">
   <div>
-    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{$i18n.t('nav.diff')}</h1>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{i18n.t('nav.diff')}</h1>
     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
       Compare two completed workflow sessions node-by-node via their audit logs.
     </p>
@@ -118,7 +118,7 @@
   </div>
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{$i18n.t('common.loading')}</p>
+    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
   {:else if sessionA && sessionB}
     <div class="grid grid-cols-3 gap-3 text-sm">
       <div class="kv-card"><div class="kv-label">A: events</div><div class="kv-value">{auditLogA.length}</div></div>

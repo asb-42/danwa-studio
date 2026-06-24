@@ -40,13 +40,11 @@ export const REACHABILITY = Object.freeze({
 /**
  * Probe the backend with a short timeout.
  *
- * IMPORTANT: we hit `/api/v1/system/status` (a proxied route) and
- * NOT `/health` directly, because the Vite dev server on :5174
- * answers /health with the static HTML shell (200 OK) even when
- * the backend is down — which would give a false positive. The
- * system/status endpoint is proxied to the backend; if the backend
- * is unreachable, Vite returns 502/500 and we correctly diagnose
- * the failure.
+ * IMPORTANT: we hit `/health` (a proxied route) and
+ * NOT `/api/v1/system/status`, because that endpoint does not exist
+ * in danwa-core. The Vite dev server on :5174 proxies /health to the
+ * backend; if the backend is unreachable, Vite returns 502/500 and
+ * we correctly diagnose the failure.
  *
  * When the backend is reachable we accept any 2xx, and also 401/403
  * (these mean the backend answered but the endpoint requires auth,
@@ -64,7 +62,7 @@ export async function isBackendReachable(opts = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const response = await fetch('/api/v1/system/status', {
+    const response = await fetch('/health', {
       method: 'GET',
       signal: controller.signal,
     });

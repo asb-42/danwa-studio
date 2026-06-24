@@ -38,7 +38,7 @@
   /** @type {{ layoutId?: string|null, routeParams?: string[], navigate?: function }} */
   let { layoutId = null, routeParams = [], navigate = () => {} } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let selectedNode = $derived(canvasStore.selectedNode);
   let showSaveDialog = $state(false);

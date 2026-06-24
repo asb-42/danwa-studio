@@ -6,7 +6,7 @@
   import { listBlueprintLLMProfiles } from '../lib/blueprint/api.js';
   import ConfirmDialog from '../components/ConfirmDialog.svelte';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let keys = $state([]);
   let llmProfiles = $state([]);
@@ -157,7 +157,7 @@
   {/if}
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{$i18n.t('common.loading')}</p>
+    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
   {:else if keys.length === 0}
     <p class="text-gray-500 text-sm">No BYOK keys configured yet. Add one to override the server's environment variable for a specific LLM profile.</p>
   {:else}
@@ -196,8 +196,8 @@
   open={pendingDelete !== null}
   title="Delete BYOK key"
   message={pendingDelete ? `Delete key for profile ${pendingDelete.profile_id}?` : ''}
-  confirmLabel={$i18n.t('common.delete')}
-  cancelLabel={$i18n.t('common.cancel')}
+  confirmLabel={i18n.t('common.delete')}
+  cancelLabel={i18n.t('common.cancel')}
   variant="danger"
   onConfirm={confirmDelete}
   onCancel={() => (pendingDelete = null)}
@@ -208,7 +208,7 @@
   title="Wipe all BYOK keys"
   message="Delete ALL your stored API keys? This cannot be undone."
   confirmLabel="Wipe all"
-  cancelLabel={$i18n.t('common.cancel')}
+  cancelLabel={i18n.t('common.cancel')}
   variant="danger"
   onConfirm={confirmWipe}
   onCancel={() => (pendingWipe = false)}

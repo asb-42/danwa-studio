@@ -14,7 +14,7 @@
     onclose = () => {},
   } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let status = $state('running');
   let nodeOutputs = $state([]);

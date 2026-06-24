@@ -7,7 +7,7 @@
 // builds. Re-enable the re-export below after `pnpm build` (or
 // equivalent) inside danwa-core/packages/api-client.
 
-const BASE_URL = '/api/v1';
+const BASE_URL = '';
 
 /**
  * Generic request function matching the danwa frontend pattern.

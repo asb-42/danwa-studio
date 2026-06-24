@@ -19,7 +19,7 @@
     onclose = () => {},
   } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let topic = $state('');
   let language = $state('de');

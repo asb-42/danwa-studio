@@ -4,7 +4,7 @@
   /** @type {{ capabilities?: Object }} */
   let { capabilities = {} } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let skills = $derived(capabilities.skills || []);
   let inputModes = $derived(capabilities.input_modes || []);

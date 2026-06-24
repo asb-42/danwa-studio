@@ -1,6 +1,7 @@
 <script>
   import { i18n } from '../lib/i18n/loader.js';
-  import { page, user } from '../stores.js';
+
+  let { currentPage = '/', user = null } = $props();
 
   const sections = [
     {
@@ -61,17 +62,17 @@
   ];
 
   function isActive(route) {
-    return $page === route || $page.startsWith(route + '/');
+    return currentPage === route || currentPage.startsWith(route + '/');
   }
 </script>
 
-<aside class="w-64 bg-white border-r border-gray-200 h-full flex flex-col overflow-y-auto">
+<aside class="w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 h-full flex flex-col overflow-y-auto">
   <nav class="flex-1 p-4 space-y-6">
     {#each sections as section}
-      {#if !section.adminOnly || ($user && $user.role === 'admin')}
+      {#if !section.adminOnly || (user && user.role === 'admin')}
         <div>
-          <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-2">
-            {$i18n.t(`nav.section.${section.label.toLowerCase()}`) || section.label}
+          <h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 px-2">
+            {i18n.t(`nav.section.${section.label.toLowerCase()}`) || section.label}
           </h3>
           <ul class="space-y-1">
             {#each section.items as item}
@@ -80,11 +81,11 @@
                   href="#{item.route}"
                   class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                     {isActive(item.route)
-                      ? 'bg-blue-50 text-blue-700'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}"
+                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'}"
                 >
                   <span class="text-lg">{item.icon}</span>
-                  {$i18n.t(item.label)}
+                  {i18n.t(item.label)}
                 </a>
               </li>
             {/each}
@@ -94,8 +95,8 @@
     {/each}
   </nav>
 
-  <div class="p-4 border-t border-gray-200">
-    <p class="text-xs text-gray-400 text-center">
+  <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+    <p class="text-xs text-gray-400 dark:text-gray-500 text-center">
       Danwa Studio v0.1.0
     </p>
   </div>

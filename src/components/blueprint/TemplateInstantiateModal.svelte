@@ -16,7 +16,7 @@
   /** @type {{ templateId?: string|null, visible?: boolean, onSuccess?: Function, onClose?: Function }} */
   let { templateId = null, visible = false, onSuccess = () => {}, onClose = () => {} } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let workflowName = $state('');
   let placeholderValues = $state({});

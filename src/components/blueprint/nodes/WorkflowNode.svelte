@@ -12,7 +12,7 @@
   /** @type {{ data: { role: string, label: string, isDraft: boolean, blueprintId?: string, icon?: string, executionStatus?: string } }} */
   let { data } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   const roleColors = {
     strategist: { border: '#8b5cf6', bg: '#f5f3ff' },

@@ -12,7 +12,7 @@
   } from '../lib/catalog/api.js';
   import ConfirmDialog from '../components/ConfirmDialog.svelte';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   // Tabs: 'sources' | 'preview' | 'diff' | 'stale'
   let activeTab = $state('sources');

@@ -8,7 +8,7 @@
   import { i18n } from '../../lib/i18n/loader.js';
   import { canvasStore } from '../../lib/blueprint/store.svelte.js';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let mode = $derived(canvasStore.mode);
 </script>

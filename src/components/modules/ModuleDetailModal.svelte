@@ -168,7 +168,7 @@
       <div class="modal-body">
         {#if loading}
           <div class="flex items-center justify-center h-32">
-            <p class="text-gray-500">{$i18n.t('common.loading')}</p>
+            <p class="text-gray-500">{i18n.t('common.loading')}</p>
           </div>
         {:else if error}
           <div class="form-error">{error}</div>
@@ -300,7 +300,7 @@
       </div>
 
       <div class="modal-footer">
-        <button class="btn-secondary" onclick={onClose}>{$i18n.t('common.cancel')}</button>
+        <button class="btn-secondary" onclick={onClose}>{i18n.t('common.cancel')}</button>
       </div>
     </div>
   </div>

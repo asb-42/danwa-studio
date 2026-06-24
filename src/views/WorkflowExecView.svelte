@@ -13,7 +13,7 @@
     getPhaseSnapshots,
   } from '../lib/workflowExec.js';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   // Sessions list
   let sessions = $state([]);
@@ -156,7 +156,7 @@
 
 <div class="space-y-6">
   <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{$i18n.t('nav.exec')}</h1>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{i18n.t('nav.exec')}</h1>
     <div class="flex gap-2">
       <button class="px-3 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg text-sm hover:bg-gray-300 dark:hover:bg-gray-600" onclick={loadSessions}>
         Refresh
@@ -295,9 +295,9 @@
       </select>
     </div>
     {#if loadingSessions}
-      <div class="p-8 text-center text-gray-500">{$i18n.t('common.loading')}</div>
+      <div class="p-8 text-center text-gray-500">{i18n.t('common.loading')}</div>
     {:else if sessions.length === 0}
-      <div class="p-8 text-center text-gray-500">{$i18n.t('common.noData')}</div>
+      <div class="p-8 text-center text-gray-500">{i18n.t('common.noData')}</div>
     {:else}
       <table class="w-full text-sm text-left">
         <thead class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">

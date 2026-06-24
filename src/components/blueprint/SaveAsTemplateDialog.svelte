@@ -11,7 +11,7 @@
   /** @type {{ workflowId?: string|null, workflowData?: Object|null, visible?: boolean, onSuccess?: Function, onClose?: Function }} */
   let { workflowId = null, workflowData = null, visible = false, onSuccess = () => {}, onClose = () => {} } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let name = $state('');
   let description = $state('');

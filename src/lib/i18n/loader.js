@@ -173,7 +173,7 @@ export const i18n = {
   },
 
   notify: () => {
-    listeners.forEach(cb => cb(currentLocale, translations[currentLocale]));
+    listeners.forEach(cb => cb(i18n));
   },
 
   getTranslations: () => translations[currentLocale] || {},

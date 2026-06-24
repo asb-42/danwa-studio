@@ -4,7 +4,7 @@
   import { error as errorStore } from '../lib/stores.js';
   import { listWorkflowSessions, getAuditLog } from '../lib/workflowExec.js';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let sessions = $state([]);
   let selectedSessionId = $state('');
@@ -108,7 +108,7 @@
 
 <div class="space-y-6">
   <div>
-    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{$i18n.t('nav.replay')}</h1>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{i18n.t('nav.replay')}</h1>
     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
       Step through a completed workflow's audit log timeline.
     </p>
@@ -127,7 +127,7 @@
   </div>
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{$i18n.t('common.loading')}</p>
+    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
   {:else if auditLog.length > 0}
     <!-- Event type breakdown -->
     <div class="flex flex-wrap gap-2 text-xs">

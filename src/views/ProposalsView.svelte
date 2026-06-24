@@ -12,7 +12,7 @@
   import { listWorkflowSessions } from '../lib/workflowExec.js';
   import ConfirmDialog from '../components/ConfirmDialog.svelte';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let proposals = $state([]);
   let loading = $state(false);
@@ -121,7 +121,7 @@
 <div class="space-y-6">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{$i18n.t('nav.proposals')}</h1>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{i18n.t('nav.proposals')}</h1>
       <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
         HITL review of meta-agent-generated workflow optimisations.
       </p>
@@ -173,7 +173,7 @@
   </div>
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{$i18n.t('common.loading')}</p>
+    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
   {:else if proposals.length === 0}
     <p class="text-gray-500 text-sm">No proposals yet. Trigger a reflection to generate one.</p>
   {:else}
@@ -224,7 +224,7 @@
   title={pendingAction?.kind === 'approve' ? 'Approve proposal' : 'Reject proposal'}
   message={pendingAction ? `${pendingAction.kind === 'approve' ? 'Apply' : 'Discard'} proposal ${pendingAction.id.slice(0, 12)}… for ${pendingAction.title}?` : ''}
   confirmLabel={pendingAction?.kind === 'approve' ? 'Approve' : 'Reject'}
-  cancelLabel={$i18n.t('common.cancel')}
+  cancelLabel={i18n.t('common.cancel')}
   variant={pendingAction?.kind === 'approve' ? 'primary' : 'danger'}
   onConfirm={confirmAction}
   onCancel={() => (pendingAction = null)}

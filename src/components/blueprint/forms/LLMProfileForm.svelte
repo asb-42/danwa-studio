@@ -15,7 +15,7 @@
   /** @type {{ node: any, onsave?: (data: any) => void, ondelete?: () => void }} */
   let { node, onsave = () => {}, ondelete = () => {} } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let draft = $state({});
   let saving = $state(false);

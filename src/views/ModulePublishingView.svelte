@@ -12,7 +12,7 @@
   } from '../lib/publishing/api.js';
   import ModuleDetailModal from '../components/modules/ModuleDetailModal.svelte';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   // Local modules + remote state
   let localModules = $state([]);
@@ -224,7 +224,7 @@
       </div>
     </div>
     {#if loading}
-      <p class="p-8 text-center text-gray-500 text-sm">{$i18n.t('common.loading')}</p>
+      <p class="p-8 text-center text-gray-500 text-sm">{i18n.t('common.loading')}</p>
     {:else if localModules.length === 0}
       <p class="p-8 text-center text-gray-500 text-sm">No local modules installed yet.</p>
     {:else}

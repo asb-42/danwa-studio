@@ -46,7 +46,7 @@
     onExecutionReset = () => {},
   } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   // Execution state
   let sessionId = $state(null);

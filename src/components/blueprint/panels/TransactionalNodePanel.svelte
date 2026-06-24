@@ -13,7 +13,7 @@
   /** @type {{ nodeType: string }} */
   let { nodeType } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 </script>
 
 <div class="txn-panel" data-testid="txn-panel-{nodeType}">

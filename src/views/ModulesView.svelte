@@ -5,7 +5,7 @@
   import { listModules, getRepoIndex, checkRepoUpdates } from '../lib/modules/api.js';
   import ModuleDetailModal from '../components/modules/ModuleDetailModal.svelte';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let modules = $state([]);
   let loading = $state(false);
@@ -94,7 +94,7 @@
 <div class="space-y-6">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{$i18n.t('nav.modules')}</h1>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{i18n.t('nav.modules')}</h1>
       <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
         Read-only view — installs happen via <code class="font-mono">danwa-modules</code> repo
       </p>
@@ -182,13 +182,13 @@
 
   {#if loading}
     <div class="flex items-center justify-center h-32">
-      <p class="text-gray-500">{$i18n.t('common.loading')}</p>
+      <p class="text-gray-500">{i18n.t('common.loading')}</p>
     </div>
   {:else}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
       {#if filteredModules.length === 0}
         <div class="p-8 text-center">
-          <p class="text-gray-500 dark:text-gray-400">{$i18n.t('common.noData')}</p>
+          <p class="text-gray-500 dark:text-gray-400">{i18n.t('common.noData')}</p>
         </div>
       {:else}
         <table class="w-full text-sm text-left">

@@ -21,7 +21,7 @@
 
   let { onloadlayout = () => {} } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   /** @type {Array} */
   let savedLayouts = $state([]);

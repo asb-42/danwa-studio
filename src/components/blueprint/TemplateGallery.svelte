@@ -14,7 +14,7 @@
   /** @type {{ visible?: boolean, onSelect?: Function, onClose?: Function }} */
   let { visible = false, onSelect = () => {}, onClose = () => {} } = $props();
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let templates = $state([]);
   let loading = $state(false);

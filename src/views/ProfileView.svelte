@@ -4,7 +4,7 @@
   import { error as errorStore } from '../lib/stores.js';
   import { getMe, updateMe, changePassword } from '../lib/admin/api.js';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let me = $state(null);
   let loading = $state(false);
@@ -83,12 +83,12 @@
 
 <div class="space-y-6">
   <div>
-    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{$i18n.t('nav.profile')}</h1>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{i18n.t('nav.profile')}</h1>
     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Your account and password.</p>
   </div>
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{$i18n.t('common.loading')}</p>
+    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
   {:else if !me}
     <div class="form-error">Could not load your profile. Are you signed in?</div>
   {:else}

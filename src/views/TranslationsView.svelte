@@ -15,7 +15,7 @@
   } from '../lib/i18n/api.js';
   import ConfirmDialog from '../components/ConfirmDialog.svelte';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   // Overview state
   let locales = $state([]);
@@ -239,7 +239,7 @@
 <div class="space-y-6">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{$i18n.t('nav.translations')}</h1>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{i18n.t('nav.translations')}</h1>
       <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
         Default locale: <code class="font-mono">{defaultLocale}</code> · {locales.length} locales installed
         {#if rtlLocales.length}· {rtlLocales.length} RTL{/if}
@@ -307,7 +307,7 @@
   <!-- Locales table -->
   {#if loading}
     <div class="flex items-center justify-center h-32">
-      <p class="text-gray-500">{$i18n.t('common.loading')}</p>
+      <p class="text-gray-500">{i18n.t('common.loading')}</p>
     </div>
   {:else}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
@@ -379,7 +379,7 @@
       </div>
 
       {#if detailLoading}
-        <p class="text-gray-500 text-sm">{$i18n.t('common.loading')}</p>
+        <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
       {:else if filteredStrings.length === 0}
         <p class="text-gray-500 text-sm">No strings match the current filter.</p>
       {:else}
@@ -422,8 +422,8 @@
   open={pendingDelete !== null}
   title="Delete string"
   message={pendingDelete ? `Delete "${pendingDelete.key}" from ${pendingDelete.locale}?` : ''}
-  confirmLabel={$i18n.t('common.delete')}
-  cancelLabel={$i18n.t('common.cancel')}
+  confirmLabel={i18n.t('common.delete')}
+  cancelLabel={i18n.t('common.cancel')}
   variant="danger"
   onConfirm={confirmDelete}
   onCancel={() => (pendingDelete = null)}
@@ -453,9 +453,9 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-secondary" onclick={() => (addOpen = false)} disabled={addingLocale}>{$i18n.t('common.cancel')}</button>
+        <button class="btn-secondary" onclick={() => (addOpen = false)} disabled={addingLocale}>{i18n.t('common.cancel')}</button>
         <button class="btn-primary" onclick={handleAddLocale} disabled={addingLocale}>
-          {addingLocale ? '…' : $i18n.t('common.create')}
+          {addingLocale ? '…' : i18n.t('common.create')}
         </button>
       </div>
     </div>

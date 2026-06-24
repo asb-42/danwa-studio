@@ -6,7 +6,7 @@
   import { listLocalModules } from '../lib/publishing/api.js';
   import { listPromptTemplates } from '../lib/blueprint/api.js';
 
-  let t = $derived((key, params) => $i18n.t(key, params));
+  let t = $derived((key, params) => i18n.t(key, params));
 
   let health = $state(null);
   let healthError = $state(null);
@@ -138,7 +138,7 @@
       {#each quickLinks as l (l.route)}
         <a href={`#${l.route}`} class="flex items-center gap-2 px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-sm">
           <span class="text-lg">{l.icon}</span>
-          <span class="text-gray-700 dark:text-gray-300">{$i18n.t(l.label) || l.route}</span>
+          <span class="text-gray-700 dark:text-gray-300">{i18n.t(l.label) || l.route}</span>
         </a>
       {/each}
     </div>
