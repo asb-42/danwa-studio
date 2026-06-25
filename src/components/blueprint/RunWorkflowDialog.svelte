@@ -22,7 +22,7 @@
   let t = $derived((key, params) => i18n.t(key, params));
 
   let topic = $state('');
-  let language = $state('de');
+  let language = $state('en');
   let maxRounds = $state(5);
   let consensusThreshold = $state(0.9);
   let availableDocuments = $state([]);
@@ -77,7 +77,7 @@
   $effect(() => {
     if (visible) {
       topic = '';
-      language = 'de';
+      language = 'en';
       maxRounds = 5;
       consensusThreshold = 0.9;
       selectedDocumentIds = [];

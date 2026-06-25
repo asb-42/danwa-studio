@@ -19,7 +19,7 @@ export function startWorkflow(workflowId, context, options = {}) {
     method: 'POST',
     body: JSON.stringify({
       context,
-      language: options.language || 'de',
+      language: options.language || 'en',
       project_id: options.projectId || '_default',
       max_rounds: options.maxRounds || 10,
       threshold: options.threshold || 0.7,
@@ -85,7 +85,7 @@ export function cancelWorkflow(sessionId) {
  */
 export function startMvpDebate({
   context,
-  language = 'de',
+  language = 'en',
   projectId = '_default',
   maxRounds = 5,
   threshold = 0.9,

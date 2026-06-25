@@ -217,7 +217,7 @@
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
     <div class="flex items-center justify-between mb-4">
       <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-        {t('debate.currentDebate') || 'Ausführung'}
+        {t('debate.currentDebate')}
       </h3>
       <div class="flex items-center space-x-3">
         <span class="px-2 py-1 text-xs font-medium rounded-full {statusBadgeClass}">
@@ -233,16 +233,16 @@
     <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm mb-3">
       {#if debateId}
         <div>
-          <span class="text-gray-500 dark:text-gray-400">{t('debate.id') || 'ID'}: </span>
+          <span class="text-gray-500 dark:text-gray-400">{t('debate.id')} </span>
           <code class="font-mono text-gray-800 dark:text-gray-200 text-xs">{debateId}</code>
         </div>
       {/if}
       <div>
-        <span class="text-gray-500 dark:text-gray-400">{t('debate.round') || 'Runde'}: </span>
+        <span class="text-gray-500 dark:text-gray-400">{t('debate.round')}: </span>
         <span class="text-gray-800 dark:text-gray-200 font-medium">{currentRound}</span>
       </div>
       <div>
-        <span class="text-gray-500 dark:text-gray-400">{t('workflow.execution.elapsed') || 'Dauer'}: </span>
+        <span class="text-gray-500 dark:text-gray-400">{t('workflow.execution.elapsed')}: </span>
         <span class="text-gray-800 dark:text-gray-200 font-mono text-xs">
           {status === 'running' || status === 'paused' ? formatDuration(elapsedMs) : totalDuration || formatDuration(elapsedMs)}
         </span>
@@ -252,7 +252,7 @@
     <!-- Consensus bar -->
     {#if consensus > 0}
       <div class="flex items-center gap-2 mb-3">
-        <span class="text-sm text-gray-500 dark:text-gray-400">{t('debate.consensus') || 'Konsens'}:</span>
+        <span class="text-sm text-gray-500 dark:text-gray-400">{t('debate.consensus')}:</span>
         <div class="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
           <div
             class="h-2 rounded-full transition-all duration-500 {consensus < 0.5 ? 'bg-red-500' : consensus < 0.8 ? 'bg-yellow-500' : 'bg-green-500'}"
@@ -275,14 +275,14 @@
           onclick={handlePauseResume}
           disabled={isPausing}
         >
-          {isPausing ? '...' : status === 'running' ? '⏸ ' + (t('workflow.execution.pause') || 'Pause') : '▶ ' + (t('workflow.execution.resume') || 'Weiter')}
+          {isPausing ? '...' : status === 'running' ? '⏸ ' + t('workflow.execution.pause') : '▶ ' + t('workflow.execution.resume')}
         </button>
         <button
           class="px-4 py-2 text-sm rounded-lg bg-red-600 hover:bg-red-700 disabled:hover:bg-red-600 text-white disabled:opacity-50 transition-colors"
           onclick={handleCancel}
           disabled={isCancelling}
         >
-          {isCancelling ? '...' : '⏹ ' + (t('workflow.execution.cancel') || 'Abbrechen')}
+          {isCancelling ? '...' : '⏹ ' + t('workflow.execution.cancel')}
         </button>
       {/if}
     </div>
@@ -303,7 +303,7 @@
         <span class="w-3 h-3 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
         <span class="w-3 h-3 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
       </div>
-      <p class="text-gray-500 dark:text-gray-400">Agenten bereiten sich vor...</p>
+      <p class="text-gray-500 dark:text-gray-400">{t('debate.starting') || 'Agents are preparing...'}</p>
     </div>
   {/if}
 
@@ -312,7 +312,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700">
       <div class="p-4 border-b border-gray-200 dark:border-gray-700">
         <h3 class="text-lg font-semibold text-gray-800 dark:text-white">
-          {t('debate.timelineTitle') || 'Beiträge'}
+          {t('debate.timelineTitle')}
         </h3>
       </div>
       <div class="p-4 space-y-6 max-h-[70vh] overflow-y-auto">
@@ -320,7 +320,7 @@
           <div>
             <div class="flex items-center gap-2 mb-3">
               <span class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
-                {t('timeline.round', { num: round }) || `Runde ${round}`}
+                {t('timeline.round', { num: round })}
               </span>
             </div>
             <div class="space-y-3">
@@ -383,10 +383,10 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700 mb-4">
       <div class="grid grid-cols-1 gap-2 text-sm text-gray-700 dark:text-gray-300">
         {#if rounds}
-          <div><span class="font-semibold">Anzahl Runden:</span> {rounds}</div>
+          <div><span class="font-semibold">{t('debate.maxRounds')}:</span> {rounds}</div>
         {/if}
         {#if roles.length}
-          <div><span class="font-semibold">Agenten-Rollen:</span> {roles.join(' · ')}</div>
+          <div><span class="font-semibold">{t('prompts.role')}:</span> {roles.join(' · ')}</div>
         {/if}
       </div>
     </div>
@@ -395,7 +395,7 @@
   <!-- Case text -->
   {#if context}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
-      <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-3">{t('debate.caseLabel') || 'Fall'}</h3>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-3">{t('debate.caseLabel')}</h3>
       <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{context}</p>
     </div>
   {/if}
@@ -404,7 +404,7 @@
   {#if isCompleted && consensus > 0}
     <div class="border rounded-lg p-6 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border-green-200 dark:border-green-800">
       <h4 class="text-lg font-bold text-gray-800 dark:text-white mb-3 flex items-center gap-2">
-        🏁 {t('timeline.finalConsensus') || 'Abschließender Konsens'}
+        🏁 {t('timeline.finalConsensus')}
       </h4>
       <div class="flex items-center gap-4 mb-3">
         <div class="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-4">
@@ -418,13 +418,13 @@
         </span>
       </div>
       <p class="text-sm text-gray-600 dark:text-gray-400">
-        {t('timeline.concludedAfter', { rounds: Object.keys(outputsByRound).length, plural: Object.keys(outputsByRound).length !== 1 ? 's' : '', percent: (consensus * 100).toFixed(1) }) || `Debatte nach ${Object.keys(outputsByRound).length} Runden mit ${(consensus * 100).toFixed(1)}% Konsens abgeschlossen.`}
+        {t('timeline.concludedAfter', { rounds: Object.keys(outputsByRound).length, plural: Object.keys(outputsByRound).length !== 1 ? 's' : '', percent: (consensus * 100).toFixed(1) })}
         {#if consensus >= 0.9}
-          <span class="text-green-600 dark:text-green-400 font-medium"> — Starkes Einvernehmen</span>
+          <span class="text-green-600 dark:text-green-400 font-medium"> — {t('timeline.strongConsensus')}</span>
         {:else if consensus >= 0.7}
-          <span class="text-yellow-600 dark:text-yellow-400 font-medium"> — Mäßiges Einvernehmen</span>
+          <span class="text-yellow-600 dark:text-yellow-400 font-medium"> — {t('timeline.moderateConsensus')}</span>
         {:else}
-          <span class="text-red-600 dark:text-red-400 font-medium"> — Geringes Einvernehmen</span>
+          <span class="text-red-600 dark:text-red-400 font-medium"> — {t('timeline.lowConsensus')}</span>
         {/if}
       </p>
     </div>

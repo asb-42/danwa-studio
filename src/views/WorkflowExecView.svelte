@@ -24,7 +24,7 @@
   let showStartForm = $state(false);
   let startWorkflowId = $state('');
   let startContext = $state('');
-  let startLanguage = $state('de');
+  let startLanguage = $state('en');
   let startMaxRounds = $state(10);
   let starting = $state(false);
 

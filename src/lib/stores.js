@@ -71,9 +71,9 @@ export const tagsByTenant = persisted('danwa.tagsByTenant', {});
  * - Debate language (when not explicitly specified)
  * - Kitsune assistant responses
  * - Prompt loading
- * Falls back to 'de' (German) if not set.
+ * Falls back to 'en' (English) if not set.
  */
-export const userLanguage = persisted('danwa.userLanguage', 'de');
+export const userLanguage = persisted('danwa.userLanguage', 'en');
 
 /** Selected LLM profile ID for debates (set in ConfigView, read in DebateView) */
 export const selectedLLMProfile = persisted('danwa.selectedLLMProfile', '');
