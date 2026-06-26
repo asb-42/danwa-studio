@@ -23,13 +23,6 @@
   import { phaseSnapshots } from '../../lib/stores/phaseSnapshotsStore.svelte.js';
   import PhasesTab from './PhasesTab.svelte';
 
-  // feedbackStore is optional — gracefully degrade if not available
-  let feedbackStore = null;
-  try {
-    const mod = await import('../../lib/stores/feedback.svelte.js');
-    feedbackStore = mod.feedbackStore;
-  } catch { /* not available */ }
-
   /** @type {{ sessionId: string|null|undefined, expanded?: boolean }} */
   let { sessionId = null, expanded = false } = $props();
 
@@ -58,30 +51,6 @@
 
   // ─── Modal state ──────────────────────────────────────────────────
   let modalOpen = $state(false);
-
-  // ─── Bridge to feedback store (A5) ────────────────────────────────
-  // Emit one `phase_snapshot` log entry per session, the first time
-  // the list loads successfully.  This is intentionally idempotent:
-  // re-mounts / re-fetches don't spam the activity log.
-  /** @type {Set<string>} — sessions we've already bridged */
-  const _bridged = new Set();
-  $effect(() => {
-    if (!sessionId) return;
-    if (_bridged.has(sessionId)) return;
-    if (entry.list.length === 0) return;
-    _bridged.add(sessionId);
-    try {
-      feedbackStore?.logActivity?.(
-        'phase_snapshot',
-        'workflow.phaseSnapshots',
-        `Loaded ${entry.list.length} phase snapshot${entry.list.length === 1 ? '' : 's'} for session ${sessionId}`,
-        { sessionId, count: entry.list.length },
-        'info',
-      );
-    } catch {
-      /* feedback store is best-effort */
-    }
-  });
 
   // ─── Formatters ───────────────────────────────────────────────────
   const latest = $derived(entry.list[entry.list.length - 1] || null);
