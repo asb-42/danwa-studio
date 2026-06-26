@@ -1,5 +1,5 @@
 <script>
-  import { i18n } from '../../lib/i18n/loader.js';
+  import { i18n, resolveLocale } from '../../lib/i18n/loader.js';
   import { getModule, getModuleProfile, updateModuleProfile } from '../../lib/modules/api.js';
 
   let { moduleInfo = null, visible = false, onClose = () => {} } = $props();
@@ -20,27 +20,38 @@
 
   $effect(() => {
     if (visible && moduleInfo) {
-      loadDetail(moduleInfo.module_id);
+      loadDetail(moduleInfo);
     }
   });
 
-  async function loadDetail(moduleId) {
+  async function loadDetail(mod) {
     loading = true;
     error = null;
+    activeTab = 'overview';
+    editing = false;
     try {
-      [detail, profile] = await Promise.all([
-        getModule(moduleId),
-        getModuleProfile(moduleId).catch((e) => {
-          // Profile may not exist for all module types
-          console.warn(`No profile for ${moduleId}:`, e.message);
-          return null;
-        }),
-      ]);
+      // Try backend first (installed modules have full data)
+      const backendDetail = await getModule(mod.module_id).catch(() => null);
+      if (backendDetail) {
+        detail = backendDetail;
+        profile = await getModuleProfile(mod.module_id).catch(() => null);
+      } else {
+        // Repo-only module: use the data we already have from getRepoIndex()
+        detail = mod;
+        profile = null;
+      }
     } catch (e) {
-      error = e.message;
+      // Fallback to provided moduleInfo
+      detail = mod;
+      profile = null;
     } finally {
       loading = false;
     }
+  }
+
+  function handleOverlayClick(e) {
+    // Only close when clicking the overlay itself, not the modal content
+    if (e.target === e.currentTarget) onClose();
   }
 
   function formatDate(iso) {
@@ -137,12 +148,15 @@
 </script>
 
 {#if visible}
-  <div class="modal-overlay" role="dialog" tabindex="-1" aria-modal="true" onkeydown={(e) => { if (e.key === 'Escape') onClose(); }}>
-    <div class="modal-container wide">
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+  <div class="modal-overlay" role="dialog" tabindex="-1" aria-modal="true"
+       onclick={handleOverlayClick}
+       onkeydown={(e) => { if (e.key === 'Escape') onClose(); }}>
+    <div class="modal-container wide" onclick={(e) => e.stopPropagation()} onkeydown={(e) => e.stopPropagation()}>
       <div class="modal-header">
         <div class="flex-1">
           <h2 class="modal-title">
-            {moduleInfo?.name || moduleInfo?.module_id}
+            {resolveLocale(moduleInfo?.name) || moduleInfo?.module_id}
             <span class="readonly-badge">🔒 read-only</span>
           </h2>
           <p class="text-xs text-gray-500 dark:text-gray-400 font-mono mt-1">
@@ -175,14 +189,14 @@
         {:else if activeTab === 'overview' && detail}
           <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
             <div class="kv-label">ID</div><div class="kv-value font-mono">{detail.module_id}</div>
-            <div class="kv-label">Name</div><div class="kv-value">{detail.name}</div>
+            <div class="kv-label">Name</div><div class="kv-value">{resolveLocale(detail.name)}</div>
             <div class="kv-label">Type</div><div class="kv-value">
               <span class="tag">{detail.type}</span>
             </div>
             <div class="kv-label">Category</div><div class="kv-value">{detail.category || '—'}</div>
             <div class="kv-label">Version</div><div class="kv-value font-mono">{detail.version || '—'}</div>
             <div class="kv-label">Language</div><div class="kv-value font-mono">{detail.language || '—'}</div>
-            <div class="kv-label">Author</div><div class="kv-value">{detail.author || '—'}</div>
+            <div class="kv-label">Author</div><div class="kv-value">{resolveLocale(detail.author) || '—'}</div>
             <div class="kv-label">License</div><div class="kv-value font-mono">{detail.license || '—'}</div>
             <div class="kv-label">Installed</div><div class="kv-value">
               {#if detail.installed}
@@ -201,7 +215,7 @@
             <div class="kv-label">File count</div><div class="kv-value font-mono">{detail.file_count ?? '—'}</div>
             <div class="kv-label">Installed at</div><div class="kv-value">{formatDate(detail.installed_at)}</div>
             <div class="kv-label">Updated at</div><div class="kv-value">{formatDate(detail.updated_at)}</div>
-            <div class="kv-label">Description</div><div class="kv-value">{detail.description || '—'}</div>
+            <div class="kv-label">Description</div><div class="kv-value">{resolveLocale(detail.description) || '—'}</div>
             {#if detail.tags && detail.tags.length}
               <div class="kv-label">Tags</div>
               <div class="kv-value">

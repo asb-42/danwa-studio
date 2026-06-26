@@ -50,6 +50,19 @@ export function checkRepoUpdates() {
   return request('/api/v1/modules/check-repo-updates');
 }
 
+/**
+ * Install a module directly from the danwa-modules GitHub release.
+ * @param {string} moduleId
+ * @param {string} [version]
+ * @returns {Promise<Object>}
+ */
+export function installFromRepo(moduleId, version = null) {
+  return request('/api/v1/modules/install-from-repo', {
+    method: 'POST',
+    body: JSON.stringify({ module_id: moduleId, version }),
+  });
+}
+
 // ─── Single Module ─────────────────────────────────────────────────
 
 /**

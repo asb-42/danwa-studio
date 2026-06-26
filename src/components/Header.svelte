@@ -1,6 +1,7 @@
 <script>
   import { i18n } from '../lib/i18n/loader.js';
   import { isDark, toggleDark } from '../lib/stores/theme.svelte.js';
+  import LanguageSwitcher from './LanguageSwitcher.svelte';
 
   let { user = null, onlogout } = $props();
 </script>
@@ -12,6 +13,8 @@
   </div>
 
   <div class="flex items-center gap-4">
+    <LanguageSwitcher />
+
     <button
       class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors"
       onclick={toggleDark}

@@ -101,7 +101,9 @@ describe('i18n.t — interpolation', () => {
 // ---------------------------------------------------------------------------
 
 describe('i18n.setLocale', () => {
-  it('switches to a remote locale and uses its translations', async () => {
+  it('switches to a registered custom locale and uses its translations', async () => {
+    // Register fr as a custom locale so setLocale doesn't probe backend
+    i18n.registerCustomLocale({ locale: 'fr', name: 'French', is_rtl: false });
     fetchMock.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ 'common.save': 'Sauvegarder' }),
@@ -113,12 +115,12 @@ describe('i18n.setLocale', () => {
     expect(i18n.t('nav.dashboard')).toBe('Dashboard');
   });
 
-  it('falls back to en on fetch error (e.g. 404)', async () => {
+  it('falls back to en on fetch error (e.g. 404) for unregistered locale', async () => {
     fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
     const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     await i18n.setLocale('xx');
-    expect(i18n.getLocale()).toBe('xx');
-    // en fallback key still works
+    // Unregistered locale with failed probe falls back to en
+    expect(i18n.getLocale()).toBe('en');
     expect(i18n.t('common.save')).toBe('Save');
     consoleSpy.mockRestore();
   });
@@ -137,11 +139,28 @@ describe('i18n.setLocale', () => {
   });
 
   it('persists the chosen locale to localStorage', async () => {
-    fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
-    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    // Register de so it doesn't get probed
+    i18n.registerCustomLocale({ locale: 'de', name: 'German', is_rtl: false });
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ 'common.save': 'Speichern' }),
+    });
     await i18n.setLocale('de');
     expect(_ls.get('locale')).toBe('de');
-    consoleSpy.mockRestore();
+  });
+
+  it('sets html lang and dir attributes on setLocale', async () => {
+    i18n.registerCustomLocale({ locale: 'ar', name: 'Arabic', is_rtl: true });
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ 'common.save': 'حفظ' }),
+    });
+    await i18n.setLocale('ar');
+    expect(document.documentElement.lang).toBe('ar');
+    expect(document.documentElement.dir).toBe('rtl');
+    // Reset to en
+    await i18n.setLocale('en');
+    expect(document.documentElement.dir).toBe('ltr');
   });
 });
 

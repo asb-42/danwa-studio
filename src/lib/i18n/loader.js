@@ -1,11 +1,69 @@
 // i18n Loader for Danwa Studio
 // English is the SSOT (Single Source of Truth)
 // ~50 UI translations are modules in danwa-modules (loaded dynamically via fetch)
-// 14 Core languages are deprecated
+
+// ── Locale Configuration ────────────────────────────────────────────────────
+
+export const SUPPORTED_LOCALES = ['en'];
+export const DEFAULT_LOCALE = 'en';
+
+/**
+ * Display names for all known locales.
+ * Starts with 'en' (the only bundled language). All other entries are
+ * added dynamically at runtime by registerCustomLocale().
+ */
+export const LOCALE_NAMES = { en: 'English' };
+
+export const RTL_LOCALES = new Set(['ar', 'he', 'fa']);
+
+/** Runtime-registered custom locales. Populated by discoverLanguagePacks() on mount. */
+export const customLocales = new Map();
+
+/**
+ * Register a custom locale discovered from the backend or a language-pack module.
+ *
+ * @param {{ locale: string, name: string, is_rtl: boolean }} info
+ */
+export function registerCustomLocale(info) {
+  customLocales.set(info.locale, { name: info.name, isRtl: info.is_rtl });
+  if (!LOCALE_NAMES[info.locale]) LOCALE_NAMES[info.locale] = info.name;
+  if (info.is_rtl) RTL_LOCALES.add(info.locale);
+}
+
+/** Get the display name for any locale (bundled or custom). */
+export function getLocaleName(code) {
+  return customLocales.get(code)?.name || LOCALE_NAMES[code] || code;
+}
+
+/**
+ * Get the combined list of all available locales (bundled + custom),
+ * sorted alphabetically by display name with 'en' first.
+ */
+export function getAllLocales() {
+  const bundled = SUPPORTED_LOCALES.filter(l => !customLocales.has(l));
+  const custom = [...customLocales.keys()];
+  return [...bundled, ...custom].sort((a, b) => {
+    if (a === 'en') return -1;
+    if (b === 'en') return 1;
+    const nameA = (customLocales.get(a)?.name || LOCALE_NAMES[a] || a).toLowerCase();
+    const nameB = (customLocales.get(b)?.name || LOCALE_NAMES[b] || b).toLowerCase();
+    return nameA.localeCompare(nameB);
+  });
+}
+
+// ── Internal State ──────────────────────────────────────────────────────────
 
 let currentLocale = 'en';
 let translations = { en: {} };
 let listeners = [];
+let _toastCallback = null;
+
+/**
+ * Set a callback for toast notifications (called by App.svelte on mount).
+ */
+export function setToastCallback(cb) {
+  _toastCallback = cb;
+}
 
 // English SSOT - minimal fallback keys
 const enFallback = {
@@ -251,6 +309,24 @@ const enFallback = {
   'mvpDebate.form.noDocumentsHint': 'No documents available. Upload documents to the DMS first to include them as RAG context in the debate.',
 };
 
+/**
+ * Resolve a localized string from a locale dict.
+ * Module manifests store name/description/author as `{ "en": "..." }` dicts.
+ * This extracts the English value (or first available) for display.
+ *
+ * @param {string|Record<string,string>|null|undefined} obj - Locale dict or plain string
+ * @param {string} [fallback=''] - Fallback if nothing resolved
+ * @returns {string}
+ */
+export function resolveLocale(obj, fallback = '') {
+  if (obj == null) return fallback;
+  if (typeof obj === 'string') return obj;
+  if (typeof obj === 'object') {
+    return obj.en || Object.values(obj)[0] || fallback;
+  }
+  return String(obj);
+}
+
 // Base URL for language modules - can be configured via Vite env
 const MODULES_BASE_URL = import.meta.env.VITE_MODULES_BASE_URL || '/modules';
 
@@ -277,23 +353,96 @@ async function loadLocale(locale) {
   return translations[locale];
 }
 
+/** Backend availability flag — set to false if first probe fails. */
+let backendAvailable = true;
+
+/**
+ * Fetch translations from the backend API.
+ * @returns {Promise<Object|null>} translations dict or null if unavailable
+ */
+async function fetchTranslationsFromBackend(lang) {
+  if (!backendAvailable) return null;
+  try {
+    const res = await fetch(`/api/v1/i18n/${lang}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.translations || {};
+  } catch {
+    backendAvailable = false;
+    return null;
+  }
+}
+
+/**
+ * Discover installed language-pack modules and register them as custom locales.
+ * Called once at app startup.
+ */
+export async function discoverLanguagePacks() {
+  try {
+    const res = await fetch('/api/v1/modules/?category=translations');
+    if (!res.ok) return;
+    const modules = await res.json();
+    for (const mod of modules) {
+      if (mod.type !== 'language-pack' || mod.enabled !== true) continue;
+      const locale = mod.language || mod.module_id.replace(/^lang-/, '').replace(/-[^-]+$/, '');
+      if (!locale || SUPPORTED_LOCALES.includes(locale)) continue;
+      if (customLocales.has(locale)) continue;
+      const name = resolveLocale(mod.name) || locale;
+      registerCustomLocale({ locale, name, is_rtl: RTL_LOCALES.has(locale) });
+      console.log(`[i18n] Registered language pack: ${locale} (${name})`);
+    }
+  } catch (e) {
+    console.warn('[i18n] Failed to discover language packs:', e);
+  }
+}
+
 export const i18n = {
   init: async () => {
-    // Get locale from localStorage or browser
     const saved = localStorage.getItem('locale');
     const browser = navigator.language.split('-')[0];
     currentLocale = saved || browser || 'en';
     await loadLocale(currentLocale);
+    i18n.updateHtmlAttrs();
     i18n.notify();
   },
 
   getLocale: () => currentLocale,
 
-  setLocale: async (locale) => {
-    currentLocale = locale;
-    localStorage.setItem('locale', locale);
-    await loadLocale(locale);
+  /**
+   * Switch to a new locale.
+   * Supports bundled locales and dynamically registered custom locales.
+   */
+  setLocale: async (lang) => {
+    const isBundled = SUPPORTED_LOCALES.includes(lang);
+    const isCustom = customLocales.has(lang);
+
+    if (!isBundled && !isCustom) {
+      // Probe backend — check if the language pack exists
+      const probe = await fetchTranslationsFromBackend(lang);
+      if (!probe) {
+        console.warn(`[i18n] Locale '${lang}' not available, falling back to English`);
+        if (_toastCallback) {
+          const msg = `UI language "${getLocaleName(lang)}" is not installed. Install the "${lang}" language pack from Modules → Language Packs, or switch to English.`;
+          // Defer toast to avoid state_unsafe_mutation in derived contexts
+          queueMicrotask(() => _toastCallback({ message: msg, type: 'warning', timeout: 10000 }));
+        }
+        lang = DEFAULT_LOCALE;
+      }
+    }
+
+    const dict = await loadLocale(lang);
+    currentLocale = lang;
+    localStorage.setItem('locale', lang);
+    i18n.updateHtmlAttrs();
     i18n.notify();
+  },
+
+  /** Update HTML lang and dir attributes. */
+  updateHtmlAttrs: () => {
+    document.documentElement.lang = currentLocale;
+    document.documentElement.dir = RTL_LOCALES.has(currentLocale) ? 'rtl' : 'ltr';
+    // Expose for E2E tests
+    window.__locale = currentLocale;
   },
 
   t: (key, params = {}) => {
@@ -302,7 +451,7 @@ export const i18n = {
 
     // Simple param interpolation
     Object.entries(params).forEach(([k, v]) => {
-      text = text.replace(new RegExp(`\\{${k}\\}`, 'g'), v);
+      text = text.replace(new RegExp(`\\{${k}\\}`, 'g'), String(v));
     });
 
     return text;
@@ -320,4 +469,13 @@ export const i18n = {
   },
 
   getTranslations: () => translations[currentLocale] || {},
+
+  resolveLocale,
+
+  /** Check if current locale is RTL. */
+  isRTL: () => RTL_LOCALES.has(currentLocale),
+
+  getAllLocales,
+  getLocaleName,
+  registerCustomLocale,
 };

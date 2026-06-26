@@ -27,10 +27,12 @@
   import SystemManagementView from './views/SystemManagementView.svelte';
   import ProfileView from './views/ProfileView.svelte';
   import BYOKManager from './views/BYOKManager.svelte';
-  import { i18n } from './lib/i18n/loader.js';
+  import { i18n, discoverLanguagePacks, setToastCallback } from './lib/i18n/loader.js';
   import { getCurrentUser as _getCurrentUser } from './lib/stores/auth.svelte.js';
+  import { addToast } from './lib/stores.js';
 
   i18n.init();
+  setToastCallback(addToast);
 
   let currentPage = $state(window.location.hash.slice(1) || '/');
 
@@ -40,6 +42,8 @@
 
   onMount(() => {
     window.addEventListener('hashchange', handleHashChange);
+    // Discover installed language packs at startup
+    discoverLanguagePacks();
     return () => window.removeEventListener('hashchange', handleHashChange);
   });
 

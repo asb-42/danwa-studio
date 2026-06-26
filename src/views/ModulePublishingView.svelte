@@ -1,5 +1,5 @@
 <script>
-  import { i18n } from '../lib/i18n/loader.js';
+  import { i18n, resolveLocale } from '../lib/i18n/loader.js';
   import { onMount } from 'svelte';
   import { error as errorStore } from '../lib/stores.js';
   import {
@@ -246,7 +246,7 @@
                 <button class="text-sm font-mono text-blue-600 dark:text-blue-400 hover:underline" onclick={() => viewDetail(m)}>
                   {m.module_id}
                 </button>
-                <div class="text-xs text-gray-500">{m.name}</div>
+                <div class="text-xs text-gray-500">{resolveLocale(m.name)}</div>
               </td>
               <td class="px-4 py-2 text-xs">{m.type}</td>
               <td class="px-4 py-2 text-xs font-mono">{m.version || '—'}</td>
