@@ -187,7 +187,7 @@
 
   <div class="flex items-center gap-2 text-sm">
     <label class="text-xs text-gray-600 dark:text-gray-400" for="u-filter">Filter</label>
-    <select id="u-filter" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700" bind:value={roleFilter}>
+    <select id="u-filter" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white" bind:value={roleFilter}>
       <option value="all">all ({users.length})</option>
       <option value="admin">admin</option>
       <option value="editor">editor</option>

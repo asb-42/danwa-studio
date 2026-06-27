@@ -371,7 +371,7 @@
           {#if rtlLocales.includes(expandedLocale)}<span class="ml-2 text-xs px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300">RTL</span>{/if}
         </h2>
         <div class="flex gap-2">
-          <select class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-xs" bind:value={detailFilter}>
+          <select class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-xs" bind:value={detailFilter}>
             <option value="all">All ({detailStrings.length})</option>
             <option value="translated">Translated</option>
             <option value="missing">Missing</option>

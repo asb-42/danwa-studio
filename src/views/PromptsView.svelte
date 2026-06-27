@@ -69,11 +69,11 @@
   <div class="flex gap-3 items-end">
     <div class="flex flex-col gap-1">
       <label class="text-xs text-gray-600 dark:text-gray-400" for="filter-role">{i18n.t('prompts.role')}</label>
-      <input id="filter-role" type="text" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm" bind:value={filterRole} placeholder="any" />
+      <input id="filter-role" type="text" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm" bind:value={filterRole} placeholder="any" />
     </div>
     <div class="flex flex-col gap-1">
       <label class="text-xs text-gray-600 dark:text-gray-400" for="filter-variant">{i18n.t('prompts.variant')}</label>
-      <input id="filter-variant" type="text" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm" bind:value={filterVariant} placeholder="default" />
+      <input id="filter-variant" type="text" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm" bind:value={filterVariant} placeholder="default" />
     </div>
     <button class="px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md text-sm hover:bg-gray-300 dark:hover:bg-gray-600" onclick={loadTemplates}>
       {i18n.t('common.filter')}

@@ -331,7 +331,7 @@
           placeholder={i18n.t('debate.casePlaceholder')}
           rows="8"
           maxlength="5000"
-          class="w-full rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm resize-y"
+          class="w-full rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 text-sm resize-y"
         ></textarea>
         {#if partialText}
           <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 italic">🎙️ {partialText}</p>
@@ -376,7 +376,7 @@
             Status: <span class="font-mono">{tracker.status}</span>
           </p>
           {#if tracker.error}
-            <p class="text-sm text-red-500 mt-1">{tracker.error}</p>
+            <p class="text-sm text-red-500 dark:text-red-400 mt-1">{tracker.error}</p>
           {/if}
         </div>
       {/if}

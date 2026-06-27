@@ -307,19 +307,19 @@
   {#if activeTab === 'preview'}
     <div class="space-y-3">
       <div class="flex items-center gap-2 flex-wrap">
-        <select class="px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700" bind:value={previewFilter.source}>
+        <select class="px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white" bind:value={previewFilter.source}>
           <option value="">all sources</option>
           {#each (catalog?.sources || []) as s (s.name)}
             <option value={s.name}>{s.name} ({s.model_count})</option>
           {/each}
         </select>
-        <select class="px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700" bind:value={previewFilter.provider}>
+        <select class="px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white" bind:value={previewFilter.provider}>
           <option value="">all providers</option>
           {#each availableProviders as p (p)}
             <option value={p}>{p}</option>
           {/each}
         </select>
-        <select class="px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700" bind:value={previewFilter.reasoning}>
+        <select class="px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white" bind:value={previewFilter.reasoning}>
           <option value="all">reasoning: all</option>
           <option value="yes">reasoning: yes</option>
           <option value="no">reasoning: no</option>

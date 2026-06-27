@@ -162,7 +162,7 @@
 
   <div class="flex items-center gap-2 text-sm">
     <label class="text-xs text-gray-600 dark:text-gray-400" for="prop-status">Status</label>
-    <select id="prop-status" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700" bind:value={statusFilter} onchange={loadProposals}>
+    <select id="prop-status" class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white" bind:value={statusFilter} onchange={loadProposals}>
       <option value="all">all</option>
       <option value="pending">pending</option>
       <option value="approved">approved</option>

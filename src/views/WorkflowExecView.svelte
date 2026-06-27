@@ -285,7 +285,7 @@
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700">
     <div class="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700">
       <h2 class="text-sm font-semibold text-gray-900 dark:text-white">All Sessions</h2>
-      <select class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700" bind:value={statusFilter} onchange={loadSessions}>
+      <select class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white" bind:value={statusFilter} onchange={loadSessions}>
         <option value="all">all</option>
         <option value="running">running</option>
         <option value="paused">paused</option>

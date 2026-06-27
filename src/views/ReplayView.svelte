@@ -116,7 +116,7 @@
 
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-3">
     <label class="text-xs text-gray-600 dark:text-gray-400" for="replay-session">Session</label>
-    <select id="replay-session" class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-sm" value={selectedSessionId} onchange={onSessionChange}>
+    <select id="replay-session" class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm" value={selectedSessionId} onchange={onSessionChange}>
       <option value="">— pick a completed session —</option>
       {#each sessions as s (s.session_id || s.id)}
         <option value={s.session_id || s.id}>
@@ -151,7 +151,7 @@
 
         <div class="ml-auto flex items-center gap-2 text-xs">
           <span class="text-gray-500 dark:text-gray-400">Speed</span>
-          <select class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" bind:value={playSpeed} onchange={() => { if (isPlaying) { stopPlayback(); startPlayback(); } }}>
+          <select class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" bind:value={playSpeed} onchange={() => { if (isPlaying) { stopPlayback(); startPlayback(); } }}>
             <option value={0.5}>0.5×</option>
             <option value={1}>1×</option>
             <option value={2}>2×</option>

@@ -159,14 +159,14 @@
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700">
     <div class="flex items-center gap-2 p-3 border-b border-gray-200 dark:border-gray-700">
       <h2 class="text-sm font-semibold text-gray-900 dark:text-white flex-1">Server logs</h2>
-      <select class="px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" bind:value={logLevel} onchange={refreshLogs}>
+      <select class="px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" bind:value={logLevel} onchange={refreshLogs}>
         <option value="all">all levels</option>
         <option value="DEBUG">DEBUG</option>
         <option value="INFO">INFO</option>
         <option value="WARNING">WARNING</option>
         <option value="ERROR">ERROR</option>
       </select>
-      <input type="number" min="50" max="5000" step="50" class="w-20 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" bind:value={logLines} onchange={refreshLogs} />
+      <input type="number" min="50" max="5000" step="50" class="w-20 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white" bind:value={logLines} onchange={refreshLogs} />
       <span class="text-xs text-gray-500 dark:text-gray-400">lines</span>
       <button class="text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded" onclick={refreshLogs}>Refresh</button>
     </div>

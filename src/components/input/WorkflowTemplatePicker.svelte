@@ -13,7 +13,7 @@
   </label>
   <select
     id="wf-template"
-    class="w-full rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm"
+    class="w-full rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-3 py-2 text-sm"
     value={selectedId}
     onchange={(e) => onchange(e.target.value)}
   >

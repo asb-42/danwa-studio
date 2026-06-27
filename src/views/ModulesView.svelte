@@ -408,7 +408,7 @@
     {#if tabTypes.length > 1}
       <div class="flex flex-col gap-1">
         <label class="text-xs text-gray-600 dark:text-gray-400" for="filter-type">Type</label>
-        <select id="filter-type" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm" bind:value={filterType}>
+        <select id="filter-type" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm" bind:value={filterType}>
           <option value="">all</option>
           {#each tabTypes as typ (typ)}
             <option value={typ}>{typ}</option>
@@ -418,7 +418,7 @@
     {/if}
     <div class="flex flex-col gap-1">
       <label class="text-xs text-gray-600 dark:text-gray-400" for="filter-status">Status</label>
-      <select id="filter-status" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm" bind:value={filterStatus}>
+      <select id="filter-status" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm" bind:value={filterStatus}>
         <option value="all">all</option>
         <option value="installed">installed</option>
         <option value="available">available (not installed)</option>
@@ -429,7 +429,7 @@
     </div>
     <div class="flex flex-col gap-1">
       <label class="text-xs text-gray-600 dark:text-gray-400" for="filter-enabled">State</label>
-      <select id="filter-enabled" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm" bind:value={filterEnabled}>
+      <select id="filter-enabled" class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm" bind:value={filterEnabled}>
         <option value="all">all</option>
         <option value="enabled">enabled</option>
         <option value="disabled">disabled</option>

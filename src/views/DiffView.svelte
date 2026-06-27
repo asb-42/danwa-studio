@@ -95,7 +95,7 @@
   <div class="grid grid-cols-2 gap-3">
     <div>
       <label class="text-xs text-gray-600 dark:text-gray-400" for="diff-a">Session A</label>
-      <select id="diff-a" class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm" value={sessionA} onchange={onSessionAChange}>
+      <select id="diff-a" class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm" value={sessionA} onchange={onSessionAChange}>
         <option value="">— pick —</option>
         {#each sessions as s (s.session_id || s.id)}
           <option value={s.session_id || s.id}>
@@ -106,7 +106,7 @@
     </div>
     <div>
       <label class="text-xs text-gray-600 dark:text-gray-400" for="diff-b">Session B</label>
-      <select id="diff-b" class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-sm" value={sessionB} onchange={onSessionBChange}>
+      <select id="diff-b" class="w-full mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm" value={sessionB} onchange={onSessionBChange}>
         <option value="">— pick —</option>
         {#each sessions as s (s.session_id || s.id)}
           <option value={s.session_id || s.id}>

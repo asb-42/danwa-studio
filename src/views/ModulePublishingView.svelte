@@ -186,7 +186,7 @@
     <p class="text-xs text-gray-500 dark:text-gray-400">
       Paste a <code class="font-mono">manifest.json</code> here. The backend runs the validator without touching disk.
     </p>
-    <textarea class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 font-mono text-xs" rows="8" bind:value={manifestJson} placeholder={'{ "id": "my-module", "name": { "en": "My Module" }, "type": "agent-core", "version": "0.1.0", ... }'}></textarea>
+    <textarea class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-xs" rows="8" bind:value={manifestJson} placeholder={'{ "id": "my-module", "name": { "en": "My Module" }, "type": "agent-core", "version": "0.1.0", ... }'}></textarea>
     <div class="flex items-center gap-2">
       <button class="btn-primary" onclick={handleValidate} disabled={validating}>
         {validating ? '…' : 'Validate'}
