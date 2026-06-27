@@ -76,7 +76,7 @@
 
   {#if loading}
     <div class="flex items-center justify-center h-32">
-      <p class="text-gray-500">{i18n.t('common.loading')}</p>
+      <p class="text-gray-500 dark:text-gray-400">{i18n.t('common.loading')}</p>
     </div>
   {:else}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">

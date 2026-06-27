@@ -118,7 +118,7 @@
   </div>
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.loading')}</p>
   {:else if sessionA && sessionB}
     <div class="grid grid-cols-3 gap-3 text-sm">
       <div class="kv-card"><div class="kv-label">A: events</div><div class="kv-value">{auditLogA.length}</div></div>
@@ -128,7 +128,7 @@
 
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
       {#if diffPairs.length === 0}
-        <p class="p-8 text-center text-gray-500">No node-level events in either session.</p>
+        <p class="p-8 text-center text-gray-500 dark:text-gray-400">No node-level events in either session.</p>
       {:else}
         <table class="w-full text-sm text-left">
           <thead class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">
@@ -168,7 +168,7 @@
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4">
         <div class="flex items-center justify-between mb-2">
           <h3 class="text-sm font-semibold text-gray-900 dark:text-white font-mono">{selectedPair.nodeId}</h3>
-          <button class="text-xs text-gray-500 hover:underline" onclick={() => (selectedNodeId = null)}>Close</button>
+          <button class="text-xs text-gray-500 dark:text-gray-400 hover:underline" onclick={() => (selectedNodeId = null)}>Close</button>
         </div>
         <div class="grid grid-cols-2 gap-3 text-xs">
           <div>
@@ -183,7 +183,7 @@
       </div>
     {/if}
   {:else if !loadingSessions && sessions.length === 0}
-    <p class="text-gray-500 text-sm">No completed sessions found. Run a workflow first.</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">No completed sessions found. Run a workflow first.</p>
   {/if}
 </div>
 

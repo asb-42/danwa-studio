@@ -453,7 +453,7 @@
   <!-- Content -->
   {#if loading}
     <div class="flex items-center justify-center h-32">
-      <p class="text-gray-500">{i18n.t('common.loading')}</p>
+      <p class="text-gray-500 dark:text-gray-400">{i18n.t('common.loading')}</p>
     </div>
   {:else if displayedModules.length === 0}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-8 text-center">
@@ -501,7 +501,7 @@
                       {#if stringCounts[m.module_id] != null}
                         {stringCounts[m.module_id]}
                       {:else if loadingCounts}
-                        <span class="text-gray-400">…</span>
+                        <span class="text-gray-400 dark:text-gray-500">…</span>
                       {:else}
                         {m.file_count || '—'}
                       {/if}
@@ -511,7 +511,7 @@
                       {#if m.installed && m.enabled}
                         <span class="text-xs px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">● enabled</span>
                       {:else if m.installed}
-                        <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500">○ disabled</span>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">○ disabled</span>
                       {:else}
                         <span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">↘ available</span>
                       {/if}
@@ -575,7 +575,7 @@
                       {#if m.installed && m.enabled}
                         <span class="text-xs px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">● enabled</span>
                       {:else if m.installed}
-                        <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500">○ disabled</span>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">○ disabled</span>
                       {:else}
                         <span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">↘ available</span>
                       {/if}

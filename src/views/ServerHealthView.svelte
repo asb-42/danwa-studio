@@ -126,7 +126,7 @@
       <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Recent LLM Activity ({activity.length})</h2>
     </div>
     {#if activity.length === 0}
-      <p class="p-8 text-center text-gray-500 text-sm">{i18n.t('common.noData')}</p>
+      <p class="p-8 text-center text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.noData')}</p>
     {:else}
       <div class="max-h-96 overflow-y-auto">
         <table class="w-full text-sm">
@@ -142,7 +142,7 @@
           <tbody>
             {#each activity as a (a.id || a.timestamp || Math.random())}
               <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                <td class="px-3 py-2 text-xs text-gray-500 font-mono">{a.timestamp?.slice(11, 19) || '—'}</td>
+                <td class="px-3 py-2 text-xs text-gray-500 dark:text-gray-400 font-mono">{a.timestamp?.slice(11, 19) || '—'}</td>
                 <td class="px-3 py-2 text-xs">{a.context || a.session_id || '—'}</td>
                 <td class="px-3 py-2 text-xs font-mono">{a.provider || '—'}</td>
                 <td class="px-3 py-2 text-xs font-mono">{a.model || '—'}</td>
@@ -167,7 +167,7 @@
         <option value="ERROR">ERROR</option>
       </select>
       <input type="number" min="50" max="5000" step="50" class="w-20 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" bind:value={logLines} onchange={refreshLogs} />
-      <span class="text-xs text-gray-500">lines</span>
+      <span class="text-xs text-gray-500 dark:text-gray-400">lines</span>
       <button class="text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded" onclick={refreshLogs}>Refresh</button>
     </div>
     <pre class="json-block max-h-96 overflow-auto">{filteredLogs || '(no logs)'}</pre>

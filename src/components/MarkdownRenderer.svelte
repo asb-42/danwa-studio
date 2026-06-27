@@ -30,7 +30,7 @@
               prose-code:text-xs prose-code:bg-gray-100 dark:prose-code:bg-gray-700
               prose-code:px-1 prose-code:py-0.5 prose-code:rounded
               prose-blockquote:border-l-blue-400 prose-blockquote:pl-3
-              prose-blockquote:text-gray-600 dark:prose-blockquote:text-gray-400
+              prose-blockquote:text-gray-600 dark:prose-blockquote:text-gray-400 dark:text-gray-500
               prose-table:text-sm
               prose-hr:my-3">
     {@html html}

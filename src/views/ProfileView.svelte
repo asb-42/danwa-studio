@@ -88,7 +88,7 @@
   </div>
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.loading')}</p>
   {:else if !me}
     <div class="form-error">Could not load your profile. Are you signed in?</div>
   {:else}

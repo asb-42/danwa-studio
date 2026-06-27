@@ -196,9 +196,9 @@
   </div>
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.loading')}</p>
   {:else if filteredUsers.length === 0}
-    <p class="text-gray-500 text-sm">{i18n.t('common.noData')}</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.noData')}</p>
   {:else}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
       <table class="w-full text-sm text-left">
@@ -219,8 +219,8 @@
               <td class="px-4 py-2">
                 <span class="text-xs px-2 py-0.5 rounded-full {roleBadge(u.role)}">{u.role}</span>
               </td>
-              <td class="px-4 py-2 text-xs text-gray-500">{u.created_at?.slice(0, 10) || '—'}</td>
-              <td class="px-4 py-2 text-xs text-gray-500">{u.last_login_at?.slice(0, 16) || '—'}</td>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400">{u.created_at?.slice(0, 10) || '—'}</td>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400">{u.last_login_at?.slice(0, 16) || '—'}</td>
             </tr>
           {/each}
         </tbody>

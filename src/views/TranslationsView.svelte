@@ -284,7 +284,7 @@
         <label class="flex items-center gap-1 text-xs px-2 py-1 rounded border border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50">
           <input type="checkbox" checked={selectedLocales.has(loc.code)} onchange={() => toggleLocaleSelection(loc.code)} disabled={bulkInProgress} />
           <span>{loc.code}</span>
-          <span class="text-gray-400">({loc.name})</span>
+          <span class="text-gray-400 dark:text-gray-500">({loc.name})</span>
         </label>
       {/each}
     </div>
@@ -307,7 +307,7 @@
   <!-- Locales table -->
   {#if loading}
     <div class="flex items-center justify-center h-32">
-      <p class="text-gray-500">{i18n.t('common.loading')}</p>
+      <p class="text-gray-500 dark:text-gray-400">{i18n.t('common.loading')}</p>
     </div>
   {:else}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
@@ -335,7 +335,7 @@
               </td>
               <td class="px-4 py-3 w-48">
                 {#if pct == null}
-                  <span class="text-gray-400 text-xs">—</span>
+                  <span class="text-gray-400 dark:text-gray-500 text-xs">—</span>
                 {:else}
                   <div class="flex items-center gap-2">
                     <div class="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded overflow-hidden">
@@ -379,9 +379,9 @@
       </div>
 
       {#if detailLoading}
-        <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
+        <p class="text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.loading')}</p>
       {:else if filteredStrings.length === 0}
-        <p class="text-gray-500 text-sm">No strings match the current filter.</p>
+        <p class="text-gray-500 dark:text-gray-400 text-sm">No strings match the current filter.</p>
       {:else}
         <div class="max-h-96 overflow-y-auto border border-gray-200 dark:border-gray-700 rounded">
           <table class="w-full text-sm">
@@ -400,7 +400,7 @@
                       </div>
                     {:else}
                       <div class="flex items-start gap-2">
-                        <span class="flex-1 {s.value ? 'text-gray-900 dark:text-white' : 'text-gray-400 italic'}">
+                        <span class="flex-1 {s.value ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500 italic'}">
                           {s.value || '(empty)'}
                         </span>
                         <button class="text-xs text-blue-600 dark:text-blue-400 hover:underline" onclick={() => startEdit(s)}>Edit</button>

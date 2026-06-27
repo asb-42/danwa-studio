@@ -80,7 +80,7 @@
     {:else if proposals.length === 0}
       <div class="proposals-empty">
         <p>No proposals generated yet.</p>
-        <p class="text-xs text-gray-400">Click "Reflect" to generate optimization proposals for this workflow.</p>
+        <p class="text-xs text-gray-400 dark:text-gray-500">Click "Reflect" to generate optimization proposals for this workflow.</p>
       </div>
     {:else}
       <div class="proposals-list">

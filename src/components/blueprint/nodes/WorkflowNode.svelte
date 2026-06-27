@@ -79,19 +79,19 @@
     {/if}
   </div>
 
-  <div class="text-xs text-gray-500">
+  <div class="text-xs text-gray-500 dark:text-gray-400">
     {#if execStatus === 'running'}
       <span class="text-blue-500">⟳ {t('blueprint.node.running')}</span>
     {:else if execStatus === 'completed'}
-      <span class="text-green-600">✓ {t('blueprint.node.completed')}</span>
+      <span class="text-green-600 dark:text-green-400">✓ {t('blueprint.node.completed')}</span>
     {:else if execStatus === 'failed'}
       <span class="text-red-500">✗ {t('blueprint.node.failed')}</span>
     {:else if execStatus === 'paused'}
       <span class="text-amber-500">⏸ {t('blueprint.node.paused')}</span>
     {:else if isLinked}
-      <span class="text-green-600">✓ {t('blueprint.node.linked')}</span>
+      <span class="text-green-600 dark:text-green-400">✓ {t('blueprint.node.linked')}</span>
     {:else}
-      <span class="text-gray-400">○ {t('blueprint.node.notLinked')}</span>
+      <span class="text-gray-400 dark:text-gray-500">○ {t('blueprint.node.notLinked')}</span>
     {/if}
   </div>
 

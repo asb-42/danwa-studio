@@ -295,9 +295,9 @@
       </select>
     </div>
     {#if loadingSessions}
-      <div class="p-8 text-center text-gray-500">{i18n.t('common.loading')}</div>
+      <div class="p-8 text-center text-gray-500 dark:text-gray-400">{i18n.t('common.loading')}</div>
     {:else if sessions.length === 0}
-      <div class="p-8 text-center text-gray-500">{i18n.t('common.noData')}</div>
+      <div class="p-8 text-center text-gray-500 dark:text-gray-400">{i18n.t('common.noData')}</div>
     {:else}
       <table class="w-full text-sm text-left">
         <thead class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">
@@ -314,7 +314,7 @@
           {#each sessions as s (s.session_id || s.id)}
             <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
               <td class="px-4 py-2 font-mono text-xs">{s.session_id || s.id}</td>
-              <td class="px-4 py-2 font-mono text-xs text-gray-500">{s.workflow_id || '—'}</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-500 dark:text-gray-400">{s.workflow_id || '—'}</td>
               <td class="px-4 py-2">
                 <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 inline-flex items-center gap-1">
                   <span class="inline-block w-1.5 h-1.5 rounded-full {statusColor(s.status)}"></span>
@@ -322,7 +322,7 @@
                 </span>
               </td>
               <td class="px-4 py-2 font-mono text-xs">{s.current_round ?? 0}</td>
-              <td class="px-4 py-2 text-xs text-gray-500">{s.created_at ? new Date(s.created_at).toLocaleString() : '—'}</td>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400">{s.created_at ? new Date(s.created_at).toLocaleString() : '—'}</td>
               <td class="px-4 py-2 text-right">
                 <button class="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded" onclick={() => openSession(s.session_id || s.id)}>Open</button>
               </td>

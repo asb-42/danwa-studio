@@ -612,7 +612,7 @@
           <span class="font-semibold">
             {compileResult.valid ? '✓' : '✗'} {t('blueprint.workflow.compileResult')}
           </span>
-          <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" onclick={() => compileResult = null}>✕</button>
+          <button class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300" onclick={() => compileResult = null}>✕</button>
         </div>
         {#if compileResult.errors?.length > 0}
           <p class="font-semibold mt-1">{t('blueprint.workflow.errors')}:</p>
@@ -639,7 +639,7 @@
                   text-xs text-red-800 dark:text-red-200">
         <div class="flex items-center justify-between">
           <span>{compileError}</span>
-          <button class="text-gray-400 hover:text-gray-600" onclick={() => compileError = ''}>✕</button>
+          <button class="text-gray-400 dark:text-gray-500 hover:text-gray-600" onclick={() => compileError = ''}>✕</button>
         </div>
       </div>
     {/if}

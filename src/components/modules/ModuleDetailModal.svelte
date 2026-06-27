@@ -182,7 +182,7 @@
       <div class="modal-body">
         {#if loading}
           <div class="flex items-center justify-center h-32">
-            <p class="text-gray-500">{i18n.t('common.loading')}</p>
+            <p class="text-gray-500 dark:text-gray-400">{i18n.t('common.loading')}</p>
           </div>
         {:else if error}
           <div class="form-error">{error}</div>
@@ -248,7 +248,7 @@
           <pre class="json-block">{prettyJson(detail)}</pre>
         {:else if activeTab === 'profile'}
           {#if !profile}
-            <p class="text-gray-500">No profile available for this module type.</p>
+            <p class="text-gray-500 dark:text-gray-400">No profile available for this module type.</p>
           {:else if !editing}
             <div class="flex items-center justify-between mb-2">
               <div class="text-xs text-gray-500 dark:text-gray-400">
@@ -472,7 +472,7 @@
   }
   .flex-1 { flex: 1; }
   .text-xs { font-size: 0.75rem; }
-  .text-gray-500 { color: #6b7280; }
+  .text-gray-500 dark:text-gray-400 { color: #6b7280; }
   .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
   .mt-1 { margin-top: 4px; }
   .mt-4 { margin-top: 16px; }

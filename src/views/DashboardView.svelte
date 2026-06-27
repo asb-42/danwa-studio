@@ -98,7 +98,7 @@
       <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
         {healthError ? 'Backend unreachable' : (health?.status || 'Checking…')}
       </h2>
-      {#if health?.version}<span class="text-xs text-gray-500">v{health.version}</span>{/if}
+      {#if health?.version}<span class="text-xs text-gray-500 dark:text-gray-400">v{health.version}</span>{/if}
       <button class="ml-auto text-xs px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded" onclick={refreshAll}>Refresh</button>
     </div>
     {#if healthError}

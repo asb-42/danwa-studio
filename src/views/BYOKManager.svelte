@@ -157,9 +157,9 @@
   {/if}
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.loading')}</p>
   {:else if keys.length === 0}
-    <p class="text-gray-500 text-sm">No BYOK keys configured yet. Add one to override the server's environment variable for a specific LLM profile.</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">No BYOK keys configured yet. Add one to override the server's environment variable for a specific LLM profile.</p>
   {:else}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
       <table class="w-full text-sm text-left">
@@ -179,8 +179,8 @@
               <td class="px-4 py-2 font-mono text-xs">{k.profile_id}</td>
               <td class="px-4 py-2 font-mono text-xs">{k.provider || '—'}</td>
               <td class="px-4 py-2">{k.label || '—'}</td>
-              <td class="px-4 py-2 font-mono text-xs text-gray-500">{maskKey(k.api_key_masked || k.api_key)}</td>
-              <td class="px-4 py-2 text-xs text-gray-500">{k.created_at?.slice(0, 10) || '—'}</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-500 dark:text-gray-400">{maskKey(k.api_key_masked || k.api_key)}</td>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400">{k.created_at?.slice(0, 10) || '—'}</td>
               <td class="px-4 py-2 text-right">
                 <button class="text-xs px-2 py-1 bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 rounded" onclick={() => (pendingDelete = k)}>Delete</button>
               </td>

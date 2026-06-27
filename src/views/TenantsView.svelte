@@ -130,7 +130,7 @@
   </div>
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.loading')}</p>
   {:else}
     <!-- Current tenant card -->
     {#if currentTenant}
@@ -198,7 +198,7 @@
       {/if}
 
       {#if currentUsers.length === 0}
-        <p class="p-8 text-center text-gray-500 text-sm">{i18n.t('common.noData')}</p>
+        <p class="p-8 text-center text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.noData')}</p>
       {:else}
         <table class="w-full text-sm text-left">
           <thead class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">
@@ -248,7 +248,7 @@
                 <td class="px-4 py-2 font-mono text-xs">{tn.tenant_id || tn.id}</td>
                 <td class="px-4 py-2">{tn.name}</td>
                 <td class="px-4 py-2">{tn.plan || '—'}</td>
-                <td class="px-4 py-2 text-xs text-gray-500">{tn.created_at?.slice(0, 10) || '—'}</td>
+                <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400">{tn.created_at?.slice(0, 10) || '—'}</td>
               </tr>
             {/each}
           </tbody>

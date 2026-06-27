@@ -98,7 +98,7 @@
       Read-only view of what the running server reports about itself. Use this to verify env-var changes after a restart.
     </p>
     {#if !configSnapshot}
-      <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
+      <p class="text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.loading')}</p>
     {:else}
       <pre class="json-block">{JSON.stringify(configSnapshot, null, 2)}</pre>
     {/if}

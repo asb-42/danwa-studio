@@ -85,7 +85,7 @@
       </button>
     </form>
 
-    <p class="text-center text-sm text-gray-500">
+    <p class="text-center text-sm text-gray-500 dark:text-gray-400">
       Demo: admin@danwa.local / admin123
     </p>
   </div>

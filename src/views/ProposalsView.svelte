@@ -169,13 +169,13 @@
       <option value="rejected">rejected</option>
       <option value="applied">applied</option>
     </select>
-    <span class="text-xs text-gray-500 ml-2">{proposals.length} proposal(s)</span>
+    <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">{proposals.length} proposal(s)</span>
   </div>
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.loading')}</p>
   {:else if proposals.length === 0}
-    <p class="text-gray-500 text-sm">No proposals yet. Trigger a reflection to generate one.</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">No proposals yet. Trigger a reflection to generate one.</p>
   {:else}
     <div class="space-y-2">
       {#each proposals as p (p.proposal_id)}
@@ -207,7 +207,7 @@
           {#if expandingId === p.proposal_id}
             <div class="border-t border-gray-200 dark:border-gray-700 p-4">
               {#if !expandedProposal}
-                <p class="text-gray-500 text-sm">Loading…</p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">Loading…</p>
               {:else}
                 <pre class="json-block">{JSON.stringify(expandedProposal, null, 2)}</pre>
               {/if}

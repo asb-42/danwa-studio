@@ -145,7 +145,7 @@
               <span class="ml-auto text-xs text-gray-400 dark:text-gray-500" dir="ltr">RTL</span>
             {/if}
             {#if lang === currentLocale}
-              <svg class="ml-auto w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24"
+              <svg class="ml-auto w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24"
                    stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
               </svg>

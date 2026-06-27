@@ -153,7 +153,7 @@
 
   {#if loading}
     <div class="flex items-center justify-center h-32">
-      <p class="text-gray-500">{i18n.t('common.loading')}</p>
+      <p class="text-gray-500 dark:text-gray-400">{i18n.t('common.loading')}</p>
     </div>
   {:else}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
@@ -183,7 +183,7 @@
                 <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">
                   {p.name}
                   {#if p.is_system}<span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 ml-1">sys</span>{/if}
-                  <span class="block text-xs text-gray-400 font-mono">{p.id}</span>
+                  <span class="block text-xs text-gray-400 dark:text-gray-500 font-mono">{p.id}</span>
                 </td>
                 <td class="px-4 py-3">
                   <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">

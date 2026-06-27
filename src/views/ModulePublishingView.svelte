@@ -224,9 +224,9 @@
       </div>
     </div>
     {#if loading}
-      <p class="p-8 text-center text-gray-500 text-sm">{i18n.t('common.loading')}</p>
+      <p class="p-8 text-center text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.loading')}</p>
     {:else if localModules.length === 0}
-      <p class="p-8 text-center text-gray-500 text-sm">No local modules installed yet.</p>
+      <p class="p-8 text-center text-gray-500 dark:text-gray-400 text-sm">No local modules installed yet.</p>
     {:else}
       <table class="w-full text-sm text-left">
         <thead class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">
@@ -246,7 +246,7 @@
                 <button class="text-sm font-mono text-blue-600 dark:text-blue-400 hover:underline" onclick={() => viewDetail(m)}>
                   {m.module_id}
                 </button>
-                <div class="text-xs text-gray-500">{resolveLocale(m.name)}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">{resolveLocale(m.name)}</div>
               </td>
               <td class="px-4 py-2 text-xs">{m.type}</td>
               <td class="px-4 py-2 text-xs font-mono">{m.version || '—'}</td>
@@ -254,7 +254,7 @@
                 {#if hasUpdate}
                   <span class="px-2 py-0.5 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300">↑ update</span>
                 {:else}
-                  <span class="text-gray-400">—</span>
+                  <span class="text-gray-400 dark:text-gray-500">—</span>
                 {/if}
               </td>
               <td class="px-4 py-2 text-right space-x-1">
@@ -317,7 +317,7 @@
           {:else if lastPublish.status === 'failed'}
             <span class="text-xs px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300">✗ failed</span>
           {/if}
-          <span class="text-xs text-gray-500 font-mono">
+          <span class="text-xs text-gray-500 dark:text-gray-400 font-mono">
             branch={lastPublish.branch}
             {#if lastPublish.commit_sha} · sha={lastPublish.commit_sha.slice(0, 7)}{/if}
             {#if lastPublish.pushed} · pushed to {lastPublish.push_remote}{/if}
@@ -327,7 +327,7 @@
           {#each lastPublish.steps as s, i (i)}
             <li class="{s.ok ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}">
               <code class="font-mono">{s.name}</code>: {s.detail}
-              <span class="text-gray-400">({s.elapsed_ms}ms)</span>
+              <span class="text-gray-400 dark:text-gray-500">({s.elapsed_ms}ms)</span>
             </li>
           {/each}
         </ol>

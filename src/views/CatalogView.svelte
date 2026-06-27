@@ -182,11 +182,11 @@
   });
 
   function statusColor(s) {
-    if (!s) return 'bg-gray-300';
-    if (s.error) return 'bg-red-500';
-    if (s.cloned) return 'bg-blue-500';
-    if (s.pulled) return 'bg-green-500';
-    return 'bg-gray-400';
+    if (!s) return 'bg-gray-300 dark:bg-gray-600';
+    if (s.error) return 'bg-red-500 dark:bg-red-400';
+    if (s.cloned) return 'bg-blue-500 dark:bg-blue-400';
+    if (s.pulled) return 'bg-green-500 dark:bg-green-400';
+    return 'bg-gray-400 dark:bg-gray-500';
   }
 
   function actionBadge(a) {
@@ -194,7 +194,7 @@
     if (a === 'update') return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300';
     if (a === 'stale')  return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300';
     if (a === 'skip')   return 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300';
-    return 'bg-gray-100 text-gray-600';
+    return 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300';
   }
 
   function fmtMoney(v) {
@@ -221,7 +221,7 @@
       { id: 'stale',   label: t('catalog.stale') },
     ] as tab}
       <button
-        class="px-4 py-2 text-sm font-medium border-b-2 {activeTab === tab.id ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}"
+        class="px-4 py-2 text-sm font-medium border-b-2 {activeTab === tab.id ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}"
         onclick={() => (activeTab = tab.id)}
       >
         {tab.label}
@@ -247,9 +247,9 @@
       </div>
 
       {#if loadingSources}
-        <p class="p-8 text-center text-gray-500 text-sm">{t('common.loading')}</p>
+        <p class="p-8 text-center text-gray-500 dark:text-gray-400 text-sm">{t('common.loading')}</p>
       {:else if sources.length === 0}
-        <p class="p-8 text-center text-gray-500 text-sm">No catalog sources configured.</p>
+        <p class="p-8 text-center text-gray-500 dark:text-gray-400 text-sm">No catalog sources configured.</p>
       {:else}
         <table class="w-full text-sm text-left">
           <thead class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">
@@ -270,7 +270,7 @@
                     <span class="inline-block w-2 h-2 rounded-full {statusColor(s.last_fetch)}"></span>
                     {s.name}
                   </div>
-                  <div class="text-xs text-gray-500">{s.description}</div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400">{s.description}</div>
                 </td>
                 <td class="px-4 py-2 font-mono text-xs text-gray-600 dark:text-gray-400 break-all">{s.repo_url}</td>
                 <td class="px-4 py-2 font-mono text-xs">{s.branch}</td>
@@ -278,12 +278,12 @@
                 <td class="px-4 py-2 text-xs">
                   {#if s.last_fetch}
                     <div class="font-mono text-gray-600 dark:text-gray-400">{s.last_fetch.commit_sha?.slice(0, 8) || '?'}</div>
-                    <div class="text-gray-400">{s.last_fetch.cloned ? 'cloned' : s.last_fetch.pulled ? 'pulled' : ''}</div>
+                    <div class="text-gray-400 dark:text-gray-500">{s.last_fetch.cloned ? 'cloned' : s.last_fetch.pulled ? 'pulled' : ''}</div>
                     {#if s.last_fetch.error}
                       <div class="text-red-500">⚠ {s.last_fetch.error.slice(0, 40)}…</div>
                     {/if}
                   {:else}
-                    <span class="text-gray-400">never</span>
+                    <span class="text-gray-400 dark:text-gray-500">never</span>
                   {/if}
                 </td>
                 <td class="px-4 py-2 text-right space-x-1">
@@ -327,11 +327,11 @@
         <button class="text-xs px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700" onclick={loadCatalog}>
           {loadingCatalog ? 'Loading…' : 'Reload catalog'}
         </button>
-        <span class="text-xs text-gray-500 ml-2">{filteredModels.length} models</span>
+        <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">{filteredModels.length} models</span>
       </div>
 
       {#if !catalog}
-        <p class="text-gray-500 text-sm">Click "Reload catalog" to load the local cache.</p>
+        <p class="text-gray-500 dark:text-gray-400 text-sm">Click "Reload catalog" to load the local cache.</p>
       {:else}
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
           <table class="w-full text-sm text-left">
@@ -359,9 +359,9 @@
                   <td class="px-3 py-1.5 text-xs">{fmtMoney(m.cost_per_1m_input)}</td>
                   <td class="px-3 py-1.5 text-xs">{fmtMoney(m.cost_per_1m_output)}</td>
                   <td class="px-3 py-1.5 text-center text-xs">
-                    {#if m.can_reason}<span class="text-blue-600">🧠</span>{:else}<span class="text-gray-300">·</span>{/if}
+                    {#if m.can_reason}<span class="text-blue-600 dark:text-blue-400">🧠</span>{:else}<span class="text-gray-300">·</span>{/if}
                   </td>
-                  <td class="px-3 py-1.5 text-center text-xs text-gray-500">
+                  <td class="px-3 py-1.5 text-center text-xs text-gray-500 dark:text-gray-400">
                     {#if m.modalities && (m.modalities.input?.length || m.modalities.output?.length)}
                       {(m.modalities.input || []).slice(0,2).join(',')}
                       {#if (m.modalities.input || []).length > 2}…{/if}
@@ -374,7 +374,7 @@
             </tbody>
           </table>
           {#if filteredModels.length > 200}
-            <p class="p-3 text-center text-xs text-gray-500">… and {filteredModels.length - 200} more (use filters to narrow)</p>
+            <p class="p-3 text-center text-xs text-gray-500 dark:text-gray-400">… and {filteredModels.length - 200} more (use filters to narrow)</p>
           {/if}
         </div>
       {/if}
@@ -475,15 +475,15 @@
                   </td>
                   <td class="px-3 py-1.5 font-mono text-xs">{e.provider || '—'}</td>
                   <td class="px-3 py-1.5 font-mono text-xs">{e.catalog_id || '—'}</td>
-                  <td class="px-3 py-1.5 font-mono text-xs text-gray-500">{e.module_id}</td>
+                  <td class="px-3 py-1.5 font-mono text-xs text-gray-500 dark:text-gray-400">{e.module_id}</td>
                   <td class="px-3 py-1.5 text-xs text-gray-600 dark:text-gray-400">
                     {e.reason}
                     {#if e.changes?.length}
                       <details class="mt-1">
-                        <summary class="cursor-pointer text-gray-500">{e.changes.length} field(s)</summary>
+                        <summary class="cursor-pointer text-gray-500 dark:text-gray-400">{e.changes.length} field(s)</summary>
                         <ul class="pl-4 mt-1 text-xs space-y-0.5">
                           {#each e.changes.slice(0, 5) as c, i (i)}<li><code class="font-mono">{c}</code></li>{/each}
-                          {#if e.changes.length > 5}<li class="text-gray-400">… +{e.changes.length - 5} more</li>{/if}
+                          {#if e.changes.length > 5}<li class="text-gray-400 dark:text-gray-500">… +{e.changes.length - 5} more</li>{/if}
                         </ul>
                       </details>
                     {/if}
@@ -522,12 +522,12 @@
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-red-200 dark:border-red-800 p-3 flex items-center justify-between">
             <div>
               <code class="font-mono text-sm">{e.module_id}</code>
-              <div class="text-xs text-gray-500">{e.reason}</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400">{e.reason}</div>
             </div>
             <span class="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300">stale</span>
           </div>
         {:else}
-          <p class="text-gray-500 text-sm">No stale modules. ✓</p>
+          <p class="text-gray-500 dark:text-gray-400 text-sm">No stale modules. ✓</p>
         {/each}
       {/if}
     </div>

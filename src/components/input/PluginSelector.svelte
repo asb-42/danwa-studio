@@ -21,7 +21,7 @@
         {selectedKey === plugin.plugin_key
           ? 'bg-blue-600 text-white shadow-md'
           : plugin.ui_hints?.is_available === false
-            ? 'bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-600 cursor-not-allowed'
+            ? 'bg-gray-100 text-gray-400 dark:text-gray-500 dark:bg-gray-800 dark:text-gray-600 cursor-not-allowed'
             : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}"
       onclick={() => {
         if (plugin.ui_hints?.is_available !== false) onchange(plugin.plugin_key);

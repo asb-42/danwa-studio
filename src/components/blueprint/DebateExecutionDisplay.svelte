@@ -223,7 +223,7 @@
         <span class="px-2 py-1 text-xs font-medium rounded-full {statusBadgeClass}">
           {status}
         </span>
-        <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-lg leading-none" onclick={handleClose}>
+        <button class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 text-lg leading-none" onclick={handleClose}>
           ✕
         </button>
       </div>

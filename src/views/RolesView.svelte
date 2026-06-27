@@ -151,7 +151,7 @@
 
   {#if loading}
     <div class="flex items-center justify-center h-32">
-      <p class="text-gray-500">{i18n.t('common.loading')}</p>
+      <p class="text-gray-500 dark:text-gray-400">{i18n.t('common.loading')}</p>
     </div>
   {:else}
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-x-auto">
@@ -180,7 +180,7 @@
               <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                 <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">
                   {role.name}
-                  <span class="block text-xs text-gray-400 font-mono">{role.id}</span>
+                  <span class="block text-xs text-gray-400 dark:text-gray-500 font-mono">{role.id}</span>
                 </td>
                 <td class="px-4 py-3">
                   <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">

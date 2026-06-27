@@ -127,7 +127,7 @@
   </div>
 
   {#if loading}
-    <p class="text-gray-500 text-sm">{i18n.t('common.loading')}</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.loading')}</p>
   {:else if auditLog.length > 0}
     <!-- Event type breakdown -->
     <div class="flex flex-wrap gap-2 text-xs">
@@ -150,14 +150,14 @@
         <button class="px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded text-sm" onclick={jumpEnd} title="Jump to end">⏭</button>
 
         <div class="ml-auto flex items-center gap-2 text-xs">
-          <span class="text-gray-500">Speed</span>
+          <span class="text-gray-500 dark:text-gray-400">Speed</span>
           <select class="px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" bind:value={playSpeed} onchange={() => { if (isPlaying) { stopPlayback(); startPlayback(); } }}>
             <option value={0.5}>0.5×</option>
             <option value={1}>1×</option>
             <option value={2}>2×</option>
             <option value={4}>4×</option>
           </select>
-          <span class="font-mono text-gray-500">{currentStep + 1} / {auditLog.length}</span>
+          <span class="font-mono text-gray-500 dark:text-gray-400">{currentStep + 1} / {auditLog.length}</span>
         </div>
       </div>
 
@@ -172,10 +172,10 @@
           <tbody>
             {#each auditLog as ev, i (i)}
               <tr class="border-b dark:border-gray-700 cursor-pointer {i === currentStep ? 'bg-blue-50 dark:bg-blue-900/30' : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'}" onclick={() => { stopPlayback(); currentStep = i; }}>
-                <td class="px-2 py-1 font-mono text-xs text-gray-400 w-10 text-right">{i + 1}</td>
+                <td class="px-2 py-1 font-mono text-xs text-gray-400 dark:text-gray-500 w-10 text-right">{i + 1}</td>
                 <td class="px-2 py-1">
                   <div class="text-xs font-semibold">{ev.event_type || '—'}</div>
-                  <div class="text-xs text-gray-500 font-mono">{ev.node_id || ev.role || '—'}</div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400 font-mono">{ev.node_id || ev.role || '—'}</div>
                 </td>
               </tr>
             {/each}
@@ -187,34 +187,34 @@
         {#if currentEvent}
           <h3 class="text-sm font-semibold mb-2 text-gray-900 dark:text-white">
             Event #{currentStep + 1}: {currentEvent.event_type || '—'}
-            {#if currentEvent.node_id}<span class="ml-2 text-xs text-gray-500 font-mono">{currentEvent.node_id}</span>{/if}
+            {#if currentEvent.node_id}<span class="ml-2 text-xs text-gray-500 dark:text-gray-400 font-mono">{currentEvent.node_id}</span>{/if}
           </h3>
           <div class="grid grid-cols-2 gap-2 text-xs mb-3">
             {#if currentEvent.timestamp}
-              <div><span class="text-gray-500">Time:</span> <span class="font-mono">{currentEvent.timestamp}</span></div>
+              <div><span class="text-gray-500 dark:text-gray-400">Time:</span> <span class="font-mono">{currentEvent.timestamp}</span></div>
             {/if}
             {#if currentEvent.actor}
-              <div><span class="text-gray-500">Actor:</span> <span class="font-mono">{currentEvent.actor}</span></div>
+              <div><span class="text-gray-500 dark:text-gray-400">Actor:</span> <span class="font-mono">{currentEvent.actor}</span></div>
             {/if}
             {#if currentEvent.round != null}
-              <div><span class="text-gray-500">Round:</span> <span class="font-mono">{currentEvent.round}</span></div>
+              <div><span class="text-gray-500 dark:text-gray-400">Round:</span> <span class="font-mono">{currentEvent.round}</span></div>
             {/if}
             {#if currentEvent.status}
-              <div><span class="text-gray-500">Status:</span> <span class="font-mono">{currentEvent.status}</span></div>
+              <div><span class="text-gray-500 dark:text-gray-400">Status:</span> <span class="font-mono">{currentEvent.status}</span></div>
             {/if}
           </div>
           {#if currentEvent.output || currentEvent.input || currentEvent.metadata}
             <pre class="json-block">{JSON.stringify({ output: currentEvent.output, input: currentEvent.input, metadata: currentEvent.metadata }, null, 2)}</pre>
           {/if}
         {:else}
-          <p class="text-gray-500 text-sm">No event at this position.</p>
+          <p class="text-gray-500 dark:text-gray-400 text-sm">No event at this position.</p>
         {/if}
       </div>
     </div>
   {:else if selectedSessionId}
-    <p class="text-gray-500 text-sm">No audit log entries for this session.</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">No audit log entries for this session.</p>
   {:else if !loadingSessions && sessions.length === 0}
-    <p class="text-gray-500 text-sm">No completed sessions available. Run a workflow first.</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">No completed sessions available. Run a workflow first.</p>
   {/if}
 </div>
 
