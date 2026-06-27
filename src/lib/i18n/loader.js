@@ -112,6 +112,7 @@ const enFallback = {
   'nav.section.execute': 'EXECUTE',
   'nav.section.evolve': 'EVOLVE',
   'nav.section.administration': 'ADMINISTRATION',
+  'nav.section.system': 'SYSTEM',
   'nav.section.account': 'ACCOUNT',
   'nav.catalog': 'LLM Catalog',
   'config.name': 'Name',

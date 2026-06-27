@@ -61,8 +61,9 @@
         getTranslationCoverage().catch(() => ({})),
       ]);
       defaultLocale = localesResp.default_locale;
-      rtlLocales = localesResp.rtl_locales || [];
       locales = localesResp.locales || [];
+      const installedCodes = new Set(locales.map(l => l.code));
+      rtlLocales = (localesResp.rtl_locales || []).filter(code => installedCodes.has(code));
       stats = statsResp || {};
       coverage = coverageResp || {};
     } catch (e) {
@@ -223,9 +224,12 @@
   );
 
   function coveragePercent(loc) {
+    if (loc === defaultLocale) return 100;
     const c = coverage?.[loc] ?? stats?.[loc]?.coverage;
     if (c == null) return null;
-    return typeof c === 'number' ? Math.round(c * 100) : null;
+    if (typeof c === 'number') return Math.round(c * 100);
+    if (typeof c === 'object' && c.coverage_pct != null) return Math.round(c.coverage_pct);
+    return null;
   }
 
   function coverageColor(pct) {
@@ -380,6 +384,8 @@
 
       {#if detailLoading}
         <p class="text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.loading')}</p>
+      {:else if detailStrings.length === 0}
+        <p class="text-gray-500 dark:text-gray-400 text-sm">No translations stored for this locale yet. Use Bulk LLM-Translate to generate them.</p>
       {:else if filteredStrings.length === 0}
         <p class="text-gray-500 dark:text-gray-400 text-sm">No strings match the current filter.</p>
       {:else}
