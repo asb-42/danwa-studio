@@ -1,9 +1,11 @@
 /**
- * Dark Theme Audit — tests that form elements have proper dark: variants.
+ * Dark Theme Audit — tests that form and table elements have proper dark: variants.
  *
  * Form elements (textarea, select, input[type=text], input[type=number])
  * must have BOTH bg-white + dark:bg-* AND text-gray-900 + dark:text-* to
  * avoid invisible text on dark backgrounds.
+ *
+ * Table elements (<td>, <th>) with text-gray-* must also have dark:text-*.
  */
 import { describe, it, expect } from 'vitest';
 import { readFileSync, readdirSync, statSync } from 'fs';
@@ -90,6 +92,79 @@ describe('Dark theme — form elements must have dark: text and bg classes', () 
           `Dark theme issues in ${rel}:\n` +
           issues.join('\n') +
           '\n\nAll form elements with bg-white + dark:bg-* must also have text-gray-900 + dark:text-*'
+        );
+      }
+    });
+  }
+});
+
+/**
+ * Find <td> and <th> elements with text-gray-* but missing dark:text-*.
+ * These would be invisible in dark mode.
+ */
+function findTableElements(source, filePath) {
+  const results = [];
+  const lines = source.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const tagMatch = line.match(/<(td|th)\b/i);
+    if (!tagMatch) continue;
+
+    // Collect full tag (may span lines)
+    let tag = line;
+    let tagLine = i;
+    while (!tag.match(/\/?>/) && i + 1 < lines.length) {
+      i++;
+      tag += ' ' + lines[i];
+    }
+
+    const classMatch = tag.match(/class="([^"]*)"/);
+    if (classMatch) {
+      results.push({
+        file: relative(SRC, filePath),
+        line: tagLine + 1,
+        tag: tagMatch[1].toLowerCase(),
+        classStr: classMatch[1],
+      });
+    }
+  }
+  return results;
+}
+
+describe('Dark theme — table cells must have dark:text classes', () => {
+  const files = svelteFiles(SRC);
+
+  for (const filePath of files) {
+    const rel = relative(SRC, filePath);
+    if (rel.includes('tests/') || rel.includes('test.') || rel.includes('.test.')) continue;
+
+    it(`${rel} — table cells have dark:text`, () => {
+      const source = readFileSync(filePath, 'utf-8');
+      const elements = findTableElements(source, filePath);
+      const issues = [];
+
+      for (const { file, line, tag, classStr } of elements) {
+        const classes = classStr.split(/\s+/);
+        // Check if it has any text-gray-* (light mode text color)
+        const hasTextGray = classes.some(c => /^text-gray-\d+$/.test(c));
+        // Check if it has dark:text-*
+        const hasDarkText = classes.some(c => c.startsWith('dark:text-'));
+        // Also check for text-gray-900 or text-gray-800 (common light mode dark text)
+        const hasExplicitLightText = classes.some(c => c === 'text-gray-900' || c === 'text-gray-800');
+
+        if (hasTextGray && !hasDarkText) {
+          issues.push(`  line ${line} <${tag}>: has text-gray-* but missing dark:text-*`);
+        }
+        if (hasExplicitLightText && !hasDarkText) {
+          issues.push(`  line ${line} <${tag}>: has text-gray-900/800 but missing dark:text-*`);
+        }
+      }
+
+      if (issues.length > 0) {
+        throw new Error(
+          `Dark theme issues in ${rel}:\n` +
+          issues.join('\n') +
+          '\n\nAll table cells with text-gray-* must also have dark:text-*'
         );
       }
     });
