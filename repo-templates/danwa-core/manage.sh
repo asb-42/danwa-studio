@@ -270,6 +270,39 @@ stop_studio() {
 }
 
 # ───────────────────────────────────────────────────────────────────────
+# Sibling discovery & delegation
+# ───────────────────────────────────────────────────────────────────────
+find_sibling_manage() {
+    local name="$1"
+    discover_siblings "$name" 2>/dev/null || true
+    local var="DANWA_SIBLING_${name//-/_}"
+    local dir="${!var:-}"
+    if [[ -z "$dir" ]]; then
+        # Fallback: try ../<name>
+        dir="$PROJECT_DIR/../$name"
+    fi
+    if [[ -d "$dir" ]] && [[ -f "$dir/manage.sh" ]]; then
+        echo "$dir/manage.sh"
+        return 0
+    fi
+    return 1
+}
+
+delegate_to() {
+    local name="$1"; shift
+    local script
+    if script="$(find_sibling_manage "$name")"; then
+        log_step "Delegating to $name: $*"
+        # Pass DANWA_LIBDANWA_PATH so the sibling can find libdanwa.sh
+        export DANWA_LIBDANWA_PATH="${DANWA_LIBDANWA_PATH:-$LIBDANWA_RESOLVED}"
+        bash "$script" "$@"
+    else
+        log_warn "Sibling '$name' not found — skipping"
+        return 1
+    fi
+}
+
+# ───────────────────────────────────────────────────────────────────────
 # Composite commands
 # ───────────────────────────────────────────────────────────────────────
 cmd_start() {
@@ -420,6 +453,13 @@ Commands:
   status [--json]    Show status (JSON for studio SystemManagementView)
   logs [be|fe|st|all] Tail logs
   clean              Remove log files
+
+  Cross-repo (manage siblings from here):
+    backend [start|stop|restart]   Manage backend (alias: be)
+    frontend [start|stop|restart]  Manage legacy frontend (alias: fe)
+    studio [start|stop|restart]    Manage danwa-studio (alias: st)
+    all [start|stop|restart]       Manage all repos
+
   help               This help
 
 Env overrides:
@@ -445,6 +485,16 @@ case "$cmd" in
     status)       cmd_status "$@" ;;
     logs)         cmd_logs "$@" ;;
     clean)        cmd_clean "$@" ;;
+    # Cross-repo shortcuts
+    backend|be)   delegate_to danwa-core "${1:-status}" ;;
+    frontend|fe)  delegate_to danwa "${1:-status}" ;;
+    studio|st)    delegate_to danwa-studio "${1:-status}" ;;
+    all)
+        sub="${1:-status}"
+        delegate_to danwa-core "$sub" || true
+        delegate_to danwa "$sub" || true
+        delegate_to danwa-studio "$sub" || true
+        ;;
     help|--help|-h) cmd_help ;;
     *)
         log_error "Unknown command: $cmd"
