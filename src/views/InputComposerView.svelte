@@ -76,7 +76,10 @@
           selectedTemplateId = workflowTemplates[0].id;
         }
       })
-      .catch(() => {});
+      .catch((e) => {
+        console.warn('[InputComposer] Failed to load workflow templates:', e);
+        error = e.message || 'Failed to load workflow templates';
+      });
 
     startA2APolling();
     return () => stopA2APolling();
