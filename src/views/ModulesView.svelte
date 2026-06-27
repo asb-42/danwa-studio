@@ -38,8 +38,6 @@
   let stringCounts = $state({});
   let loadingCounts = $state(false);
 
-  const MODULES_BASE_URL = import.meta.env.VITE_MODULES_BASE_URL || '/modules';
-
   async function loadStringCounts() {
     if (loadingCounts || Object.keys(stringCounts).length > 0) return;
     loadingCounts = true;
@@ -47,18 +45,10 @@
       const langModules = allModules().filter(
         (m) => canonicalCategory(m.category) === 'translations' && m.language,
       );
-      const results = await Promise.allSettled(
-        langModules.map(async (m) => {
-          const res = await fetch(`${MODULES_BASE_URL}/i18n-${m.language}/ui_strings.json`);
-          if (!res.ok) return [m.module_id, null];
-          const dict = await res.json();
-          return [m.module_id, Object.keys(dict).length];
-        }),
-      );
       const counts = {};
-      for (const r of results) {
-        if (r.status === 'fulfilled' && r.value[1] !== null) {
-          counts[r.value[0]] = r.value[1];
+      for (const m of langModules) {
+        if (m.string_count != null && m.string_count > 0) {
+          counts[m.module_id] = m.string_count;
         }
       }
       stringCounts = counts;
