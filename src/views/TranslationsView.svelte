@@ -224,7 +224,6 @@
   );
 
   function coveragePercent(loc) {
-    if (loc === defaultLocale) return 100;
     const c = coverage?.[loc] ?? stats?.[loc]?.coverage;
     if (c == null) return null;
     if (typeof c === 'number') return Math.round(c * 100);
@@ -385,7 +384,13 @@
       {#if detailLoading}
         <p class="text-gray-500 dark:text-gray-400 text-sm">{i18n.t('common.loading')}</p>
       {:else if detailStrings.length === 0}
-        <p class="text-gray-500 dark:text-gray-400 text-sm">No translations stored for this locale yet. Use Bulk LLM-Translate to generate them.</p>
+        <p class="text-gray-500 dark:text-gray-400 text-sm">
+          {#if expandedLocale === defaultLocale}
+            Source language — strings are bundled in the frontend source code.
+          {:else}
+            No backend translations stored for this locale yet.
+          {/if}
+        </p>
       {:else if filteredStrings.length === 0}
         <p class="text-gray-500 dark:text-gray-400 text-sm">No strings match the current filter.</p>
       {:else}
