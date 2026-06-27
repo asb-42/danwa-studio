@@ -51,6 +51,25 @@ export function setLanguage(language) {
 }
 
 // ---------------------------------------------------------------------------
+// Utility / Service LLM
+// ---------------------------------------------------------------------------
+
+export function getServiceLLMConfig() {
+  return request('/api/v1/config/service-llm');
+}
+
+export function setServiceLLM(profileId) {
+  return request('/api/v1/config/service-llm', {
+    method: 'POST',
+    body: JSON.stringify({ profile_id: profileId }),
+  });
+}
+
+export function getServiceEligibleProfiles() {
+  return request('/api/v1/profiles/llm/service-eligible');
+}
+
+// ---------------------------------------------------------------------------
 // System Logs
 // ---------------------------------------------------------------------------
 
