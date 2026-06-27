@@ -224,6 +224,7 @@
   );
 
   function coveragePercent(loc) {
+    if (loc === defaultLocale) return 100;
     const c = coverage?.[loc] ?? stats?.[loc]?.coverage;
     if (c == null) return null;
     if (typeof c === 'number') return Math.round(c * 100);
