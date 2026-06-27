@@ -34,6 +34,41 @@
   let updatesAvailable = $state([]);
   let showRepoPanel = $state(false);
 
+  // String counts for language packs (fetched lazily from ui_strings.json)
+  let stringCounts = $state({});
+  let loadingCounts = $state(false);
+
+  const MODULES_BASE_URL = import.meta.env.VITE_MODULES_BASE_URL || '/modules';
+
+  async function loadStringCounts() {
+    if (loadingCounts || Object.keys(stringCounts).length > 0) return;
+    loadingCounts = true;
+    try {
+      const langModules = allModules().filter(
+        (m) => canonicalCategory(m.category) === 'translations' && m.language,
+      );
+      const results = await Promise.allSettled(
+        langModules.map(async (m) => {
+          const res = await fetch(`${MODULES_BASE_URL}/i18n-${m.language}/ui_strings.json`);
+          if (!res.ok) return [m.module_id, null];
+          const dict = await res.json();
+          return [m.module_id, Object.keys(dict).length];
+        }),
+      );
+      const counts = {};
+      for (const r of results) {
+        if (r.status === 'fulfilled' && r.value[1] !== null) {
+          counts[r.value[0]] = r.value[1];
+        }
+      }
+      stringCounts = counts;
+    } catch (e) {
+      console.warn('Failed to load string counts:', e);
+    } finally {
+      loadingCounts = false;
+    }
+  }
+
   // Human-readable category labels + icons (normalized from repo categories)
   const categoryInfo = {
     'prompts':                    { label: 'Prompts',              icon: '📝' },
@@ -299,6 +334,8 @@
     filterEnabled = 'all';
     filterStatus = 'all';
     searchQuery = '';
+    // Lazy-load string counts when switching to translations tab
+    if (tab === 'translations') loadStringCounts();
   }
 </script>
 
@@ -461,7 +498,13 @@
                       {m.module_id}
                     </td>
                     <td class="px-4 py-2.5 font-mono text-xs text-gray-600 dark:text-gray-400">
-                      {m.file_count || '—'}
+                      {#if stringCounts[m.module_id] != null}
+                        {stringCounts[m.module_id]}
+                      {:else if loadingCounts}
+                        <span class="text-gray-400">…</span>
+                      {:else}
+                        {m.file_count || '—'}
+                      {/if}
                     </td>
                     <td class="px-4 py-2.5 font-mono text-xs text-gray-600 dark:text-gray-400">{m.version || '—'}</td>
                     <td class="px-4 py-2.5">
