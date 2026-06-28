@@ -24,6 +24,7 @@
       error = null;
       if (profile) {
         form = {
+          id: profile.id,
           name: profile.name || '',
           profile_type: profile.profile_type || 'text',
           provider: profile.provider || 'openrouter',
@@ -66,6 +67,12 @@
     try {
       const payload = { ...form };
       if (isNew) {
+        const slug = (payload.name || 'profile')
+          .toLowerCase()
+          .replace(/[^a-z0-9._-]+/g, '-')
+          .replace(/^-+|-+$/g, '')
+          .slice(0, 64);
+        payload.id = slug || `profile-${Date.now()}`;
         await createBlueprintLLMProfile(payload);
       } else {
         await updateBlueprintLLMProfile(profile.id, payload);

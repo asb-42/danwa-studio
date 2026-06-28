@@ -24,7 +24,14 @@ export async function request(path, options = {}) {
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: response.statusText }));
-    throw new Error(error.detail || `HTTP ${response.status}`);
+    const detail = error.detail;
+    let msg;
+    if (Array.isArray(detail)) {
+      msg = detail.map((d) => d.msg || JSON.stringify(d)).join('; ');
+    } else {
+      msg = detail || `HTTP ${response.status}`;
+    }
+    throw new Error(msg);
   }
 
   if (response.status === 204) return null;
