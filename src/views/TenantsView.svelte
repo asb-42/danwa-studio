@@ -394,17 +394,17 @@
         <table class="w-full text-sm text-left">
           <thead class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th class="px-4 py-2">Email</th>
-              <th class="px-4 py-2">Name</th>
-              <th class="px-4 py-2">Role</th>
-              <th class="px-4 py-2 text-right">Actions</th>
+              <th class="px-4 py-2 text-gray-700 dark:text-gray-300">Email</th>
+              <th class="px-4 py-2 text-gray-700 dark:text-gray-300">Name</th>
+              <th class="px-4 py-2 text-gray-700 dark:text-gray-300">Role</th>
+              <th class="px-4 py-2 text-right text-gray-700 dark:text-gray-300">Actions</th>
             </tr>
           </thead>
           <tbody>
             {#each currentUsers as u (u.user_id || u.id)}
               <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                <td class="px-4 py-2 font-mono text-xs">{u.email}</td>
-                <td class="px-4 py-2">{u.display_name || '—'}</td>
+                <td class="px-4 py-2 font-mono text-xs text-gray-900 dark:text-gray-100">{u.email}</td>
+                <td class="px-4 py-2 text-gray-900 dark:text-gray-100">{u.display_name || '—'}</td>
                 <td class="px-4 py-2">
                   <span class="text-xs px-2 py-0.5 rounded-full {roleBadge(u.role)}">{u.role}</span>
                 </td>
