@@ -11,6 +11,9 @@
     cancelWorkflow,
     submitInterjection,
     getPhaseSnapshots,
+    startRenderJob,
+    getRenderJobStatus,
+    getRenderDownloadUrl,
   } from '../lib/workflowExec.js';
 
   let t = $derived((key, params) => i18n.t(key, params));
@@ -36,8 +39,16 @@
   let submittingInterject = $state(false);
   let phaseSnapshots = $state([]);
 
+  // Export state
+  let exportFormat = $state('pdf');
+  let exportLanguage = $state('en');
+  let exportLoading = $state(false);
+  let exportJobId = $state(null);
+  let exportError = $state('');
+  let exportPolling = $state(null);
+
   onMount(loadSessions);
-  onDestroy(() => stopPolling());
+  onDestroy(() => { stopPolling(); if (exportPolling) clearInterval(exportPolling); });
 
   async function loadSessions() {
     loadingSessions = true;
@@ -128,6 +139,50 @@
       errorStore.set(e.message);
     } finally {
       submittingInterject = false;
+    }
+  }
+
+  async function handleExport() {
+    if (!activeSessionId) return;
+    exportLoading = true;
+    exportError = '';
+    exportJobId = null;
+    try {
+      const result = await startRenderJob(activeSessionId, {
+        primary_format: exportFormat,
+        language: exportLanguage,
+      });
+      exportJobId = result.job_id;
+      exportPolling = setInterval(async () => {
+        try {
+          const st = await getRenderJobStatus(exportJobId);
+          if (st.status === 'completed') {
+            clearInterval(exportPolling);
+            exportPolling = null;
+            exportLoading = false;
+            const url = getRenderDownloadUrl(exportJobId);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          } else if (st.status === 'failed') {
+            clearInterval(exportPolling);
+            exportPolling = null;
+            exportLoading = false;
+            exportError = st.error_message || 'Export failed';
+          }
+        } catch (err) {
+          clearInterval(exportPolling);
+          exportPolling = null;
+          exportLoading = false;
+          exportError = err.message || 'Failed to check export status';
+        }
+      }, 1000);
+    } catch (err) {
+      exportLoading = false;
+      exportError = err.message || 'Failed to start export';
     }
   }
 
@@ -248,6 +303,31 @@
               {submittingInterject ? '…' : 'Send'}
             </button>
           </div>
+        </div>
+      {/if}
+
+      <!-- Export section (completed debates only) -->
+      {#if activeState.status === 'completed'}
+        <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
+          <h3 class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase">Export Debate</h3>
+          <div class="flex gap-2 items-center flex-wrap">
+            <select class="px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white" bind:value={exportFormat}>
+              <option value="pdf">PDF</option>
+              <option value="md">Markdown</option>
+              <option value="odt">ODT</option>
+              <option value="docx">DOCX</option>
+            </select>
+            <select class="px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white" bind:value={exportLanguage}>
+              <option value="en">English</option>
+              <option value="de">Deutsch</option>
+            </select>
+            <button class="px-4 py-1.5 bg-green-600 text-white rounded text-sm hover:bg-green-700 disabled:opacity-50" onclick={handleExport} disabled={exportLoading}>
+              {exportLoading ? '⏳ Generating…' : '⬇ Download'}
+            </button>
+          </div>
+          {#if exportError}
+            <div class="text-xs text-red-600 dark:text-red-400 mt-1">{exportError}</div>
+          {/if}
         </div>
       {/if}
 
