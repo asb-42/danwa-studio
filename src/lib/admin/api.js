@@ -50,6 +50,30 @@ export function updateCurrentTenantSettings(settings) {
 }
 
 /**
+ * Update any tenant by ID (admin only).
+ * @param {string} tenantId
+ * @param {{ name?: string, plan?: string, max_projects?: number, max_concurrent_debates?: number, max_documents?: number, max_storage_mb?: number, settings?: object, is_active?: boolean }} body
+ * @returns {Promise<Object>}
+ */
+export function updateTenant(tenantId, body) {
+  return request(`/api/v1/tenants/${encodeURIComponent(tenantId)}`, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+  });
+}
+
+/**
+ * Delete a tenant by ID (admin only, cannot delete own tenant).
+ * @param {string} tenantId
+ * @returns {Promise<Object>}
+ */
+export function deleteTenant(tenantId) {
+  return request(`/api/v1/tenants/${encodeURIComponent(tenantId)}`, {
+    method: 'DELETE',
+  });
+}
+
+/**
  * List members of the current tenant.
  * @returns {Promise<Array>}
  */
