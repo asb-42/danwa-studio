@@ -1,7 +1,7 @@
 <script>
   import { i18n } from '../lib/i18n/loader.js';
   import { onMount } from 'svelte';
-  import { error as errorStore, toast } from '../lib/stores.js';
+  import { error as errorStore, addToast } from '../lib/stores.js';
   import {
     listTenants,
     getCurrentTenant,
@@ -92,7 +92,7 @@
     try {
       await createTenant({ name: createName.trim(), plan: createPlan });
       showCreate = false;
-      toast.set({ message: 'Tenant created', type: 'success' });
+      addToast({ message: 'Tenant created', type: 'success' });
       await loadAll();
     } catch (e) {
       errorStore.set(e.message);
@@ -135,7 +135,7 @@
         is_active: editIsActive,
       });
       editing = null;
-      toast.set({ message: 'Tenant updated', type: 'success' });
+      addToast({ message: 'Tenant updated', type: 'success' });
       await loadAll();
     } catch (e) {
       errorStore.set(e.message);
@@ -157,7 +157,7 @@
     try {
       if (type === 'tenant') {
         await deleteTenant(item.id);
-        toast.set({ message: 'Tenant deleted', type: 'success' });
+        addToast({ message: 'Tenant deleted', type: 'success' });
       } else {
         await removeFromCurrentTenant(item.user_id || item.id);
       }
@@ -181,7 +181,7 @@
     savingSettings = true;
     try {
       await updateCurrentTenantSettings(parsed);
-      toast.set({ message: 'Settings saved', type: 'success' });
+      addToast({ message: 'Settings saved', type: 'success' });
       await loadAll();
     } catch (e) {
       settingsError = e.message;
@@ -210,7 +210,7 @@
       inviteDisplayName = '';
       invitePassword = '';
       inviteRole = 'viewer';
-      toast.set({ message: 'User invited', type: 'success' });
+      addToast({ message: 'User invited', type: 'success' });
       await loadAll();
     } catch (e) {
       errorStore.set(e.message);
