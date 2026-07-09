@@ -22,6 +22,7 @@
         { route: '/roles', label: 'nav.roles', icon: '🎭' },
         { route: '/tones', label: 'nav.tones', icon: '🎨' },
         { route: '/modules', label: 'nav.modules', icon: '📦' },
+        { route: '/action-templates', label: 'Action Templates', icon: '🌳' },
       ],
     },
     {

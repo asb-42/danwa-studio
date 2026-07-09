@@ -25,6 +25,7 @@
   import UsersView from './views/UsersView.svelte';
   import ServerHealthView from './views/ServerHealthView.svelte';
   import SystemManagementView from './views/SystemManagementView.svelte';
+  import ActionTemplatesView from './views/ActionTemplatesView.svelte';
   import ProfileView from './views/ProfileView.svelte';
   import BYOKManager from './views/BYOKManager.svelte';
   import { i18n, discoverLanguagePacks, setToastCallback } from './lib/i18n/loader.js';
@@ -113,6 +114,8 @@
             <ServerHealthView />
           {:else if currentPage === '/system'}
             <SystemManagementView />
+          {:else if currentPage === '/action-templates'}
+            <ActionTemplatesView />
           {:else if currentPage === '/profile'}
             <ProfileView {user} />
           {:else if currentPage === '/my-keys'}
