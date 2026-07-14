@@ -79,20 +79,20 @@
 
 <div class="action-templates-view p-6 max-w-6xl mx-auto">
   <header class="mb-8">
-    <h1 class="text-2xl font-bold text-gray-900">Action Templates</h1>
+    <h1 class="text-2xl font-bold text-gray-900">{$t('action_templates.title')}</h1>
     <p class="text-gray-600 mt-2">
-      Manage the actions available in the [+] forking menu of the interactive debate mode.
+      {$t('action_templates.description')}
     </p>
   </header>
 
   {#if loading}
-    <div class="text-center py-12 text-gray-500">Loading...</div>
+    <div class="text-center py-12 text-gray-500">{$t('common.loading')}</div>
   {:else}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Template list -->
       <div class="lg:col-span-1">
         <div class="bg-white rounded-xl border border-gray-200 p-4">
-          <h2 class="text-sm font-semibold text-gray-700 mb-3">Templates</h2>
+          <h2 class="text-sm font-semibold text-gray-700 mb-3">{$t('action_templates.templates')}</h2>
           {#each templates as tpl}
             <button
               class="w-full text-left px-3 py-2 rounded-lg mb-2 transition-colors
@@ -142,20 +142,20 @@
                       : 'border-gray-200 bg-gray-100 text-gray-500'}"
                     onclick={() => toggleAction(action.id)}
                   >
-                    {action.enabled ? 'Enabled' : 'Disabled'}
+                    {action.enabled ? $t('common.enabled') : $t('common.disabled')}
                   </button>
                   <button
                     class="px-3 py-1 text-xs rounded-lg border border-gray-200 hover:bg-gray-50"
                     onclick={() => editAction(action)}
                   >
-                    Edit
+                    {$t('common.edit')}
                   </button>
                 </div>
               {/each}
             </div>
           </div>
         {:else}
-          <div class="text-center py-12 text-gray-500">Select a template</div>
+          <div class="text-center py-12 text-gray-500">{$t('action_templates.select_template')}</div>
         {/if}
       </div>
     </div>
@@ -172,11 +172,11 @@
     }}
   >
     <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 p-6">
-      <h2 class="text-lg font-semibold mb-4">Edit Action</h2>
+      <h2 class="text-lg font-semibold mb-4">{$t('action_templates.edit_action')}</h2>
 
       <div class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Label</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{$t('common.label')}</label>
           <input
             type="text"
             bind:value={editingAction.label}
@@ -186,7 +186,7 @@
 
         {#if editingAction.type === 'agent'}
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Default Role</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">{$t('action_templates.default_role')}</label>
             <input
               type="text"
               bind:value={editingAction.default_role}
@@ -196,7 +196,7 @@
         {/if}
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Icon</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{$t('common.icon')}</label>
           <input
             type="text"
             bind:value={editingAction.icon}
@@ -210,13 +210,13 @@
           class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800"
           onclick={() => (editingAction = null)}
         >
-          Cancel
+          {$t('common.cancel')}
         </button>
         <button
           class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
           onclick={saveAction}
         >
-          Save
+          {$t('common.save')}
         </button>
       </div>
     </div>
