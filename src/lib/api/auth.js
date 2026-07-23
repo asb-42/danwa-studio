@@ -53,8 +53,18 @@ export const REACHABILITY = Object.freeze({
  * Same shape as danwa-frontend's isBackendReachable so the two
  * apps surface the same diagnostic.
  */
+// Cache reachability result for 30 seconds to avoid doubling login latency.
+let _reachabilityCache = null;
+let _reachabilityCacheTs = 0;
+const REACHABILITY_TTL_MS = 30000;
+
 export async function isBackendReachable(opts = {}) {
   const timeoutMs = opts.timeoutMs ?? 2500;
+  // Return cached result if within TTL
+  const now = Date.now();
+  if (_reachabilityCache && (now - _reachabilityCacheTs) < REACHABILITY_TTL_MS) {
+    return _reachabilityCache;
+  }
   // Guard for test environments where AbortController is unavailable.
   if (typeof AbortController === 'undefined') {
     return { ok: false, reason: REACHABILITY.NETWORK_ERROR };
@@ -66,13 +76,18 @@ export async function isBackendReachable(opts = {}) {
       method: 'GET',
       signal: controller.signal,
     });
-    if (response.ok) return { ok: true };
+    let result;
+    if (response.ok) result = { ok: true };
     // 401/403 means the backend is up but the endpoint needs auth —
     // still a positive reachability signal.
-    if (response.status === 401 || response.status === 403) {
-      return { ok: true, authRequired: true };
+    else if (response.status === 401 || response.status === 403) {
+      result = { ok: true, authRequired: true };
+    } else {
+      result = { ok: false, reason: REACHABILITY.UNHEALTHY, status: response.status };
     }
-    return { ok: false, reason: REACHABILITY.UNHEALTHY, status: response.status };
+    _reachabilityCache = result;
+    _reachabilityCacheTs = now;
+    return result;
   } catch (err) {
     if (err && err.name === 'AbortError') {
       return { ok: false, reason: REACHABILITY.TIMEOUT };
