@@ -27,7 +27,7 @@
  */
 
 import { request } from '../api.js';
-import { setAuth, clearAuth, getAccessToken } from '../stores/auth.svelte.js';
+import { setAuth, clearAuth, getAccessToken, getCurrentUser as _storeGetCurrentUser } from '../stores/auth.svelte.js';
 
 export const REACHABILITY = Object.freeze({
   REACHABLE: 'reachable',
@@ -149,7 +149,11 @@ export function logout() {
  * or null if not authenticated.
  */
 export function getCurrentUserSync() {
-  return getAccessToken() ? null : null; // placeholder — see stores/auth.svelte.js
+  // Return the in-memory user if we have a token; null otherwise.
+  // This is synchronous — it does not validate the token against the
+  // backend. Use getCurrentUser() (async) for a validated check.
+  if (!getAccessToken()) return null;
+  return _storeGetCurrentUser();
 }
 
 /**

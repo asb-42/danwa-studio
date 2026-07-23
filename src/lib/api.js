@@ -7,19 +7,27 @@
 // builds. Re-enable the re-export below after `pnpm build` (or
 // equivalent) inside danwa-core/packages/api-client.
 
+import { getAccessToken } from './stores/auth.svelte.js';
+
 const BASE_URL = '';
 
 /**
  * Generic request function matching the danwa frontend pattern.
- * Used by blueprint API functions.
+ * Used by blueprint API functions. Automatically injects the JWT
+ * Authorization header from the auth store.
  */
 export async function request(path, options = {}) {
+  const token = getAccessToken();
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+  };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
   const response = await fetch(`${BASE_URL}${path}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
     ...options,
+    headers,
   });
 
   if (!response.ok) {
