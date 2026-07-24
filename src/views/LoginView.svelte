@@ -86,7 +86,7 @@
     </form>
 
     <p class="text-center text-sm text-gray-500 dark:text-gray-400">
-      Demo: admin@danwa.local / admin123
+      Use your Danwa account credentials to sign in.
     </p>
   </div>
 </div>

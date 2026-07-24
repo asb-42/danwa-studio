@@ -92,6 +92,13 @@
     try { await setLanguage(lang); } catch {}
     finally { persisting = false; }
     open = false;
+    // Force a full page reload to ensure all components re-render with
+    // the new locale. The i18n system uses a custom pub/sub pattern that
+    // doesn't integrate with Svelte 5's reactivity, so a reload is the
+    // most reliable way to update all i18n.t() calls in templates.
+    if (i18n.getLocale() === lang) {
+      window.location.reload();
+    }
   }
 </script>
 
