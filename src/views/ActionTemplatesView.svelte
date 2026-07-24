@@ -79,30 +79,30 @@
 
 <div class="action-templates-view p-6 max-w-6xl mx-auto">
   <header class="mb-8">
-    <h1 class="text-2xl font-bold text-gray-900">Action Templates</h1>
-    <p class="text-gray-600 mt-2">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Action Templates</h1>
+    <p class="text-gray-600 dark:text-gray-400 mt-2">
       Manage the actions available in the [+] forking menu of the interactive debate mode.
     </p>
   </header>
 
   {#if loading}
-    <div class="text-center py-12 text-gray-500">Loading...</div>
+    <div class="text-center py-12 text-gray-500 dark:text-gray-400">Loading...</div>
   {:else}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Template list -->
       <div class="lg:col-span-1">
-        <div class="bg-white rounded-xl border border-gray-200 p-4">
-          <h2 class="text-sm font-semibold text-gray-700 mb-3">Templates</h2>
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+          <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Templates</h2>
           {#each templates as tpl}
             <button
               class="w-full text-left px-3 py-2 rounded-lg mb-2 transition-colors
                 {selectedTemplate?.template_id === tpl.template_id
-                ? 'bg-blue-50 border border-blue-200'
-                : 'hover:bg-gray-50'}"
+                ? 'bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700'
+                : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'}"
               onclick={() => (selectedTemplate = tpl)}
             >
-              <div class="font-medium text-sm">{tpl.name}</div>
-              <div class="text-xs text-gray-500">{tpl.actions.length} Actions</div>
+              <div class="font-medium text-sm text-gray-900 dark:text-gray-100">{tpl.name}</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400">{tpl.actions.length} Actions</div>
             </button>
           {/each}
         </div>
@@ -111,10 +111,10 @@
       <!-- Action list -->
       <div class="lg:col-span-2">
         {#if selectedTemplate}
-          <div class="bg-white rounded-xl border border-gray-200 p-4">
+          <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
             <div class="flex items-center justify-between mb-4">
-              <h2 class="text-lg font-semibold">{selectedTemplate.name}</h2>
-              <span class="text-sm text-gray-500">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{selectedTemplate.name}</h2>
+              <span class="text-sm text-gray-500 dark:text-gray-400">
                 {selectedTemplate.actions.filter((a) => a.enabled).length} / {selectedTemplate.actions.length} enabled
               </span>
             </div>
@@ -123,12 +123,14 @@
               {#each selectedTemplate.actions as action}
                 <div
                   class="flex items-center gap-4 p-3 rounded-lg border transition-colors
-                    {action.enabled ? 'border-gray-200 bg-white' : 'border-gray-100 bg-gray-50 opacity-60'}"
+                    {action.enabled
+                    ? 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
+                    : 'border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 opacity-60'}"
                 >
                   <span class="text-2xl">{action.icon}</span>
                   <div class="flex-1 min-w-0">
-                    <div class="font-medium text-sm">{action.label}</div>
-                    <div class="text-xs text-gray-500">
+                    <div class="font-medium text-sm text-gray-900 dark:text-gray-100">{action.label}</div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400">
                       {getTypeLabel(action.type)}
                       {#if action.default_role}
                         · Role: {action.default_role}
@@ -138,14 +140,14 @@
                   <button
                     class="px-3 py-1 text-xs rounded-lg border
                       {action.enabled
-                      ? 'border-green-200 bg-green-50 text-green-700'
-                      : 'border-gray-200 bg-gray-100 text-gray-500'}"
+                      ? 'border-green-200 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-900/30 dark:text-green-400'
+                      : 'border-gray-200 bg-gray-100 text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400'}"
                     onclick={() => toggleAction(action.id)}
                   >
                     {action.enabled ? 'Enabled' : 'Disabled'}
                   </button>
                   <button
-                    class="px-3 py-1 text-xs rounded-lg border border-gray-200 hover:bg-gray-50"
+                    class="px-3 py-1 text-xs rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
                     onclick={() => editAction(action)}
                   >
                     Edit
@@ -155,7 +157,7 @@
             </div>
           </div>
         {:else}
-          <div class="text-center py-12 text-gray-500">Select a template</div>
+          <div class="text-center py-12 text-gray-500 dark:text-gray-400">Select a template</div>
         {/if}
       </div>
     </div>
@@ -171,43 +173,46 @@
       if (e.target === e.currentTarget) editingAction = null;
     }}
   >
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 p-6">
-      <h2 class="text-lg font-semibold mb-4">Edit Action</h2>
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md mx-4 p-6">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Edit Action</h2>
 
       <div class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Label</label>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="action-label">Label</label>
           <input
+            id="action-label"
             type="text"
             bind:value={editingAction.label}
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           />
         </div>
 
         {#if editingAction.type === 'agent'}
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Default Role</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="action-role">Default Role</label>
             <input
+              id="action-role"
               type="text"
               bind:value={editingAction.default_role}
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
           </div>
         {/if}
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Icon</label>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="action-icon">Icon</label>
           <input
+            id="action-icon"
             type="text"
             bind:value={editingAction.icon}
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           />
         </div>
       </div>
 
       <div class="flex justify-end gap-3 mt-6">
         <button
-          class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800"
+          class="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
           onclick={() => (editingAction = null)}
         >
           Cancel
