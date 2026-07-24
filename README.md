@@ -1,31 +1,33 @@
 # Danwa Studio
 
-A visual workflow and agent management platform for LLM-powered applications. Danwa Studio provides a comprehensive interface for designing, managing, and executing complex multi-agent workflows with a node-based visual editor.
+Admin and developer frontend for the Danwa Multi-Agent Debate Platform. Provides a visual workflow editor, module management, LLM profile configuration, and system administration tools.
 
 ## Features
 
-- **Visual Blueprint Editor** - Drag-and-drop node-based workflow designer powered by @xyflow/svelte
-- **Multi-Agent Orchestration** - Define and manage complex agent personas with specialized roles (Critic, Analyst, Creative, Strategist, etc.)
-- **Prompt Engineering** - Create, version, and manage prompt templates with variable interpolation
-- **Tone Profiles** - Define consistent communication styles across agents
-- **LLM Profile Management** - Configure and manage multiple LLM providers and model configurations
-- **Workflow Execution & Monitoring** - Real-time execution tracking with replay and diff capabilities
-- **Workflow Templates** - Save and reuse common workflow patterns
-- **Multi-Tenancy** - Isolated environments for teams and organizations
-- **Role-Based Access Control** - Fine-grained permissions system
-- **Internationalization** - Built-in i18n support
-- **BYOK (Bring Your Own Keys)** - Secure API key management per user
-- **System Health Monitoring** - Server health and performance dashboards
+- **Visual Blueprint Editor** — drag-and-drop node-based workflow designer (@xyflow/svelte)
+- **Multi-Agent Orchestration** — define and manage agent personas with specialized roles
+- **Prompt Engineering** — create, version, and manage prompt templates with variable interpolation
+- **Tone Profiles** — define consistent communication styles across agents
+- **LLM Profile Management** — configure multiple LLM providers and model configurations
+- **Interactive Mode** — action templates for real-time human-in-the-loop debates
+- **Workflow Execution & Monitoring** — real-time execution tracking with replay and diff
+- **Workflow Templates** — save and reuse common workflow patterns
+- **Module Management** — browse, install, and publish modules from the catalog
+- **Input/Output Composers** — configure modular pipelines for processing and rendering
+- **Multi-Tenancy** — isolated environments for teams and organizations
+- **Role-Based Access Control** — fine-grained permissions system
+- **Internationalization** — i18n support with language switcher
+- **Dark Mode** — full dark theme support across all views
+- **BYOK (Bring Your Own Keys)** — secure API key management per user
+- **System Health Monitoring** — server health and performance dashboards
 
 ## Tech Stack
 
-- **Frontend**: Svelte 5, Vite
-- **Styling**: Tailwind CSS, @tailwindcss/typography
-- **Visual Editor**: @xyflow/svelte (React Flow for Svelte)
-- **Graph Layout**: ELK.js (elkjs) for automatic node layout
+- **Frontend**: Svelte 5, Vite, Tailwind CSS
+- **Visual Editor**: @xyflow/svelte
+- **Graph Layout**: ELK.js (elkjs)
 - **Validation**: Zod
-- **Markdown**: marked
-- **Sanitization**: DOMPurify
+- **Markdown**: marked + DOMPurify
 - **Graph Analysis**: Cytoscape.js
 
 ## Project Structure
@@ -33,36 +35,47 @@ A visual workflow and agent management platform for LLM-powered applications. Da
 ```
 src/
 ├── components/
-│   ├── blueprint/           # Visual editor components
-│   │   ├── nodes/           # Node type definitions (25+ agent types)
-│   │   ├── forms/           # Configuration forms for nodes
-│   │   └── panels/          # Side panels (Inspector, Proposals, etc.)
+│   ├── blueprint/           # Visual editor (canvas, nodes, forms, panels, edges)
+│   ├── input/               # Input components (A2A, plugins, STT, template picker)
+│   ├── workflow/            # Workflow components (phases, snapshots)
+│   ├── modules/             # Module detail modal
 │   ├── Header.svelte
 │   ├── Sidebar.svelte
-│   └── ConfirmDialog.svelte
-├── views/                   # Page-level components (20+ views)
+│   ├── ConfirmDialog.svelte
+│   ├── LanguageSwitcher.svelte
+│   └── MarkdownRenderer.svelte
+├── views/                   # 27 page-level views
 │   ├── BlueprintCanvasView.svelte
 │   ├── LLMAgentsView.svelte
+│   ├── LLMProfilesView.svelte
 │   ├── PromptsView.svelte
 │   ├── WorkflowExecView.svelte
+│   ├── ActionTemplatesView.svelte
+│   ├── ModulesView.svelte
+│   ├── CatalogView.svelte
+│   ├── BYOKManager.svelte
 │   └── ...
 ├── lib/
 │   ├── api/                 # API client modules
+│   ├── stores/              # Svelte stores (auth, theme, phase snapshots)
+│   ├── admin/               # Admin API layer
+│   ├── catalog/             # Catalog API layer
+│   ├── i18n/                # Internationalization
+│   ├── blueprint/           # Blueprint engine (layout, validation, registry, DnD)
+│   ├── input/               # Input composer logic
+│   ├── proposals/           # Proposal management
+│   ├── publishing/          # Module publishing
 │   ├── elk-service.js       # Graph layout service
-│   └── workflowExec.js      # Workflow execution logic
-├── stores.js                # Global state management
+│   ├── stores.js            # Global state management
+│   ├── workflowExec.js      # Workflow execution logic
+│   ├── workflowSession.js   # Workflow session management
+│   ├── workflowSSE.js       # SSE streaming for workflows
+│   └── transcriptNormalizer.js
 ├── App.svelte               # Main app with routing
 └── main.js                  # Entry point
 ```
 
 ## Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- npm or pnpm
-
-### Installation
 
 ```bash
 # Install dependencies
@@ -74,56 +87,36 @@ npm run dev
 # Build for production
 npm run build
 
-# Preview production build
-npm run preview
+# Run tests
+npm test
 
-# Lint code
+# Lint
 npm run lint
-
-# Format code
-npm run format
 ```
 
-### Environment
+## Testing
 
-The application expects a running Danwa backend API. Configure the API endpoint in your environment or through the UI settings.
+Unit tests use Vitest and cover stores, API clients, blueprint logic, i18n, auth, dark theme, and catalog:
 
-## Key Concepts
-
-### Blueprints
-Visual workflows composed of connected nodes representing agents, inputs, outputs, and control flow. Blueprints can be saved as templates for reuse.
-
-### Agents
-Specialized LLM personas with defined roles, prompts, and capabilities. 25+ built-in agent types including:
-- **Creative** - Ideation and brainstorming
-- **Critic** - Evaluation and feedback
-- **Analyst** - Data analysis and synthesis
-- **Strategist** - Planning and decision-making
-- **Mediator** - Conflict resolution
-- **FactChecker** - Verification and validation
-- **Optimizer** - Performance improvement
-- And many more...
-
-### Phases
-Sequential stages in a workflow that group related agents and control execution flow.
-
-### Templates
-Reusable workflow patterns that can be instantiated with different configurations.
+```bash
+npm test                  # run all tests
+npm test -- --watch       # watch mode
+```
 
 ## Architecture
 
-- **Hash-based Routing** - Client-side routing without server configuration
-- **Reactive State** - Svelte 5 runes ($state, $derived) for fine-grained reactivity
-- **Component Composition** - Modular, reusable component architecture
-- **Service Layer** - Separated API, layout, and execution services
+- **Hash-based Routing** — client-side routing without server configuration
+- **Reactive State** — Svelte 5 runes ($state, $derived) for fine-grained reactivity
+- **Component Composition** — modular, reusable component architecture
+- **Service Layer** — separated API, layout, and execution services
 
 ## Related Packages
 
 This project consumes local packages from `danwa-core`:
-- `@danwa/api-client` - Type-safe API client
-- `@danwa/ui-core` - Shared UI components
-- `@danwa/i18n` - Internationalization utilities
+- `@danwa/api-client` — type-safe API client
+- `@danwa/ui-core` — shared UI components
+- `@danwa/i18n` — internationalization utilities
 
 ## License
 
-AGPL-3.0 License - see [LICENSE](LICENSE) for details.
+AGPL-3.0 — see [LICENSE](LICENSE) for details.
