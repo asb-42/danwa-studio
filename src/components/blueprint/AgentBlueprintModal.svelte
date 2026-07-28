@@ -8,6 +8,7 @@
     listRoleDefinitions,
     listToneProfiles,
   } from '../../lib/blueprint/api.js';
+  import TTSEngineSelector from '../tts/TTSEngineSelector.svelte';
 
   let { blueprint = null, visible = false, onSuccess = () => {}, onClose = () => {} } = $props();
 
@@ -186,8 +187,11 @@
         </div>
 
         <div class="form-field">
-          <label class="field-label" for="ab-tts">TTS Voice ID (optional)</label>
-          <input id="ab-tts" type="text" class="field-input" bind:value={form.tts_voice_id} placeholder="edge-tts:de-DE-KatjaNeural" />
+          <label class="field-label" for="ab-tts">TTS Voice (optional)</label>
+          <TTSEngineSelector
+            value={form.tts_voice_id}
+            onchange={(v) => form.tts_voice_id = v}
+          />
         </div>
 
         <div class="form-field">

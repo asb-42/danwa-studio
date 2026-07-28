@@ -103,3 +103,21 @@ export function publishModule(moduleId, body) {
     body: JSON.stringify(body),
   });
 }
+
+// ─── Sync from DB ──────────────────────────────────────────────
+
+/**
+ * Export DB profiles (LLM, agents, tones, prompts) as module directories
+ * under the modules/ folder so they appear in the module list and can be
+ * published to the danwa-modules repo.
+ *
+ * @param {'llm-profile'|'agent-persona'|'tone-profile'|'prompt-variant'} type
+ * @param {string[]} [ids]  Optional list of specific profile IDs to sync (None = all).
+ * @returns {Promise<{ exported: number, skipped: number, errors: string[], category: string, module_dir: string }>}
+ */
+export function syncFromDb(type, ids = null) {
+  return request('/api/v1/modules/sync-from-db', {
+    method: 'POST',
+    body: JSON.stringify({ type, ids }),
+  });
+}

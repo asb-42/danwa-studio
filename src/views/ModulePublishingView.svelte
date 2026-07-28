@@ -9,6 +9,7 @@
     fetchRepoIndex,
     checkRepoUpdates,
     publishModule,
+    syncFromDb,
   } from '../lib/publishing/api.js';
   import ModuleDetailModal from '../components/modules/ModuleDetailModal.svelte';
 
@@ -40,6 +41,36 @@
   let publishError = $state(null);
   let publishMessage = $state('');
 
+  // PR creation
+  const MODULES_REPO_URL = 'https://github.com/asb-42/danwa-modules';
+
+  // Sync from DB state
+  let syncing = $state(false);
+  let syncResult = $state(null);
+  let syncError = $state(null);
+
+  const SYNC_TYPES = [
+    { value: 'llm-profile', label: 'LLM Profiles' },
+    { value: 'agent-persona', label: 'Agents' },
+    { value: 'tone-profile', label: 'Tone Profiles' },
+    { value: 'prompt-variant', label: 'Prompts' },
+  ];
+  let syncType = $state('llm-profile');
+
+  async function handleSyncFromDb() {
+    syncing = true;
+    syncResult = null;
+    syncError = null;
+    try {
+      syncResult = await syncFromDb(syncType);
+      await loadAll();
+    } catch (e) {
+      syncError = e.message;
+    } finally {
+      syncing = false;
+    }
+  }
+
   async function handlePublish(m) {
     publishing = true;
     publishError = null;
@@ -49,7 +80,7 @@
     // lib/blueprint/api.js as getModuleProfile).
     let manifest = null;
     try {
-      const profile = await (await import('../lib/blueprint/api.js')).getModuleProfile(m.module_id);
+      const profile = await (await import('../lib/modules/api.js')).getModuleProfile(m.module_id);
       manifest = profile;
     } catch (e) {
       // fall through to lastPublish below
@@ -173,16 +204,47 @@
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4">
     <h2 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Publishing pipeline</h2>
     <ol class="text-xs text-gray-600 dark:text-gray-400 space-y-1 list-decimal pl-5">
-      <li>Validate the manifest here (paste the JSON below).</li>
+      <li>Sync profiles from the database as local module directories.</li>
+      <li>Validate the manifest (paste the JSON below).</li>
       <li>Click <em>Publish</em> on a row in the table — the backend commits (and optionally pushes) the live manifest to the <code class="font-mono">danwa-modules</code> repo on a <code class="font-mono">{'publish/<id>'}</code> branch.</li>
-      <li>Optionally export the module as a zip pack for offline use / uploading.</li>
-      <li>Open a PR on github.com/asb-42/danwa-modules; once merged, <strong>Update available</strong> shows up in the ModulesView.</li>
+      <li>Click <em>Create PR on GitHub</em> to open a pull request — merge it when ready.</li>
     </ol>
+  </div>
+
+  <!-- Sync from DB -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 space-y-3">
+    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">1. Sync from DB</h2>
+    <p class="text-xs text-gray-500 dark:text-gray-400">
+      Export profiles from the database as local module directories. They will then appear in the table below for publishing.
+    </p>
+    <div class="flex items-center gap-3">
+      <select class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs" bind:value={syncType}>
+        {#each SYNC_TYPES as st (st.value)}
+          <option value={st.value}>{st.label}</option>
+        {/each}
+      </select>
+      <button class="text-xs px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50" onclick={handleSyncFromDb} disabled={syncing}>
+        {syncing ? 'Syncing…' : 'Sync from DB'}
+      </button>
+    </div>
+    {#if syncResult}
+      <div class="text-xs px-3 py-2 rounded bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300">
+        ✓ Exported {syncResult.exported} module(s) to <code class="font-mono">{syncResult.module_dir}</code>
+        {#if syncResult.errors?.length}
+          <span class="text-red-600 dark:text-red-400"> · {syncResult.errors.length} error(s)</span>
+        {/if}
+      </div>
+    {/if}
+    {#if syncError}
+      <div class="text-xs px-3 py-2 rounded bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300">
+        ✗ {syncError}
+      </div>
+    {/if}
   </div>
 
   <!-- Validate manifest -->
   <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-4 space-y-3">
-    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">1. Validate manifest</h2>
+    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">2. Validate manifest</h2>
     <p class="text-xs text-gray-500 dark:text-gray-400">
       Paste a <code class="font-mono">manifest.json</code> here. The backend runs the validator without touching disk.
     </p>
@@ -284,7 +346,7 @@
     <h2 class="text-sm font-semibold text-gray-900 dark:text-white">3. Publish to danwa-modules (Git)</h2>
     <p class="text-xs text-gray-500 dark:text-gray-400">
       Click <em>Publish</em> on a row in the table above to commit (and optionally push)
-      the live module manifest to the danwa-modules repo.
+      the live module manifest to the danwa-modules repo. After pushing, click <em>Create PR on GitHub</em> to open a pull request.
     </p>
     <details class="border border-gray-200 dark:border-gray-700 rounded">
       <summary class="cursor-pointer text-xs px-2 py-1 bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -322,6 +384,16 @@
             {#if lastPublish.commit_sha} · sha={lastPublish.commit_sha.slice(0, 7)}{/if}
             {#if lastPublish.pushed} · pushed to {lastPublish.push_remote}{/if}
           </span>
+          {#if lastPublish.pushed}
+            <a
+              href="https://github.com/asb-42/danwa-modules/compare/main...{lastPublish.branch}?expand=1"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-xs px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded hover:bg-purple-200 dark:hover:bg-purple-800/40"
+            >
+              Create PR on GitHub →
+            </a>
+          {/if}
         </div>
         <ol class="text-xs space-y-1 list-decimal pl-5 max-h-48 overflow-y-auto">
           {#each lastPublish.steps as s, i (i)}

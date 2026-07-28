@@ -79,6 +79,7 @@
     'agent-bundles':              { label: 'Bundles',              icon: '📦' },
     'translations':               { label: 'Language Packs',       icon: '🌐' },
     'ui-translations':            { label: 'Language Packs',       icon: '🌐' },
+    'tts-adapters':               { label: 'TTS Adapters',         icon: '🔊' },
   };
 
   // Canonical category name (normalize repo categories to display categories)

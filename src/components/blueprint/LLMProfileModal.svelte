@@ -16,7 +16,7 @@
   let form = $state({});
 
   let protocols = ['litellm', 'a2a'];
-  let providers = ['openrouter', 'openai', 'anthropic', 'local', 'ollama', 'deepseek', 'xiaomi', 'opencode-zen', 'opencode-go', 'cloudflare'];
+  let providers = ['openrouter', 'openai', 'anthropic', 'local', 'ollama', 'deepseek', 'xiaomi', 'opencode-zen', 'opencode-go', 'cloudflare', 'meituan'];
   let profileTypes = ['text', 'tts', 'stt'];
 
   $effect(() => {

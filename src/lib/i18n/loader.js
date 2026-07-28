@@ -115,6 +115,7 @@ const enFallback = {
   'nav.section.system': 'SYSTEM',
   'nav.section.account': 'ACCOUNT',
   'nav.catalog': 'LLM Catalog',
+  'nav.action_templates': 'Action Templates',
   'config.name': 'Name',
   'config.category': 'Category',
   'config.description': 'Description',
@@ -140,6 +141,8 @@ const enFallback = {
   'config.translate': 'Translate',
   'config.translatePrompt': 'Translate Prompt',
   'config.translatePromptHint': 'Translate all roles of this prompt variant to the target language using LLM.',
+  'config.default': 'Default',
+  'config.active': 'active',
   'llm_profiles.title': 'LLM Profiles',
   'llm_profiles.create': 'Create LLM Profile',
   'llm_profiles.edit': 'Edit LLM Profile',
@@ -233,6 +236,27 @@ const enFallback = {
   'debate.count.one': '{count} debate',
   'debate.count.other': '{count} debates',
 
+  // ── Blueprint Palette ────────────────────────────────────────────
+  'blueprint.palette.assets': 'ASSETS',
+  'blueprint.palette.existingEntities': 'EXISTING ENTITIES',
+  'blueprint.palette.llmProfile': 'LLM Profile',
+  'blueprint.palette.llmProfiles': 'LLM Profiles',
+  'blueprint.palette.toneProfile': 'Tone Profile',
+  'blueprint.palette.toneProfiles': 'Tone Profiles',
+  'blueprint.palette.agentCore': 'Agent Core',
+  'blueprint.palette.agentCores': 'Agent Cores',
+  'blueprint.palette.agentBundles': 'Agent Bundles',
+  'blueprint.palette.transactionalRoles': 'TRANSACTIONAL ROLES',
+  'blueprint.palette.workflowNodes': 'WORKFLOW NODES',
+  'blueprint.palette.savedLayouts': 'SAVED LAYOUTS',
+  'blueprint.canvas.loadLayout': 'Load layout',
+  'blueprint.canvas.deleteLayout': 'Delete layout',
+  'blueprint.canvas.saveLayout': 'Save Layout',
+  'blueprint.canvas.saveAs': 'Save As',
+  'blueprint.canvas.autoLayout': 'Auto Layout',
+  'blueprint.mode.blueprint': 'Blueprint',
+  'blueprint.mode.workflow': 'Workflow',
+
   // ── Timeline ───────────────────────────────────────────────────────
   'timeline.title': 'Debate Timeline',
   'timeline.live': 'Live',
@@ -298,6 +322,28 @@ const enFallback = {
   'blueprint.workflow.saveAsWorkflow': 'Save as Workflow',
   'blueprint.workflow.saveAsWorkflowHint': 'Convert this canvas layout into an executable workflow definition. The workflow can then be compiled and run as a debate.',
   'blueprint.inspector.cancel': 'Cancel',
+  'blueprint.inspector.save': 'Save',
+  'blueprint.inspector.draft': 'Draft',
+
+  // ── Template Gallery ─────────────────────────────────────────────
+  'template.gallery.title': 'Templates',
+  'template.gallery.searchPlaceholder': 'Search templates...',
+  'template.gallery.filterAll': 'All',
+  'template.gallery.filterSystem': 'System',
+  'template.gallery.filterCustom': 'Custom',
+  'template.gallery.loading': 'Loading templates...',
+  'template.gallery.empty': 'No templates found.',
+  'template.gallery.blankCanvas': 'Blank Canvas',
+  'template.gallery.blankCanvasDesc': 'Start with an empty canvas',
+  'template.gallery.systemBadge': 'System',
+  'template.gallery.placeholders': 'placeholders',
+  'template.gallery.confirmDelete': 'Delete this template?',
+  'template.gallery.yes': 'Yes',
+  'template.gallery.no': 'No',
+
+  // ── Service LLM ──────────────────────────────────────────────────
+  'service.utility': 'Utility',
+  'service.utilityHint': 'Utility LLM is used for internal tasks like title generation and translations.',
 
   // ── Documents / RAG ────────────────────────────────────────────────
   'documents.ragContext': 'RAG Context',
