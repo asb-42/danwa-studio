@@ -74,7 +74,7 @@
 <aside class="w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 h-full flex flex-col overflow-y-auto">
   <nav class="flex-1 p-4 space-y-6">
     {#each sections as section}
-      {#if true}
+      {#if section.label}
         <div>
           <h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 px-2">
             {i18n.t(`nav.section.${section.label.toLowerCase()}`) || section.label}
