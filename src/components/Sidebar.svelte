@@ -5,6 +5,11 @@
 
   const sections = [
     {
+      items: [
+        { route: '/', label: 'nav.dashboard', icon: '🏠' },
+      ],
+    },
+    {
       label: 'BUILD',
       items: [
         { route: '/blueprints', label: 'nav.blueprints', icon: '📐' },
